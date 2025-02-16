@@ -340,7 +340,7 @@ pre.rouge {
 <div class="details">
 <span id="author" class="author">Andreas Nicolai</span><br>
 <span id="email" class="email"><a href="mailto:andreas.nicolai@gmx.net">andreas.nicolai@gmx.net</a></span><br>
-<span id="revnumber">version 1.0 (11.01.2025)</span>
+<span id="revnumber">version 1.0 (16.02.2025)</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -351,108 +351,115 @@ pre.rouge {
 <li><a href="#_informationsquellen">1.2. Informationsquellen</a></li>
 </ul>
 </li>
-<li><a href="#_aufspielenaktualisieren_der_firmware_und_ein_erstes_testprogramm">2. Aufspielen/Aktualisieren der Firmware und ein erstes Testprogramm</a>
+<li><a href="#chap:install">2. Treiberinstallation und -konfiguration</a>
 <ul class="sectlevel2">
-<li><a href="#_verbindung_des_auriga_boards_mit_den_linux_pc">2.1. Verbindung des Auriga-Boards mit den Linux-PC</a>
+<li><a href="#_linux">2.1. Linux</a>
 <ul class="sectlevel3">
-<li><a href="#_behebung_von_brttly_problemen">2.1.1. Behebung von brttly Problemen</a></li>
+<li><a href="#sec:connecting_auriga">2.1.1. Verbindung des Auriga-Boards mit den Linux-PC</a></li>
+<li><a href="#_behebung_von_brttly_problemen">2.1.2. Behebung von brttly Problemen</a></li>
 </ul>
 </li>
-<li><a href="#_firmware_update_neu_installieren">2.2. Firmware-Update / Neu-Installieren</a>
-<ul class="sectlevel3">
-<li><a href="#_firmware_mit_mblock_aktualisierenzurücksetzen">2.2.1. Firmware mit mBlock aktualisieren/zurücksetzen</a></li>
+<li><a href="#_windows">2.2. Windows</a></li>
+<li><a href="#_macos">2.3. MacOS</a></li>
 </ul>
 </li>
-<li><a href="#_makeblock_libraries_über_arduino_ide_bibliotheksverwaltung_installieren">2.3. Makeblock-Libraries über Arduino-IDE Bibliotheksverwaltung installieren</a>
-<ul class="sectlevel3">
-<li><a href="#_installation_via_bibliotheksmanager_empfohlen">2.3.1. Installation via Bibliotheksmanager (empfohlen)</a></li>
-<li><a href="#_manuelle_installation">2.3.2. Manuelle Installation</a></li>
-</ul>
-</li>
-<li><a href="#_firmware_update_installieren_zurücksetzen">2.4. Firmware Update installieren / zurücksetzen</a></li>
-</ul>
-</li>
-<li><a href="#sec:basics">3. Die Grundlagen der Auriga-Programmierung</a>
+<li><a href="#_aufspielenaktualisieren_der_firmware_und_ein_erstes_testprogramm">3. Aufspielen/Aktualisieren der Firmware und ein erstes Testprogramm</a>
 <ul class="sectlevel2">
-<li><a href="#_kleines_testbeispiel">3.1. Kleines Testbeispiel</a></li>
+<li><a href="#_firmware_update_neu_installieren">3.1. Firmware-Update / Neu-Installieren</a>
+<ul class="sectlevel3">
+<li><a href="#_firmware_mit_mblock_aktualisierenzurücksetzen">3.1.1. Firmware mit mBlock aktualisieren/zurücksetzen</a></li>
 </ul>
 </li>
-<li><a href="#_onboard_leds_und_rgb_ring">4. OnBoard LEDs und RGB Ring</a>
+<li><a href="#_makeblock_libraries_über_arduino_ide_bibliotheksverwaltung_installieren">3.2. Makeblock-Libraries über Arduino-IDE Bibliotheksverwaltung installieren</a>
+<ul class="sectlevel3">
+<li><a href="#_installation_via_bibliotheksmanager_empfohlen">3.2.1. Installation via Bibliotheksmanager (empfohlen)</a></li>
+<li><a href="#_manuelle_installation">3.2.2. Manuelle Installation</a></li>
+</ul>
+</li>
+<li><a href="#_firmware_update_installieren_zurücksetzen">3.3. Firmware Update installieren / zurücksetzen</a></li>
+</ul>
+</li>
+<li><a href="#sec:basics">4. Die Grundlagen der Auriga-Programmierung</a>
 <ul class="sectlevel2">
-<li><a href="#_allgemeines">4.1. Allgemeines</a></li>
-<li><a href="#_standard_built_in_led">4.2. Standard built-in LED</a>
-<ul class="sectlevel3">
-<li><a href="#_beispielprogramm">4.2.1. Beispielprogramm</a></li>
+<li><a href="#_kleines_testbeispiel">4.1. Kleines Testbeispiel</a></li>
 </ul>
 </li>
-<li><a href="#_onboard_leds_kommunikationsmodul">4.3. OnBoard LEDs (Kommunikationsmodul)</a>
-<ul class="sectlevel3">
-<li><a href="#_beispielprogramm_2">4.3.1. Beispielprogramm</a></li>
-</ul>
-</li>
-<li><a href="#_12er_rgb_led_ring">4.4. 12er RGB LED Ring</a>
-<ul class="sectlevel3">
-<li><a href="#_beispielprogramm_3">4.4.1. Beispielprogramm</a></li>
-<li><a href="#_die_wichtigsten_funktionen_der_mergbled_klasse">4.4.2. Die wichtigsten Funktionen der MeRGBLed Klasse</a></li>
-<li><a href="#_programmierideen">4.4.3. Programmierideen</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_onboard_sensoren_licht_schall_temperature_gyroscop">5. OnBoard Sensoren (Licht, Schall, Temperature, Gyroscop)</a>
+<li><a href="#_onboard_leds_und_rgb_ring">5. OnBoard LEDs und RGB Ring</a>
 <ul class="sectlevel2">
-<li><a href="#_lautstärkeschall">5.1. Lautstärke/Schall</a>
+<li><a href="#_allgemeines">5.1. Allgemeines</a></li>
+<li><a href="#_standard_built_in_led">5.2. Standard built-in LED</a>
 <ul class="sectlevel3">
-<li><a href="#_beispielprogramm_4">5.1.1. Beispielprogramm</a></li>
+<li><a href="#_beispielprogramm">5.2.1. Beispielprogramm</a></li>
 </ul>
 </li>
-<li><a href="#_lichthelligkeit">5.2. Licht/Helligkeit</a>
+<li><a href="#_onboard_leds_kommunikationsmodul">5.3. OnBoard LEDs (Kommunikationsmodul)</a>
 <ul class="sectlevel3">
-<li><a href="#_beispielprogramm_5">5.2.1. Beispielprogramm</a></li>
+<li><a href="#_beispielprogramm_2">5.3.1. Beispielprogramm</a></li>
 </ul>
 </li>
-<li><a href="#_temperatur">5.3. Temperatur</a>
+<li><a href="#_12er_rgb_led_ring">5.4. 12er RGB LED Ring</a>
 <ul class="sectlevel3">
-<li><a href="#_beispielprogramm_6">5.3.1. Beispielprogramm</a></li>
-</ul>
-</li>
-<li><a href="#_gyroskop">5.4. Gyroskop</a>
-<ul class="sectlevel3">
-<li><a href="#_beispielprogramm_7">5.4.1. Beispielprogramm</a></li>
+<li><a href="#_beispielprogramm_3">5.4.1. Beispielprogramm</a></li>
+<li><a href="#_die_wichtigsten_funktionen_der_mergbled_klasse">5.4.2. Die wichtigsten Funktionen der MeRGBLed Klasse</a></li>
+<li><a href="#_programmierideen">5.4.3. Programmierideen</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_töne_mit_dem_passiven_buzzer_auf_dem_board">6. Töne mit dem passiven Buzzer auf dem Board</a>
+<li><a href="#_onboard_sensoren_licht_schall_temperature_gyroscop">6. OnBoard Sensoren (Licht, Schall, Temperature, Gyroscop)</a>
 <ul class="sectlevel2">
-<li><a href="#_allgemeines_2">6.1. Allgemeines</a>
+<li><a href="#_lautstärkeschall">6.1. Lautstärke/Schall</a>
 <ul class="sectlevel3">
-<li><a href="#_beispielprogramm_8">6.1.1. Beispielprogramm</a></li>
+<li><a href="#_beispielprogramm_4">6.1.1. Beispielprogramm</a></li>
 </ul>
 </li>
-<li><a href="#_verwendung_der_makeblock_klasse_mebuzzer">6.2. Verwendung der Makeblock Klasse MeBuzzer</a>
+<li><a href="#_lichthelligkeit">6.2. Licht/Helligkeit</a>
 <ul class="sectlevel3">
-<li><a href="#_beispielprogramm_9">6.2.1. Beispielprogramm</a></li>
+<li><a href="#_beispielprogramm_5">6.2.1. Beispielprogramm</a></li>
+</ul>
+</li>
+<li><a href="#_temperatur">6.3. Temperatur</a>
+<ul class="sectlevel3">
+<li><a href="#_beispielprogramm_6">6.3.1. Beispielprogramm</a></li>
+</ul>
+</li>
+<li><a href="#_gyroskop">6.4. Gyroskop</a>
+<ul class="sectlevel3">
+<li><a href="#_beispielprogramm_7">6.4.1. Beispielprogramm</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_motorsteuerung">7. Motorsteuerung</a>
+<li><a href="#_töne_mit_dem_passiven_buzzer_auf_dem_board">7. Töne mit dem passiven Buzzer auf dem Board</a>
 <ul class="sectlevel2">
-<li><a href="#_allgemeines_3">7.1. Allgemeines</a></li>
-<li><a href="#_direkte_ansteuerung_über_pwm_und_digitale_pins">7.2. Direkte Ansteuerung über PWM und digitale Pins</a>
+<li><a href="#_allgemeines_2">7.1. Allgemeines</a>
 <ul class="sectlevel3">
-<li><a href="#_beispielprogramm_direkte_ansteuerung">7.2.1. Beispielprogramm - Direkte Ansteuerung</a></li>
+<li><a href="#_beispielprogramm_8">7.1.1. Beispielprogramm</a></li>
 </ul>
 </li>
-<li><a href="#_ansteuerung_über_encoder_klasse_der_bibliothek">7.3. Ansteuerung über Encoder-Klasse der Bibliothek</a>
+<li><a href="#_verwendung_der_makeblock_klasse_mebuzzer">7.2. Verwendung der Makeblock Klasse MeBuzzer</a>
 <ul class="sectlevel3">
-<li><a href="#_beispielprogramm_ansteuerung_mittels_bibliotheksfunktion">7.3.1. Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion</a></li>
+<li><a href="#_beispielprogramm_9">7.2.1. Beispielprogramm</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_abschließende_bemerkungen">8. Abschließende Bemerkungen</a></li>
+<li><a href="#_motorsteuerung">8. Motorsteuerung</a>
+<ul class="sectlevel2">
+<li><a href="#_allgemeines_3">8.1. Allgemeines</a></li>
+<li><a href="#_direkte_ansteuerung_über_pwm_und_digitale_pins">8.2. Direkte Ansteuerung über PWM und digitale Pins</a>
+<ul class="sectlevel3">
+<li><a href="#_beispielprogramm_direkte_ansteuerung">8.2.1. Beispielprogramm - Direkte Ansteuerung</a></li>
+</ul>
+</li>
+<li><a href="#_ansteuerung_über_encoder_klasse_der_bibliothek">8.3. Ansteuerung über Encoder-Klasse der Bibliothek</a>
+<ul class="sectlevel3">
+<li><a href="#_beispielprogramm_ansteuerung_mittels_bibliotheksfunktion">8.3.1. Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_abschließende_bemerkungen">9. Abschließende Bemerkungen</a></li>
 </ul>
 </div>
 </div>
@@ -461,7 +468,10 @@ pre.rouge {
 <h2 id="_einleitung">1. Einleitung</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Dieser Makeblock mBot Ranger Programmierkurs baut auf vorhandenen Grundlagen zur Arduino-Programmierung auf. Man sollte also schon die Arduino IDE kennen und natürlich auch Grundlagen der C-Programmiersprache beherrschen. In diesem Tutorial bzw. Robotik-Kurs wird gezeigt, wie man den mBot Ranger Bausatz mittels der Arduino-IDE und der C bzw. C++ Programmiersprache programmiert (wenn man also die Stufe der Block-Programmierung überwunden hat).</p>
+<p>Der <em>MakeBlock Ranger</em> Bausatz ist ziemlich cool und bietet einiges. Leider ist eigentlich nur die Block-basierte Programmierung wirklich gut umgesetzt, und diese hat Grenzen. Dokumentation für die Programmierung mittels C in der Arduino IDE gibt es kaum, zumindest keine offizielle, daher habe ich dieses Tutorial und Anleitung zusammengestellt. Außerdem soll diese Dokumentation als Leitfaden für einen Programmier-/Robotikkurs an der Schule dienen.</p>
+</div>
+<div class="paragraph">
+<p>Diese <em>Makeblock Ranger</em> Anleitung baut auf vorhandenen Grundlagen zur Arduino-Programmierung auf. Man sollte also schon die Arduino IDE kennen und natürlich auch Grundlagen der C-Programmiersprache beherrschen. In diesem Tutorial bzw. Robotik-Kurs wird gezeigt, wie man den mBot Ranger Bausatz mittels der Arduino-IDE und der C bzw. C++ Programmiersprache programmiert (wenn man also die Stufe der Block-Programmierung überwunden hat).</p>
 </div>
 <div class="paragraph">
 <p>Es geht also um folgenden Robotor</p>
@@ -473,26 +483,6 @@ pre.rouge {
 </div>
 <div class="paragraph">
 <p>bzw. die darin verbaute Auriga-Platine mit dem Arduino-Prozessor.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>In diesem Tutorial wird Linux (konkret Ubuntu) verwendet. Linux bringt die Treiber für den ch341-Chip bereits mit, während man unter Windows hier noch die Treiber installieren muss. Bei Gelegenheit würde ich das nochmal dokumentieren (ansonsten hilft hier einfach eine Websuche).</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Der <em>MakeBlock Ranger</em>, oder besser gesagt das Gehirn davon, das Auriga Board mit dem Arduino Mega 2560 Prozessor wird angeschlossen und erklärt, wie man die Entwicklungsbibliotheken einrichtet und die Firmware aktualisiert bzw. nach dem Aufspielen eigener Programme wieder zurücksetzt. Dieser Text erklärt auch ein paar Hintergründe und wie die RJ25 Ports mit den Arduino-Pins verbunden sind und gibt allgemein erstmal eine Orientierung, wie das Ganze so funktioniert.</p>
-</div>
-<div class="paragraph">
-<p>Ein kleines Minibeispiel zum Austesten der Programmierumgebung und Aufspielen eines Programms auf den Robotor schließt das Kapitel ab.</p>
 </div>
 <div class="sect2">
 <h3 id="_überblick_über_den_roboterbausatz">1.1. Überblick über den Roboterbausatz</h3>
@@ -506,27 +496,29 @@ pre.rouge {
 <div class="content">
 <img src="../images/makeblock-mbot-ranger.jpg" alt="makeblock mbot ranger" width="300">
 </div>
+<div class="title">Abbildung 1. Land Raider - ein Kettenfahrzeug mit Linienfolgesensor und Abstandsradar</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../images/makeblock-mbot-raptor.jpg" alt="makeblock mbot raptor" width="300">
 </div>
+<div class="title">Abbildung 2. Dashing Raptor - ähnlich wie Ranger - ohne Ketten zwar weniger cool, dafür schneller unterwegs (auf glatten Fußböden)</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../images/makeblock-mbot-bird.jpg" alt="makeblock mbot bird" width="300">
 </div>
+<div class="title">Abbildung 3. Nervous Bird - interessante Demo für die Verwendung des Neigungs-/Beschleunigungssensors (quasi ein Segway-Personal-Transporter ohne Person); mit diesem Modell kann man seine ganze Kreativität bei der Regelungsprogrammierung ausspielen, um das Gefährt auf hügeligem Gelände sicher und mit konstanter Geschwindigkeit fahren zu lassen.</div>
 </div>
 <div class="paragraph">
-<div class="title">Mögliche Modelle, welche man mit dem Bausatz bauen kann</div>
-<p>Der Bausatz verwendet ein Auriga Board, mit einem Arduino Mega 2560 Prozessor. Das Auriga-Board ist die Weiterentwicklung des Orion-Boards (welches bei früheren mBot Bausätzen verwendet wurde) und kann einiges mehr.</p>
+<p>Der <em>MakeBlock Ranger</em> Bausatz verwendet ein <em>Auriga Board</em> mit einem <em>Arduino Mega 2560</em> Prozessor. Das Auriga-Board ist die Weiterentwicklung des Orion-Boards (welches bei früheren mBot Bausätzen verwendet wurde) und kann einiges mehr.</p>
 </div>
 <div class="paragraph">
 <p>Hier ist eine Funktions-/Ausstattungsbeschreibung (basierend auf der Produktbeschreibung aus
 <a href="https://shop.technik-lpe.de/steuerboards/872-auriga-steuerboard-6928819504967.html">shop.technik-lpe.de</a>:</p>
 </div>
 <div class="paragraph">
-<p>Der <strong>Auriga</strong> ist eine einfach zu bedienende Hauptsteuerplatine, die speziell für den MINT-Unterricht entwickelt wurde. Basierend auf dem Arduino ATmega 2560 hat der Auriga ein paar mehr Möglichkeiten, Sensoren oder Aktoren anschließen zu können. Hier ist ein kleiner Überblick:</p>
+<p>Der <strong>Auriga</strong> ist eine gut ausgestattete Hauptsteuerplatine, die speziell für den MINT-Unterricht entwickelt wurde. Basierend auf dem Arduino ATmega 2560 sind auf dem Auriga bereits eine Reihe von Sensoren und Aktoren vebaut, und es können externe Sensoren oder Motoren angesteckt werden. Hier ist ein kleiner Überblick:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -554,13 +546,13 @@ pre.rouge {
 <div class="content">
 <img src="../images/auriga_schaubild.jpg" alt="auriga schaubild" width="500">
 </div>
-<div class="title">Abbildung 1. Schaubild der Aurigaplatine mit verbauten Sensoren</div>
+<div class="title">Abbildung 4. Schaubild der Aurigaplatine mit verbauten Sensoren</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../images/farbcodierung_auriga.jpg" alt="farbcodierung auriga" width="150">
 </div>
-<div class="title">Abbildung 2. Farbkodierung der Anschlüsse (Details dazu im Kapitel zu den RJ25 Ports)</div>
+<div class="title">Abbildung 5. Farbkodierung der Anschlüsse (Details dazu im Kapitel zu den RJ25 Ports)</div>
 </div>
 <div class="ulist">
 <ul>
@@ -577,7 +569,7 @@ pre.rouge {
 <p>PORT1 - PORT4 haben einen Kurzschluss- und Überstromschutz für 3,5A</p>
 </li>
 <li>
-<p>USB-Anschluss mit antistatischem Schutz (Akku wird darüber nicht geladen)</p>
+<p>USB-Anschluss mit antistatischem Schutz (Akkus werden darüber nicht geladen)</p>
 </li>
 </ul>
 </div>
@@ -599,7 +591,7 @@ pre.rouge {
 <p><a href="../downloads/Makeblock_Leaflet_mBot-Ranger_2018Q3_V1-1-1_View.pdf">MakeBlock Ranger Flyer</a></p>
 </li>
 <li>
-<p><a href="../downloads/mBot-Ranger_Blue_Instruction_Book.pdf">mBot Ranger (Bau-)Anleitung</a></p>
+<p><a href="../downloads/mBot-Ranger_Blue_Instruction_Book.pdf">mBot Ranger (Bau-)Anleitung</a> - enthält auch einen guten Kurzüberblick über die Lage der oben aufgelisteten OnBoard-Sensoren</p>
 </li>
 <li>
 <p><a href="../downloads/getting_started_with_mBlock.pdf">mBlock Entwicklungsumgebung - Getting Started</a></p>
@@ -616,12 +608,20 @@ pre.rouge {
 </div>
 </div>
 <div class="sect1">
-<h2 id="_aufspielenaktualisieren_der_firmware_und_ein_erstes_testprogramm">2. Aufspielen/Aktualisieren der Firmware und ein erstes Testprogramm</h2>
+<h2 id="chap:install">2. Treiberinstallation und -konfiguration</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_verbindung_des_auriga_boards_mit_den_linux_pc">2.1. Verbindung des Auriga-Boards mit den Linux-PC</h3>
 <div class="paragraph">
-<p>Der erste Schritt zur Programmierung des Auriga Boards, ist es eine serielle Verbindung mit dem Board aufzubauen. Dazu verbindet man das Board via USB-Kabel mit dem PC.</p>
+<p>Bevor man den Roboter bzw. die Auriga-Platine programmieren kann, muss man erstmal das jeweilige Betriebssystem vorbereiten. Für Windows, Linux und MacOS gibt es hier jeweils unterschiedliche Vorgehensweisen.</p>
+</div>
+<div class="sect2">
+<h3 id="_linux">2.1. Linux</h3>
+<div class="paragraph">
+<p>Nachfolgende Schritte sind für ein hinreichend aktuelles Linux beschrieben, konkret Ubuntu 22.04 oder neuer. Eigentlich müsste das Board aber auch mit älteren Systemen wie Ubuntu 18.04 oder so noch problemlos funktionieren.</p>
+</div>
+<div class="sect3">
+<h4 id="sec:connecting_auriga">2.1.1. Verbindung des Auriga-Boards mit den Linux-PC</h4>
+<div class="paragraph">
+<p>Der erste Schritt zur Programmierung des Auriga Boards ist es, eine serielle Verbindung mit dem Board aufzubauen. Dazu verbindet man das Board via USB-Kabel mit dem PC.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -641,15 +641,22 @@ pre.rouge {
 <p><code>sudo dmesg</code> sollte dann ausgeben, mit welchem COM-Port das Bord verbunden ist.</p>
 </div>
 <div class="listingblock">
+<div class="title">Ausgabe von dmesg beim Anstecken des Auriga Boards</div>
 <div class="content">
-<pre class="rouge highlight"><code>&gt; sudo dmesg
-[ 1588.506008] usb 3-2: new full-speed USB device number 4 using xhci_hcd
-[ 1588.677924] usb 3-2: New USB device found, idVendor=1a86, idProduct=7523, bcdDevice= 2.64
-[ 1588.677942] usb 3-2: New USB device strings: Mfr=0, Product=2, SerialNumber=0
-[ 1588.677949] usb 3-2: Product: USB Serial
-[ 1588.686988] ch341 3-2:1.0: ch341-uart converter detected
-[ 1588.701256] usb 3-2: ch341-uart converter now attached to ttyUSB0</code></pre>
+<pre class="rouge highlight"><code data-lang="bash"><span class="o">&gt;</span> <span class="nb">sudo </span>dmesg
+<span class="o">[</span> 1588.506008] usb 3-2: new full-speed USB device number 4 using xhci_hcd
+<span class="o">[</span> 1588.677924] usb 3-2: New USB device found, <span class="nv">idVendor</span><span class="o">=</span>1a86, <span class="nv">idProduct</span><span class="o">=</span>7523, <span class="nv">bcdDevice</span><span class="o">=</span> 2.64
+<span class="o">[</span> 1588.677942] usb 3-2: New USB device strings: <span class="nv">Mfr</span><span class="o">=</span>0, <span class="nv">Product</span><span class="o">=</span>2, <span class="nv">SerialNumber</span><span class="o">=</span>0
+<span class="o">[</span> 1588.677949] usb 3-2: Product: USB Serial
+<span class="o">[</span> 1588.686988] ch341 3-2:1.0: ch341-uart converter detected
+<span class="o">[</span> 1588.701256] usb 3-2: ch341-uart converter now attached to ttyUSB0</code></pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_behebung_von_brttly_problemen">2.1.2. Behebung von brttly Problemen</h4>
+<div class="paragraph">
+<p>Bei Ubuntu 22.04 und einigen neueren Ubuntu Versionen wird beim Anschließen des Boards an den USB-Port die Verbindung mit <code>/dev/ttyUSB0</code> kurz hergestellt und gleich wieder unterbrochen</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -659,17 +666,14 @@ pre.rouge {
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Windows/Mac-Nutzer müssen erst den ch341-Treiber installieren (Internetsuche hilft).</p>
+<p>Ab Ubuntu 24.04 scheint das aber kein Problem mehr zu sein.</p>
 </div>
 </td>
 </tr>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_behebung_von_brttly_problemen">2.1.1. Behebung von brttly Problemen</h4>
 <div class="paragraph">
-<p>Bei Ubuntu 22.04 und einigen neueren Ubuntu Versionen wird beim Anschließend des Boards an den USB-Port die Verbindung mit <code>/dev/ttyUSB0</code> kurz hergestellt und gleich wieder unterbrochen (ab Ubuntu 24.04 scheint das aber kein Problem mehr zu sein).
-Ausgabe von <code>sudo dmesg</code> ist ähnlich wie:</p>
+<p>Ausgabe von <code>sudo dmesg</code> ist ähnlich wie:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -700,17 +704,45 @@ sudo udevadm control --reload-rules</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Nun kann man das Board verbinden und sollte die Ausgabe oben im vorangehenden Abschnitt sehen.</p>
+<p>Nun kann man das Board verbinden und sollte die Ausgabe wie oben in <a href="#sec:connecting_auriga">Abschnitt 2.1.1</a> sehen.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_firmware_update_neu_installieren">2.2. Firmware-Update / Neu-Installieren</h3>
+<h3 id="_windows">2.2. Windows</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>TODO: ch341 Treiber&#8230;&#8203;</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_macos">2.3. MacOS</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>TODO: Intel CPUs ch341 Treiber</p>
+</li>
+<li>
+<p>TODO: M CPUs</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_aufspielenaktualisieren_der_firmware_und_ein_erstes_testprogramm">3. Aufspielen/Aktualisieren der Firmware und ein erstes Testprogramm</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_firmware_update_neu_installieren">3.1. Firmware-Update / Neu-Installieren</h3>
 <div class="paragraph">
-<p>Der Makeblock Ranger bzw. das Board und der Prozessor werden mit einer vorinstallierten <em>Firmware</em> geliefert. Das ist nichts anderes als ein Arduino-Programm. Dieses Programm enthält die Basisfunktionalität (wie im Handbuch beschrieben), einschließlich der Bluetooth Kommunikation mit dem SmartPhone.</p>
+<p>Der <em>Makeblock Ranger</em> bzw. das Board und der Prozessor werden mit einer vorinstallierten <em>Firmware</em> geliefert. Diese Firmware ist nichts anderes als ein (recht komplexes) Arduino-Programm. Dieses Programm enthält die Basisfunktionalität (wie im Handbuch beschrieben), einschließlich der Bluetooth-Kommunikation mit der SmartPhone-App.</p>
 </div>
 <div class="paragraph">
-<p>Dieses Programm (also die <em>Firmware</em>), ist im Quelltext verfügbar. Den kann man sich herunterladen (siehe unten) und nach Belieben anpassen und verändern. Das ist auch einer der Gründe, warum ich die MakeBlock Roboterbausätze ziemlich cool finde.  Außerdem kann man in der Firmware jede Menge abgucken.</p>
+<p>Dieses Programm (also die <em>Firmware</em>) ist im Quelltext verfügbar. Den kann man sich herunterladen (siehe unten) und nach Belieben anpassen und verändern. Das ist auch einer der Gründe, warum ich die MakeBlock Roboterbausätze ziemlich cool finde.  Außerdem kann man in der Firmware jede Menge abgucken.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -727,7 +759,7 @@ sudo udevadm control --reload-rules</code></pre>
 </table>
 </div>
 <div class="paragraph">
-<p>Die originale Firmware stellt auch die Funktionalität für die "Live"-Tests in der mBlock-Umgebung (z.B. zum Sensor-Auslesen) bereit. Sobald man ein anderes Programm hochgeladen hat, funktioniert diese "Live"-Funktionalität nicht mehr. Wenn man also wieder mit mBlock arbeiten will, und dort die "Live-"Test Funktionalität braucht, lädt man einfach dei Firmware wieder hoch und mBlock funktioniert wieder wie bisher.</p>
+<p>Die originale Firmware stellt auch die Funktionalität für die "Live"-Tests in der mBlock-Umgebung (z.B. zum Sensor-Auslesen) bereit. Sobald man ein anderes Programm hochgeladen hat, funktioniert diese "Live"-Funktionalität nicht mehr. Wenn man also wieder mit der Block-basierten Programmierung in mBlock arbeiten will und dort die "Live"-Test Funktionalität braucht, lädt man einfach die Firmware wieder hoch und mBlock funktioniert wieder wie bisher.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -737,16 +769,16 @@ sudo udevadm control --reload-rules</code></pre>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Wie wir später sehen werden, kann man aber über den <em>Serial Monitor</em> der Arduino-IDE alle Sensorwerte bequem ausgeben und brauch die mBlock Oberfläche gar nicht mehr.</p>
+<p>Wie wir später sehen werden, kann man aber über den <em>Serial Monitor</em> der Arduino-IDE alle Sensorwerte bequem ausgeben und braucht die mBlock Oberfläche gar nicht mehr.</p>
 </div>
 </td>
 </tr>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_firmware_mit_mblock_aktualisierenzurücksetzen">2.2.1. Firmware mit mBlock aktualisieren/zurücksetzen</h4>
+<h4 id="_firmware_mit_mblock_aktualisierenzurücksetzen">3.1.1. Firmware mit mBlock aktualisieren/zurücksetzen</h4>
 <div class="paragraph">
-<p>Die Firmware kann aber auch mit der mBlock Entwicklungsumgebung installiert werden.</p>
+<p>Die Firmware kann auch mit der mBlock Entwicklungsumgebung installiert werden.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -765,7 +797,7 @@ sudo udevadm control --reload-rules</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_makeblock_libraries_über_arduino_ide_bibliotheksverwaltung_installieren">2.3. Makeblock-Libraries über Arduino-IDE Bibliotheksverwaltung installieren</h3>
+<h3 id="_makeblock_libraries_über_arduino_ide_bibliotheksverwaltung_installieren">3.2. Makeblock-Libraries über Arduino-IDE Bibliotheksverwaltung installieren</h3>
 <div class="paragraph">
 <p>Für das Compilieren der Firmware sind aber noch die Makeblock-Bibliotheken notwendig. Dafür gibt es zwei Methoden:</p>
 </div>
@@ -780,7 +812,7 @@ sudo udevadm control --reload-rules</code></pre>
 </ol>
 </div>
 <div class="sect3">
-<h4 id="_installation_via_bibliotheksmanager_empfohlen">2.3.1. Installation via Bibliotheksmanager (empfohlen)</h4>
+<h4 id="_installation_via_bibliotheksmanager_empfohlen">3.2.1. Installation via Bibliotheksmanager (empfohlen)</h4>
 <div class="paragraph">
 <p>Die Installation der makeblock-Bibliothek erfolgt analog zu anderen Arduino-Bibliotheken.</p>
 </div>
@@ -791,13 +823,13 @@ sudo udevadm control --reload-rules</code></pre>
 <div class="content">
 <img src="../images/arduino-ide-makeblock-library-install.png" alt="arduino ide makeblock library install">
 </div>
-<div class="title">Abbildung 3. Bibliotheksmanager in der Arduino-IDE und ausgewählt MakeBlock Dive Updated Bibliothek</div>
+<div class="title">Abbildung 6. Bibliotheksmanager in der Arduino-IDE und ausgewählte MakeBlock Dive Updated Bibliothek</div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_manuelle_installation">2.3.2. Manuelle Installation</h4>
+<h4 id="_manuelle_installation">3.2.2. Manuelle Installation</h4>
 <div class="paragraph">
-<p>Alternativ gibt es auch hier die Möglichkeit, die Bibliothek via Download des Quelltextes manuell zu installieren.</p>
+<p>Alternativ gibt es auch hier die Möglichkeit, die Bibliothek via Download des Quelltextes manuell zu installieren. Das ist vielleicht mal notwendig, wenn die Bibliothek nicht mehr vom Bibliotheksverwalter angeboten wird.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -807,7 +839,7 @@ sudo udevadm control --reload-rules</code></pre>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>So kann man aktualisierte Versionen einer Bibliothek installieren, ohne auf die offiziellen Bibliotheksquellen zu warten.
+<p>Man kann so auch aktualisierte Versionen einer Bibliothek installieren, ohne auf die offiziellen Bibliotheksquellen zu warten.
 Außerdem kann man so eigene Anpassungen in der Bibliothek (so man das braucht) integrieren.</p>
 </div>
 </td>
@@ -825,8 +857,10 @@ Außerdem kann man so eigene Anpassungen in der Bibliothek (so man das braucht) 
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Die offiziellen MakeBlock-Bibliotheken werden seit 2020 nicht mehr aktiv weiterentwickelt.
-Das offizielle <a href="https://github.com/Makeblock-official/Makeblock-Libraries.git">Makeblock-Libraries GitHub Repository</a> enthält die originalen Quelltexte. Man kann die Bibliothek auch über den Link über folgenden Link herunterladen: <a href="https://codeload.github.com/Makeblock-official/Makeblock-Libraries/zip/master">Makeblock-Libraries - ZIP</a>.</p>
+<p>Die offiziellen MakeBlock-Bibliotheken werden seit 2020 nicht mehr aktiv weiterentwickelt.</p>
+</div>
+<div class="paragraph">
+<p>Falls man doch mal die Originalversionen braucht: Das offizielle <a href="https://github.com/Makeblock-official/Makeblock-Libraries.git">Makeblock-Libraries GitHub Repository</a> enthält die originalen Quelltexte. Man kann die Bibliothek auch über den Link über folgenden Link herunterladen: <a href="https://codeload.github.com/Makeblock-official/Makeblock-Libraries/zip/master">Makeblock-Libraries - ZIP</a>.</p>
 </div>
 </td>
 </tr>
@@ -835,21 +869,18 @@ Das offizielle <a href="https://github.com/Makeblock-official/Makeblock-Librarie
 </div>
 </div>
 <div class="sect2">
-<h3 id="_firmware_update_installieren_zurücksetzen">2.4. Firmware Update installieren / zurücksetzen</h3>
+<h3 id="_firmware_update_installieren_zurücksetzen">3.3. Firmware Update installieren / zurücksetzen</h3>
 <div class="paragraph">
-<p>Die Makeblock Bibliothek bringt als <em>Beispiel</em>-Programm die Firmware mit. Man wählt diese über <em>Datei&#8594;Beispiele&#8594;MakeBlock Drive Updated&#8594;Firmware_For_Auriga</em> aus.</p>
+<p>Die Makeblock Bibliothek bringt als Beispiel-Programm die <em>Firmware</em> mit. Man wählt diese über <em>Datei&#8594;Beispiele&#8594;MakeBlock Drive Updated&#8594;Firmware_For_Auriga</em> aus.</p>
 </div>
 <div class="paragraph">
-<p>Man muss dann in der Arduino-IDE noch den Port und die CPU einstellen: hier wählt man <em>Arduino Mega or Mega 2560</em> aus.</p>
-</div>
-<div class="paragraph">
-<p>Dann kann man das Firmware-Programm übersetzen und hochladen. So kann man nach dem Ausprobieren eigener Programme stets den Originalzustand zurücksetzen.</p>
+<p>Man muss dann in der Arduino-IDE noch den Port und die CPU einstellen: hier wählt man <em>Arduino Mega or Mega 2560</em> aus (dazu gleich mehr im folgenden Kapitel). Dann kann man das Firmware-Programm übersetzen und hochladen. So kann man nach dem Ausprobieren eigener Programme stets zum Originalzustand zurückkehren.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="sec:basics">3. Die Grundlagen der Auriga-Programmierung</h2>
+<h2 id="sec:basics">4. Die Grundlagen der Auriga-Programmierung</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Bevor man mit der Programmierung loslegt, hilft es, sich einen kleinen Überblick über die Möglichkeiten zu verschaffen. De Informationen in diesem Kapitel sind aber eher als Referenz zu verstehen, da die einzelnen Ports und Pins in den nachfolgenden Kapiteln für alle Komponenten nochmal einzeln eingeführt und erklärt werden.</p>
@@ -858,7 +889,7 @@ Das offizielle <a href="https://github.com/Makeblock-official/Makeblock-Librarie
 <div class="content">
 <img src="../images/auriga_pinout.png" alt="auriga pinout">
 </div>
-<div class="title">Abbildung 4. Auriga Board PinOut Diagramm</div>
+<div class="title">Abbildung 7. Auriga Board PinOut Diagramm</div>
 </div>
 <div class="paragraph">
 <p>Wenn man das Board mit der Makeblock-Bibliothek programmieren will, muss man die Port-Nummern kennen. Diese sind in der Makeblock-Bibliothek in der Datei <code>MeAuriga.h</code> definiert:
@@ -930,7 +961,7 @@ DIR B2 = pin 46</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_kleines_testbeispiel">3.1. Kleines Testbeispiel</h3>
+<h3 id="_kleines_testbeispiel">4.1. Kleines Testbeispiel</h3>
 <div class="paragraph">
 <p>Um das Aufspielen des Programms zu testen, kann man die eingebaute LED auf Pin 13 (wie bei jedem Arduino Board) blinken lassen. Das Programm dazu entspricht dem typischen Arduino Blink-Beispielprogramm:</p>
 </div>
@@ -974,19 +1005,19 @@ DIR B2 = pin 46</code></pre>
 <div class="content">
 <img src="../images/auriga-Builtin-LED.gif" alt="auriga Builtin LED">
 </div>
-<div class="title">Abbildung 5. Auriga Built-in LED</div>
+<div class="title">Abbildung 8. Auriga Built-in LED</div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_onboard_leds_und_rgb_ring">4. OnBoard LEDs und RGB Ring</h2>
+<h2 id="_onboard_leds_und_rgb_ring">5. OnBoard LEDs und RGB Ring</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Auf dem Auriga-Board sind zahlreiche LEDs verbaut. In diesem Kapitel geht es darum, diese LEDs zum Leuchte zu bringen.</p>
 </div>
 <div class="sect2">
-<h3 id="_allgemeines">4.1. Allgemeines</h3>
+<h3 id="_allgemeines">5.1. Allgemeines</h3>
 <div class="paragraph">
 <p>Auf dem Board gibt es eine ganze Reihe von LEDs, die man programmieren kann. Da ist zunächst eine blaue Standard Arduino LED, die wie bei anderen Arduino Boards auf dem Pin 13 anzusprechen ist. Dann sind da noch 2 LEDs beim Kommunikationsmodul vorhanden, die primär Kommunikation über die serielle Schnittstelle (Bluetooth/USB) anzeigen. Dazu gibt es noch den 12er RGB LED Ring, bei dem man alle 12 LED unterschiedlich bunt einfärben kann und damit ein vielseitiges Anzeigegerät für Roboterzustände hat.</p>
 </div>
@@ -995,18 +1026,18 @@ DIR B2 = pin 46</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_standard_built_in_led">4.2. Standard built-in LED</h3>
+<h3 id="_standard_built_in_led">5.2. Standard built-in LED</h3>
 <div class="imageblock text-left">
 <div class="content">
 <img src="../images/auriga-Builtin-LED.gif" alt="auriga Builtin LED">
 </div>
-<div class="title">Abbildung 6. Eingebaute Standard-LED auf dem Board</div>
+<div class="title">Abbildung 9. Eingebaute Standard-LED auf dem Board</div>
 </div>
 <div class="paragraph">
 <p>Diese LED wird wie bei allen Arduino-Boards programmiert - man kann das Standard-Blink-Beispielprogramm nehmen:</p>
 </div>
 <div class="sect3">
-<h4 id="_beispielprogramm">4.2.1. Beispielprogramm</h4>
+<h4 id="_beispielprogramm">5.2.1. Beispielprogramm</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Eingebaute LED auf dem Arduino-Board blinken lassen</span>
@@ -1056,12 +1087,12 @@ DIR B2 = pin 46</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_onboard_leds_kommunikationsmodul">4.3. OnBoard LEDs (Kommunikationsmodul)</h3>
+<h3 id="_onboard_leds_kommunikationsmodul">5.3. OnBoard LEDs (Kommunikationsmodul)</h3>
 <div class="imageblock text-left">
 <div class="content">
 <img src="../images/comm-red-blue-LEDs.gif" alt="comm red blue LEDs">
 </div>
-<div class="title">Abbildung 7. Rote und blaue Kommunikations-Modul-LEDs</div>
+<div class="title">Abbildung 10. Rote und blaue Kommunikations-Modul-LEDs</div>
 </div>
 <div class="paragraph">
 <p>Es gibt zwei weitere LEDs auf dem Auriga Board, die zwei kleinen roten und blauen LEDs in der Nähe des USB Anschlusses. Diese werden in der Makeblock Bibliothek nicht verwendet, auch nicht in der Firmware. Man kann diese aber mit den Arduino-Standardpins ansprechen, wenn man denn erstmal weiß, an welchen Pins diese LEDs angeklemmt sind.</p>
@@ -1074,7 +1105,7 @@ Die zwei LEDs sind im Abschnitt <em>程序更新&amp;无线遥控 (dt. Programma
 <div class="content">
 <img src="../images/Schaltplanauszug_OnBoard_LEDs.png" alt="Schaltplanauszug OnBoard LEDs">
 </div>
-<div class="title">Abbildung 8. Auszug Schaltplan OnBoard LEDs</div>
+<div class="title">Abbildung 11. Auszug Schaltplan OnBoard LEDs</div>
 </div>
 <div class="paragraph">
 <p>Diese LEDs sind mit den Pins D0/RX0 und D1/TX0 des MEGA2560 Mikrocontrollers verbunden. Diese LEDs werden hauptsächlich dafür benutzt, die Kommunikation über diese Ports anzuzeigen.
@@ -1095,7 +1126,7 @@ Die Anoden der LEDs sind mit +5 Volt verbunden. Also <strong>leuchten</strong> s
 </table>
 </div>
 <div class="sect3">
-<h4 id="_beispielprogramm_2">4.3.1. Beispielprogramm</h4>
+<h4 id="_beispielprogramm_2">5.3.1. Beispielprogramm</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Programm für den Arduino Mega</span>
@@ -1122,15 +1153,15 @@ Die Anoden der LEDs sind mit +5 Volt verbunden. Also <strong>leuchten</strong> s
 </div>
 </div>
 <div class="sect2">
-<h3 id="_12er_rgb_led_ring">4.4. 12er RGB LED Ring</h3>
+<h3 id="_12er_rgb_led_ring">5.4. 12er RGB LED Ring</h3>
 <div class="paragraph">
 <p>Als Zusatzmodul für das Auriga-Board gibt es einen RGB Ring (Typ: ws12812).</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../images/images/RGBRing.gif" alt="RGBRing">
+<img src="../images/RGBRing.gif" alt="RGBRing">
 </div>
-<div class="title">Abbildung 9. Rings aus 12 RGBS</div>
+<div class="title">Abbildung 12. Rings aus 12 RGBS</div>
 </div>
 <div class="paragraph">
 <p>Der LED Ring wird über einen Controller angesteuert, der am PWM PIN 44 am Arduino Mega 2560 angeschlossen ist.</p>
@@ -1145,7 +1176,7 @@ Die Anoden der LEDs sind mit +5 Volt verbunden. Also <strong>leuchten</strong> s
 <p>Die LED 0 (bzw. 1. LED) ist übrigends die LED auf "1 Uhr", wenn man sich das Bild oben anschaut. Die oberste LED ("12 Uhr") ist die LED 11.</p>
 </div>
 <div class="sect3">
-<h4 id="_beispielprogramm_3">4.4.1. Beispielprogramm</h4>
+<h4 id="_beispielprogramm_3">5.4.1. Beispielprogramm</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Testprogramm für den LED Ring auf dem Auriga Board.</span>
@@ -1205,7 +1236,7 @@ Die Anoden der LEDs sind mit +5 Volt verbunden. Also <strong>leuchten</strong> s
 </div>
 </div>
 <div class="sect3">
-<h4 id="_die_wichtigsten_funktionen_der_mergbled_klasse">4.4.2. Die wichtigsten Funktionen der MeRGBLed Klasse</h4>
+<h4 id="_die_wichtigsten_funktionen_der_mergbled_klasse">5.4.2. Die wichtigsten Funktionen der MeRGBLed Klasse</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Alle RGB mit der gleichen Farbe setzen</span>
@@ -1220,7 +1251,7 @@ Die Anoden der LEDs sind mit +5 Volt verbunden. Also <strong>leuchten</strong> s
 </div>
 </div>
 <div class="sect3">
-<h4 id="_programmierideen">4.4.3. Programmierideen</h4>
+<h4 id="_programmierideen">5.4.3. Programmierideen</h4>
 <div class="paragraph">
 <p>Den RGB-Ring kann man prima für verschiedene Sachen nutzen, bspw.:</p>
 </div>
@@ -1245,7 +1276,7 @@ Die Anoden der LEDs sind mit +5 Volt verbunden. Also <strong>leuchten</strong> s
 </div>
 </div>
 <div class="sect1">
-<h2 id="_onboard_sensoren_licht_schall_temperature_gyroscop">5. OnBoard Sensoren (Licht, Schall, Temperature, Gyroscop)</h2>
+<h2 id="_onboard_sensoren_licht_schall_temperature_gyroscop">6. OnBoard Sensoren (Licht, Schall, Temperature, Gyroscop)</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Hier geht es um das Auslesen der verschiedenen OnBoard-Sensoren auf dem Auriga-Board. Auf dem Auriga Board sind 4 Sensortypen platziert:</p>
@@ -1270,7 +1301,7 @@ Die Anoden der LEDs sind mit +5 Volt verbunden. Also <strong>leuchten</strong> s
 <p>Nachfolgend wird gezeigt, wie diese Sensoren einzeln auszulesen sind, und welche Genauigkeiten/Wertebereiche zu erwarten sind.</p>
 </div>
 <div class="sect2">
-<h3 id="_lautstärkeschall">5.1. Lautstärke/Schall</h3>
+<h3 id="_lautstärkeschall">6.1. Lautstärke/Schall</h3>
 <div class="paragraph">
 <p>Der Sound-Sensor auf dem Auriga-Board wird über die Klasse <code>MeSoundSensor</code> (Include-Datei nur <code>MeAuriga.h</code>)
 ausgelesen.</p>
@@ -1293,7 +1324,7 @@ ausgelesen.</p>
 <p>Die Klasse hat nur eine sinnvolle Memberfunction: <code>strength()</code>, was die Lautstärke im Bereich 140 bis ~600 ausgibt.</p>
 </div>
 <div class="sect3">
-<h4 id="_beispielprogramm_4">5.1.1. Beispielprogramm</h4>
+<h4 id="_beispielprogramm_4">6.1.1. Beispielprogramm</h4>
 <div class="paragraph">
 <p>Liest kontinuierlich die Lautstärke aus und übergibt diese via serieller Verbindung an den PC und kann dort bspw. mit dem Serial Plotter der Arduino-IDE angezeigt werden.</p>
 </div>
@@ -1321,12 +1352,12 @@ ausgelesen.</p>
 <div class="content">
 <img src="../images/auriga_soundsensor.png" alt="auriga soundsensor">
 </div>
-<div class="title">Abbildung 10. Im SerialPlotter sieht man die erfassten Werte, als ich mehrfach laut direkt über dem Auriga-Board geklatscht habe. In sehr leiser Umgebung rauscht das Signal bei ca. 130&#8230;&#8203;140.</div>
+<div class="title">Abbildung 13. Im SerialPlotter sieht man die erfassten Werte, als ich mehrfach laut direkt über dem Auriga-Board geklatscht habe. In sehr leiser Umgebung rauscht das Signal bei ca. 130&#8230;&#8203;140.</div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_lichthelligkeit">5.2. Licht/Helligkeit</h3>
+<h3 id="_lichthelligkeit">6.2. Licht/Helligkeit</h3>
 <div class="paragraph">
 <p>Es gibt zwei Helligkeitssensoren auf dem Auriga Board:</p>
 </div>
@@ -1359,7 +1390,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <p>Die Klasse <code>MeLightSensor</code> liest die Helligkeitswerte aus (im Bereich 0..1000) (Memberfunktion <code>read()</code>).</p>
 </div>
 <div class="sect3">
-<h4 id="_beispielprogramm_5">5.2.1. Beispielprogramm</h4>
+<h4 id="_beispielprogramm_5">6.2.1. Beispielprogramm</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Test für die Lichtsensoren</span>
@@ -1393,7 +1424,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <div class="content">
 <img src="../images/auriga_lightsensors.png" alt="auriga lightsensors">
 </div>
-<div class="title">Abbildung 11. Bei direkten Anleuchten mit einer Fahrradlampe wurde der Wert 1000 ausgegeben. In sehr dunklen Räumen (nur der Monitor in 30 cm Entfernung ist an), zeigt der Sensor Werte zwischen 1-3. Im Beispiel oben habe ich wechselseitig den einen und dann den anderen Sensor mit der Hand abgedeckt.</div>
+<div class="title">Abbildung 14. Bei direkten Anleuchten mit einer Fahrradlampe wurde der Wert 1000 ausgegeben. In sehr dunklen Räumen (nur der Monitor in 30 cm Entfernung ist an), zeigt der Sensor Werte zwischen 1-3. Im Beispiel oben habe ich wechselseitig den einen und dann den anderen Sensor mit der Hand abgedeckt.</div>
 </div>
 <div class="paragraph">
 <p><em>Interessant:</em> bei moderatem Licht von Energiesparlampen zeigt der Sensor (wellenförmige schwankende) Werte zwischen 55 und 140 an.</p>
@@ -1404,12 +1435,12 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_temperatur">5.3. Temperatur</h3>
+<h3 id="_temperatur">6.3. Temperatur</h3>
 <div class="paragraph">
 <p>Auf dem Board ist ein DS18B20 Temperatursensor verbunden. Dieser wird über das Wire-Protokoll am Port 13 abgefragt. Die entsprechende Implementierung steckt in der Klasse <code>MeOnBoardTemp</code> mit der Member-Funktion <code>readValue()</code> (bzw. <code>readAnalog()</code> für den Rohwert).</p>
 </div>
 <div class="sect3">
-<h4 id="_beispielprogramm_6">5.3.1. Beispielprogramm</h4>
+<h4 id="_beispielprogramm_6">6.3.1. Beispielprogramm</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Test für den Temperatursensor</span>
@@ -1435,7 +1466,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <div class="content">
 <img src="../images/auriga_temperatursensor.png" alt="auriga temperatursensor">
 </div>
-<div class="title">Abbildung 12. Vom Sensor gelieferten Temperaturverlauf, wenn man den Arduino nach längerer Zeit (6h) erstmalig anschaltet. Ausgehend von der Raumtemperatur (ca. 22°) erwärmt sich das Board und der Sensor in wenigen Minuten auf über 25°C, wenn man noch ein paar LEDs anmacht, oder dem Mikroprozessor ordentlich was zu tun gibt, geht die Temperatur rauf auf knapp 30°C.</div>
+<div class="title">Abbildung 15. Vom Sensor gelieferten Temperaturverlauf, wenn man den Arduino nach längerer Zeit (6h) erstmalig anschaltet. Ausgehend von der Raumtemperatur (ca. 22°) erwärmt sich das Board und der Sensor in wenigen Minuten auf über 25°C, wenn man noch ein paar LEDs anmacht, oder dem Mikroprozessor ordentlich was zu tun gibt, geht die Temperatur rauf auf knapp 30°C.</div>
 </div>
 <div class="paragraph">
 <p><em>Interessant:</em> Der Temperatursensor wird maßgeblich durch die Energieabgabe von LEDs und des Prozessors allgemein beeinflusst. Die Umgebungstemperatur lässt sich damit nur sehr ungenau messen, da die Wärmezirkulation zum Sensor durch das Plastikgehäuse behindert ist.</p>
@@ -1443,7 +1474,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_gyroskop">5.4. Gyroskop</h3>
+<h3 id="_gyroskop">6.4. Gyroskop</h3>
 <div class="paragraph">
 <p>Das Auriga-Board hat einen Neigungssensor verbaut. Dieser liefert für die 3 Achsen x,y,z jeweils Neigungswerte/Ausrichtungswerte und dazu die Beschleunigungen auf den 3 Achsen.</p>
 </div>
@@ -1470,7 +1501,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <p>Zum Auslesen des Neigungssensors/Gyroskops verwendet man die Klasse <code>MeGyro</code> wie im nachfolgendem Beispiel gezeigt.</p>
 </div>
 <div class="sect3">
-<h4 id="_beispielprogramm_7">5.4.1. Beispielprogramm</h4>
+<h4 id="_beispielprogramm_7">6.4.1. Beispielprogramm</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Testprogramm für den Neigungssensor</span>
@@ -1514,13 +1545,13 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_töne_mit_dem_passiven_buzzer_auf_dem_board">6. Töne mit dem passiven Buzzer auf dem Board</h2>
+<h2 id="_töne_mit_dem_passiven_buzzer_auf_dem_board">7. Töne mit dem passiven Buzzer auf dem Board</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Hier steuern wir den passiven Buzzer auf dem Board an.</p>
 </div>
 <div class="sect2">
-<h3 id="_allgemeines_2">6.1. Allgemeines</h3>
+<h3 id="_allgemeines_2">7.1. Allgemeines</h3>
 <div class="paragraph">
 <p>Auf dem Auriga-Board ist ein passiver Buzzer verbaut, welcher an einen PWM-Pin angeschlossen ist. Der Buzzer ist an Pin 45 angeschlossen.</p>
 </div>
@@ -1559,7 +1590,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <p>Um den passiven Buzzer anzusteuern, verwendet man <code>tone()</code> und zum Ausschalten <code>noTone()</code>. Hier ist ein Beispiel, für die direkte Ansteuerung des Pins.</p>
 </div>
 <div class="sect3">
-<h4 id="_beispielprogramm_8">6.1.1. Beispielprogramm</h4>
+<h4 id="_beispielprogramm_8">7.1.1. Beispielprogramm</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="cp">#define BUZZER_PIN 45
@@ -1636,7 +1667,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_verwendung_der_makeblock_klasse_mebuzzer">6.2. Verwendung der Makeblock Klasse MeBuzzer</h3>
+<h3 id="_verwendung_der_makeblock_klasse_mebuzzer">7.2. Verwendung der Makeblock Klasse MeBuzzer</h3>
 <div class="paragraph">
 <p>In der Makeblock-Bibliothek gibt es noch die Klasse <code>MeBuzzer</code>. Diese kapselt den Zugriff, macht die Ansteuerung des Buzzers aber nicht wirklich einfacher.
 Man kann mittels der Member-Funktion <code>MeBuzzer::tone(frequenz, dauer in ms)</code> einen Ton ausgeben. Diese Funktion implementiert einen Software-PWM (d.h. in dieser Funktion wird der angegebene Buzzer-Pin sehr häufig an und aus geschaltet, wobei das Verhältnis der an/aus-Zeiten die Tonhöhe definiert).
@@ -1658,7 +1689,7 @@ die Frequenz einstellen. Das hat auch den Vorteil, dass man ohne Wartezeiten par
 </table>
 </div>
 <div class="sect3">
-<h4 id="_beispielprogramm_9">6.2.1. Beispielprogramm</h4>
+<h4 id="_beispielprogramm_9">7.2.1. Beispielprogramm</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Beispielprogramm für die Verwendung der MeBuzzer-Klasse</span>
@@ -1692,13 +1723,13 @@ die Frequenz einstellen. Das hat auch den Vorteil, dass man ohne Wartezeiten par
 </div>
 </div>
 <div class="sect1">
-<h2 id="_motorsteuerung">7. Motorsteuerung</h2>
+<h2 id="_motorsteuerung">8. Motorsteuerung</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Jetzt wird endlich mal was bewegt. In diesem Teil geht es um die Programmierung der Motoren.</p>
 </div>
 <div class="sect2">
-<h3 id="_allgemeines_3">7.1. Allgemeines</h3>
+<h3 id="_allgemeines_3">8.1. Allgemeines</h3>
 <div class="paragraph">
 <p>Am Auriga-Board gibt es zwei Motorports. Jeder der Motoren kann über einen PWM Pin (für die Geschwindigkeit) und zwei Richtungspins angesteuert werden.
 Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Verwendung der Makeblock Bibliothek.</p>
@@ -1708,7 +1739,7 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 </div>
 </div>
 <div class="sect2">
-<h3 id="_direkte_ansteuerung_über_pwm_und_digitale_pins">7.2. Direkte Ansteuerung über PWM und digitale Pins</h3>
+<h3 id="_direkte_ansteuerung_über_pwm_und_digitale_pins">8.2. Direkte Ansteuerung über PWM und digitale Pins</h3>
 <div class="paragraph">
 <p>Aus dem Schaltplan kann man die Bezeichnung der digitalen Pins (D46-D49) und die PWM Pins (D10, D11) entnehmen:</p>
 </div>
@@ -1716,7 +1747,7 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 <div class="content">
 <img src="../images/auriga_motorports.png" alt="auriga motorports">
 </div>
-<div class="title">Abbildung 13. Motor-Ports an der Auriga-Platine</div>
+<div class="title">Abbildung 16. Motor-Ports an der Auriga-Platine</div>
 </div>
 <div class="paragraph">
 <p>Die Pins werden nun wie folgt angesprochen:</p>
@@ -1735,7 +1766,7 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 </ul>
 </div>
 <div class="sect3">
-<h4 id="_beispielprogramm_direkte_ansteuerung">7.2.1. Beispielprogramm - Direkte Ansteuerung</h4>
+<h4 id="_beispielprogramm_direkte_ansteuerung">8.2.1. Beispielprogramm - Direkte Ansteuerung</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Testprogramm für die Ansteuerung der DC-Motoren mittels Arduino Pin Bibliothek</span>
@@ -1828,7 +1859,7 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 </div>
 </div>
 <div class="sect2">
-<h3 id="_ansteuerung_über_encoder_klasse_der_bibliothek">7.3. Ansteuerung über Encoder-Klasse der Bibliothek</h3>
+<h3 id="_ansteuerung_über_encoder_klasse_der_bibliothek">8.3. Ansteuerung über Encoder-Klasse der Bibliothek</h3>
 <div class="paragraph">
 <p>Die MakeBlock-Bibliothek bietet zahlreiche Klassen für die Programmierung von Encodern. Für die mitgelieferten DC-Motoren wird die Klasse <code>MeEncoderOnBoard</code> verwendet. Diese übernimmt, wie der Name schon sagt, die Programmierung der auf dem Board befindlichen Motorsteuerung.</p>
 </div>
@@ -1839,7 +1870,7 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 <p>Die Motoren liefern Bewegungsimpulse, die man zählen kann, um so Geschwindigkeit und Entfernung zu bestimmen. Damit man das präzise machen kann, ohne dass anderen Aufgaben im Mikroprozessor die Messung beeinträchtigen, verwendet man Interruptfunktionen. Dazu registriert man für jeden Motor eine Interruptfunktion, die immer dann aufgerufen wird, wenn am entsprechenden Pin ein RISING Signal anliegt (also der Eingangspin von LOW auf HIGH wechselt). In der Interruptfuktion wird dann ein Zähler hochgezählt, der dann für die Berechnung der Momentangeschwindigkeit und Bewegung verwendet wird. Die Berechnung selbst ist in der Klasse <code>MeEncoderOnBoard</code> gekapselt.</p>
 </div>
 <div class="sect3">
-<h4 id="_beispielprogramm_ansteuerung_mittels_bibliotheksfunktion">7.3.1. Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion</h4>
+<h4 id="_beispielprogramm_ansteuerung_mittels_bibliotheksfunktion">8.3.1. Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion</h4>
 <div class="paragraph">
 <p>Im Folgenden Testbeispiel kann man den Robotor begrenzt steuern:</p>
 </div>
@@ -1969,7 +2000,7 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 </div>
 </div>
 <div class="sect1">
-<h2 id="_abschließende_bemerkungen">8. Abschließende Bemerkungen</h2>
+<h2 id="_abschließende_bemerkungen">9. Abschließende Bemerkungen</h2>
 <div class="sectionbody">
 
 </div>
@@ -1977,8 +2008,8 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0 (11.01.2025)<br>
-Last updated 2025-02-16 09:22:06 +0100
+Version 1.0 (16.02.2025)<br>
+Last updated 2025-02-16 15:14:25 +0100
 </div>
 </div>
 </body>

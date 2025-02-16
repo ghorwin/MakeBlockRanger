@@ -1,7 +1,7 @@
 Makeblock mBot Ranger: Eine Anleitung zur Programmierung des Roboterbausatzes mit der ArduinoIDE
 ================================================================================================
 Andreas Nicolai <andreas.nicolai@gmx.net>
-v1.0 (11.01.2025)
+v1.0 (16.02.2025)
 // v1.0 date_on_line_above
 :Author Initials: AN
 :toc: left
@@ -25,7 +25,9 @@ v1.0 (11.01.2025)
 
 ## Einleitung
 
-Dieser Makeblock mBot Ranger Programmierkurs baut auf vorhandenen Grundlagen zur Arduino-Programmierung auf. Man sollte also schon die Arduino IDE kennen und natürlich auch Grundlagen der C-Programmiersprache beherrschen. In diesem Tutorial bzw. Robotik-Kurs wird gezeigt, wie man den mBot Ranger Bausatz mittels der Arduino-IDE und der C bzw. C++ Programmiersprache programmiert (wenn man also die Stufe der Block-Programmierung überwunden hat).
+Der _MakeBlock Ranger_ Bausatz ist ziemlich cool und bietet einiges. Leider ist eigentlich nur die Block-basierte Programmierung wirklich gut umgesetzt, und diese hat Grenzen. Dokumentation für die Programmierung mittels C in der Arduino IDE gibt es kaum, zumindest keine offizielle, daher habe ich dieses Tutorial und Anleitung zusammengestellt. Außerdem soll diese Dokumentation als Leitfaden für einen Programmier-/Robotikkurs an der Schule dienen.
+
+Diese _Makeblock Ranger_ Anleitung baut auf vorhandenen Grundlagen zur Arduino-Programmierung auf. Man sollte also schon die Arduino IDE kennen und natürlich auch Grundlagen der C-Programmiersprache beherrschen. In diesem Tutorial bzw. Robotik-Kurs wird gezeigt, wie man den mBot Ranger Bausatz mittels der Arduino-IDE und der C bzw. C++ Programmiersprache programmiert (wenn man also die Stufe der Block-Programmierung überwunden hat).
 
 Es geht also um folgenden Robotor
 
@@ -33,32 +35,27 @@ image::makeblock-mbot-ranger.jpg[width=400]
 
 bzw. die darin verbaute Auriga-Platine mit dem Arduino-Prozessor. 
 
-[NOTE]
-====
-In diesem Tutorial wird Linux (konkret Ubuntu) verwendet. Linux bringt die Treiber für den ch341-Chip bereits mit, während man unter Windows hier noch die Treiber installieren muss. Bei Gelegenheit würde ich das nochmal dokumentieren (ansonsten hilft hier einfach eine Websuche).
-====
-
-Der _MakeBlock Ranger_, oder besser gesagt das Gehirn davon, das Auriga Board mit dem Arduino Mega 2560 Prozessor wird angeschlossen und erklärt, wie man die Entwicklungsbibliotheken einrichtet und die Firmware aktualisiert bzw. nach dem Aufspielen eigener Programme wieder zurücksetzt. Dieser Text erklärt auch ein paar Hintergründe und wie die RJ25 Ports mit den Arduino-Pins verbunden sind und gibt allgemein erstmal eine Orientierung, wie das Ganze so funktioniert.
-
-Ein kleines Minibeispiel zum Austesten der Programmierumgebung und Aufspielen eines Programms auf den Robotor schließt das Kapitel ab.
-
 ### Überblick über den Roboterbausatz
 
 Als Roboterbausatz wird der Makeblock mBot Ranger verwendet. Es gibt noch andere Makeblock Bausätze. Die Pin/Port-Belegung ist dann etwas anders und es gibt andere Sensoren, aber im Großen und Ganzen funktioniert das alles sehr ähnlich wie bei dem hier beschriebenen mBot Ranger. 
 
 Mit dem Bausatz lassen sich 3 verschiedene Modelle bauen (und mit etwas Kreativität noch weitere):
 
-image::makeblock-mbot-ranger.jpg[width=300]
-image::makeblock-mbot-raptor.jpg[width=300]
-image::makeblock-mbot-bird.jpg[width=300]
-.Mögliche Modelle, welche man mit dem Bausatz bauen kann
+.Land Raider - ein Kettenfahrzeug mit Linienfolgesensor und Abstandsradar
+image::makeblock-mbot-ranger.jpg[width=300,pdfwidth=6cm]
 
-Der Bausatz verwendet ein Auriga Board, mit einem Arduino Mega 2560 Prozessor. Das Auriga-Board ist die Weiterentwicklung des Orion-Boards (welches bei früheren mBot Bausätzen verwendet wurde) und kann einiges mehr.
+.Dashing Raptor - ähnlich wie Ranger - ohne Ketten zwar weniger cool, dafür schneller unterwegs (auf glatten Fußböden)
+image::makeblock-mbot-raptor.jpg[width=300,pdfwidth=6cm]
+
+.Nervous Bird - interessante Demo für die Verwendung des Neigungs-/Beschleunigungssensors (quasi ein Segway-Personal-Transporter ohne Person); mit diesem Modell kann man seine ganze Kreativität bei der Regelungsprogrammierung ausspielen, um das Gefährt auf hügeligem Gelände sicher und mit konstanter Geschwindigkeit fahren zu lassen.
+image::makeblock-mbot-bird.jpg[width=300,pdfwidth=6cm]
+
+Der _MakeBlock Ranger_ Bausatz verwendet ein _Auriga Board_ mit einem _Arduino Mega 2560_ Prozessor. Das Auriga-Board ist die Weiterentwicklung des Orion-Boards (welches bei früheren mBot Bausätzen verwendet wurde) und kann einiges mehr.
 
 Hier ist eine Funktions-/Ausstattungsbeschreibung (basierend auf der Produktbeschreibung aus
 https://shop.technik-lpe.de/steuerboards/872-auriga-steuerboard-6928819504967.html[shop.technik-lpe.de]:
 
-Der *Auriga* ist eine einfach zu bedienende Hauptsteuerplatine, die speziell für den MINT-Unterricht entwickelt wurde. Basierend auf dem Arduino ATmega 2560 hat der Auriga ein paar mehr Möglichkeiten, Sensoren oder Aktoren anschließen zu können. Hier ist ein kleiner Überblick:
+Der *Auriga* ist eine gut ausgestattete Hauptsteuerplatine, die speziell für den MINT-Unterricht entwickelt wurde. Basierend auf dem Arduino ATmega 2560 sind auf dem Auriga bereits eine Reihe von Sensoren und Aktoren vebaut, und es können externe Sensoren oder Motoren angesteckt werden. Hier ist ein kleiner Überblick:
  
 - Onboard-Gyroskop, Tonsensor, passiver Summer und Temperatursensor, 2 Lichtsensoren
 - Unterstützt DC-Motoren, Schrittmotoren, Servoregler, Smart Servos, Encoder-Motoren, etc.
@@ -68,17 +65,17 @@ Der *Auriga* ist eine einfach zu bedienende Hauptsteuerplatine, die speziell fü
 - WS1282 RGB LED ring
 
 .Schaubild der Aurigaplatine mit verbauten Sensoren
-image::auriga_schaubild.jpg[width=500]
+image::auriga_schaubild.jpg[width=500, pdfwidth=12cm]
 
 .Farbkodierung der Anschlüsse (Details dazu im Kapitel zu den RJ25 Ports)
-image::farbcodierung_auriga.jpg[width=150]
+image::farbcodierung_auriga.jpg[width=150, pdfwidth=4cm]
 
 - PORT1 - PORT4 unterstützen einen kontinuierlichen 3,5A-Ausgang (max. 5A)
 - PORT5 - PORT10 haben einen Kurzschluss- und Überstromschutz für 3A
 - PORT5 - PORT10 unterstützen kontinuierlich 5V DC und 4A Ausgang (max. 3A)
 - PORT1 - PORT4 haben einen Kurzschluss- und Überstromschutz für 3,5A
 
-- USB-Anschluss mit antistatischem Schutz (Akku wird darüber nicht geladen)
+- USB-Anschluss mit antistatischem Schutz (Akkus werden darüber nicht geladen)
 
 ### Informationsquellen
 
@@ -89,7 +86,7 @@ Viele nachfolgend und in den anderen Teilen beschriebene Details habe ich aus de
 Hier sind noch einige Dokumente, die ich zusammengetragen habe:
 
 - link:../downloads/Makeblock_Leaflet_mBot-Ranger_2018Q3_V1-1-1_View.pdf[MakeBlock Ranger Flyer]
-- link:../downloads/mBot-Ranger_Blue_Instruction_Book.pdf[mBot Ranger (Bau-)Anleitung]
+- link:../downloads/mBot-Ranger_Blue_Instruction_Book.pdf[mBot Ranger (Bau-)Anleitung] - enthält auch einen guten Kurzüberblick über die Lage der oben aufgelisteten OnBoard-Sensoren
 - link:../downloads/getting_started_with_mBlock.pdf[mBlock Entwicklungsumgebung - Getting Started]
 - link:../downloads/MeAuriga_Schaltplan.pdf[Auriga Schaltplan]
 - link:../downloads/MeAuriga_Pinout.pdf[Auriga Pinout]

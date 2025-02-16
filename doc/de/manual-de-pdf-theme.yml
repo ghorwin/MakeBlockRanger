@@ -1,7 +1,7 @@
 extends: default-for-print
 
 base:
-  font-size: 8
+  font-size: 9
 
 font:
   catalog:
@@ -18,7 +18,7 @@ font:
       bold_italic: RobotoCondensed-BoldItalic.ttf
       
 toc:
-  font-size: 7
+  font-size: 8
 
 toc-h2:
   font-style: bold
@@ -30,13 +30,20 @@ heading:
   h4-font-size: $base-font-size * 1.1
 
 title-page:
+  font-family: Roboto
   text-align: center
   logo:
-    image: image:../images/VICUS_Logo.png[align=center,pdfwidth=75%]
+    image: image:../images/makeblock-mbot-ranger.jpg[align=center,pdfwidth=75%]
     top: 0cm
   authors:
-    content: ~
+    content:
+      name_only: "{author}"
+      with_email: "{author} <{email}>"
+  subtitle:
+    font-family: Roboto
+    font-style: italic
 
+      
 page:
   margin: [3cm, 2.5cm, 3cm, 2cm]
 
@@ -51,10 +58,18 @@ header:
   line-height: 1
   recto:
     left:
-      content: 'image::../images/Logo_VICUS_horizontal.png[pdfwidth="5cm"]'
-  verso:
+      content: 'image::../images/makeblock-mbot-ranger.jpg[pdfwidth="2cm"]'
+    center:
+      content: 'image::../images/makeblock-mbot-raptor.jpg[pdfwidth="2cm"]'
     right:
-      content: 'image::../images/Logo_VICUS_horizontal.png[pdfwidth="5cm"]'
+      content: 'image::../images/makeblock-mbot-bird.jpg[pdfwidth="1cm"]'
+  verso:
+    left:
+      content: 'image::../images/makeblock-mbot-bird.jpg[pdfwidth="1cm"]'
+    center:
+      content: 'image::../images/makeblock-mbot-raptor.jpg[pdfwidth="2cm"]'
+    right:
+      content: 'image::../images/makeblock-mbot-ranger.jpg[pdfwidth="2cm"]'
 
 footer:
   height: 0.75in
@@ -63,14 +78,14 @@ footer:
     right:
       content: 'Seite {page-number} von {page-count}'
     center:
-      content: 'VICUS User Manual'
+      content: 'Makeblock Ranger Tutorial und Anleitung'
     left:
       content: 'v{revnumber}'
   verso:
     left:
       content: 'Seite {page-number} von {page-count}'
     center:
-      content: 'VICUS User Manual'
+      content: 'Makeblock Ranger Tutorial und Anleitung'
     right:
       content: 'v{revnumber}'
 

@@ -1,3 +1,5 @@
+:imagesdir: ../images
+
 # OnBoard LEDs und RGB Ring
 
 Auf dem Auriga-Board sind zahlreiche LEDs verbaut. In diesem Kapitel geht es darum, diese LEDs zum Leuchte zu bringen.
@@ -114,7 +116,7 @@ void loop() {
 Als Zusatzmodul für das Auriga-Board gibt es einen RGB Ring (Typ: ws12812).
 
 .Rings aus 12 RGBS
-image::images/RGBRing.gif[]
+image::RGBRing.gif[]
 
 Der LED Ring wird über einen Controller angesteuert, der am PWM PIN 44 am Arduino Mega 2560 angeschlossen ist.
 

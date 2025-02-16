@@ -1,4 +1,1 @@
-set ADOC=VICUS-Handbuch.adoc
-asciidoctor -a lang=de  %ADOC%
-pause
-
+asciidoctor -a lang=de -a icons=font -a stylesdir=../css -a iconfont-remote!  main.adoc -o index.html
