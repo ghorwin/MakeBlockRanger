@@ -151,10 +151,50 @@ Falls man doch mal die Originalversionen braucht: Das offizielle https://github.
 ====
 
 
+## Software erstellen und Hochladen
+
+Wie üblich in der Arduino IDE wählt man zuerst 
+
 ## Firmware Update installieren / zurücksetzen
 
 Die Makeblock Bibliothek bringt als Beispiel-Programm die _Firmware_ mit. Man wählt diese über _Datei->Beispiele->MakeBlock Drive Updated->Firmware_For_Auriga_ aus.
 
 Man muss dann in der Arduino-IDE noch den Port und die CPU einstellen: hier wählt man _Arduino Mega or Mega 2560_ aus (dazu gleich mehr im folgenden Kapitel). Dann kann man das Firmware-Programm übersetzen und hochladen. So kann man nach dem Ausprobieren eigener Programme stets zum Originalzustand zurückkehren.
+
+
+
+## Ein erstes Testprogramm
+
+Um das Aufspielen des Programms zu testen, kann man die eingebaute LED auf Pin 13 (wie bei jedem Arduino Board) blinken lassen. Das Programm dazu entspricht dem typischen Arduino Blink-Beispielprogramm:
+
+
+.Triviales Beispielprogramm für ein Arduino-Board. Die eingebaute LED wird ein- und ausgeschaltet. Um sie von der rhythmisch blinkenden anderen blauen LED zu unterscheiden, lassen wir sie lang-kurz blinken.
+```c++
+// Eingebaute LED auf dem Arduino-Board blinken lassen
+// Dies ist quasi das Standard-Test-Programm für die meisten Arduino-Boards
+
+int BlueLed = LED_BUILTIN; // Pin 13
+
+void setup() {
+  pinMode( BlueLed, OUTPUT);
+}
+
+void loop() {
+  // lang an
+  digitalWrite( BlueLed, HIGH);
+  delay (2000);
+  // kurz aus
+  digitalWrite( BlueLed, LOW);
+  delay (500);
+}
+```
+
+[NOTE]
+====
+Die LED ist etwas schwer zu erkennen und liegt einseitig etwas verdeckt. Sehr sinnvoll ist damit ihre Ansteuerung nicht, aber zum Testen kann man das ja mal machen.
+====
+
+.Auriga Built-in LED
+image::auriga-Builtin-LED.gif[align="left"]
 
 

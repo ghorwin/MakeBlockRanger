@@ -1,4 +1,6 @@
 :imagesdir: ../images
+
+[[chap:motors]]
 # Motorsteuerung
 
 Jetzt wird endlich mal was bewegt. In diesem Teil geht es um die Programmierung der Motoren.

@@ -377,14 +377,16 @@ pre.rouge {
 </ul>
 </li>
 <li><a href="#_firmware_update_installieren_zurücksetzen">3.3. Firmware Update installieren / zurücksetzen</a></li>
+<li><a href="#_ein_erstes_testprogramm">3.4. Ein erstes Testprogramm</a></li>
 </ul>
 </li>
-<li><a href="#sec:basics">4. Die Grundlagen der Auriga-Programmierung</a>
+<li><a href="#chap:basics">4. Auriga-Pin/Ports Referenz</a>
 <ul class="sectlevel2">
-<li><a href="#_kleines_testbeispiel">4.1. Kleines Testbeispiel</a></li>
+<li><a href="#_ports_und_zugeordnete_arduino_pins">4.1. Ports und zugeordnete Arduino-Pins</a></li>
+<li><a href="#_weitere_verwendete_pins_des_arduino_mega_2560_prozessors">4.2. Weitere verwendete Pins des Arduino Mega 2560 Prozessors</a></li>
 </ul>
 </li>
-<li><a href="#_onboard_leds_und_rgb_ring">5. OnBoard LEDs und RGB Ring</a>
+<li><a href="#chap:LEDs">5. OnBoard LEDs und RGB Ring</a>
 <ul class="sectlevel2">
 <li><a href="#_allgemeines">5.1. Allgemeines</a></li>
 <li><a href="#_standard_built_in_led">5.2. Standard built-in LED</a>
@@ -444,7 +446,7 @@ pre.rouge {
 </li>
 </ul>
 </li>
-<li><a href="#_motorsteuerung">8. Motorsteuerung</a>
+<li><a href="#sec:motors">8. Motorsteuerung</a>
 <ul class="sectlevel2">
 <li><a href="#_allgemeines_3">8.1. Allgemeines</a></li>
 <li><a href="#_direkte_ansteuerung_über_pwm_und_digitale_pins">8.2. Direkte Ansteuerung über PWM und digitale Pins</a>
@@ -877,91 +879,8 @@ Außerdem kann man so eigene Anpassungen in der Bibliothek (so man das braucht) 
 <p>Man muss dann in der Arduino-IDE noch den Port und die CPU einstellen: hier wählt man <em>Arduino Mega or Mega 2560</em> aus (dazu gleich mehr im folgenden Kapitel). Dann kann man das Firmware-Programm übersetzen und hochladen. So kann man nach dem Ausprobieren eigener Programme stets zum Originalzustand zurückkehren.</p>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="sec:basics">4. Die Grundlagen der Auriga-Programmierung</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Bevor man mit der Programmierung loslegt, hilft es, sich einen kleinen Überblick über die Möglichkeiten zu verschaffen. De Informationen in diesem Kapitel sind aber eher als Referenz zu verstehen, da die einzelnen Ports und Pins in den nachfolgenden Kapiteln für alle Komponenten nochmal einzeln eingeführt und erklärt werden.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="../images/auriga_pinout.png" alt="auriga pinout">
-</div>
-<div class="title">Abbildung 7. Auriga Board PinOut Diagramm</div>
-</div>
-<div class="paragraph">
-<p>Wenn man das Board mit der Makeblock-Bibliothek programmieren will, muss man die Port-Nummern kennen. Diese sind in der Makeblock-Bibliothek in der Datei <code>MeAuriga.h</code> definiert:
-Jeder Makeblock-Port ist an 2 Arduino-Pins angeschlossen (siehe auch Erklärung dazu in <a href="#sec:rj25">[sec:rj25]</a>. Diese Pins werden als <em>Slot1</em> und <em>Slot2</em> bezeichnet.</p>
-</div>
-<div class="listingblock">
-<div class="title">Auszug aus der Header-Datei <em>MeAuriga.h</em></div>
-<div class="content">
-<pre class="rouge highlight"><code data-lang="c++"><span class="n">MePort_Sig</span> <span class="n">mePort</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span> <span class="o">=</span>
-<span class="p">{</span>
-	<span class="p">{</span> <span class="n">NC</span><span class="p">,</span> <span class="n">NC</span> <span class="p">},</span> <span class="p">{</span>   <span class="mi">5</span><span class="p">,</span>   <span class="mi">4</span> <span class="p">},</span> <span class="p">{</span>   <span class="mi">3</span><span class="p">,</span>   <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span>   <span class="mi">7</span><span class="p">,</span>   <span class="mi">6</span> <span class="p">},</span> <span class="p">{</span>   <span class="mi">9</span><span class="p">,</span>   <span class="mi">8</span> <span class="p">},</span>
-	<span class="p">{</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span> <span class="p">},</span> <span class="p">{</span> <span class="n">A10</span><span class="p">,</span> <span class="n">A15</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">A9</span><span class="p">,</span> <span class="n">A14</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">A8</span><span class="p">,</span> <span class="n">A13</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">A7</span><span class="p">,</span> <span class="n">A12</span> <span class="p">},</span>
-	<span class="c1">//             LIGHT2        LIGHT1        TEMP          SOUND</span>
-	<span class="p">{</span> <span class="n">A6</span><span class="p">,</span><span class="n">A11</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A2</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A3</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A0</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A1</span> <span class="p">},</span>
-	<span class="p">{</span> <span class="n">NC</span><span class="p">,</span> <span class="n">NC</span> <span class="p">},</span> <span class="p">{</span> <span class="n">NC</span><span class="p">,</span> <span class="n">NC</span> <span class="p">},</span>
-<span class="p">};</span>
-
-<span class="c1">// etwas umformatiert und kommentiert</span>
-<span class="n">MePort_Sig</span> <span class="n">mePort</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-	<span class="n">Port</span> <span class="mi">0</span>  <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">NC</span> <span class="p">}</span>   <span class="n">Not</span> <span class="n">connected</span>
-	<span class="n">Port</span> <span class="mi">1</span>  <span class="p">{</span>   <span class="mi">5</span><span class="p">,</span>   <span class="mi">4</span> <span class="p">}</span>   <span class="n">red</span>
-	<span class="n">Port</span> <span class="mi">2</span>  <span class="p">{</span>   <span class="mi">3</span><span class="p">,</span>   <span class="mi">2</span> <span class="p">}</span>   <span class="n">red</span>
-	<span class="n">Port</span> <span class="mi">3</span>  <span class="p">{</span>   <span class="mi">7</span><span class="p">,</span>   <span class="mi">6</span> <span class="p">}</span>   <span class="n">red</span>
-	<span class="n">Port</span> <span class="mi">4</span>  <span class="p">{</span>   <span class="mi">9</span><span class="p">,</span>   <span class="mi">8</span> <span class="p">}</span>   <span class="n">red</span>
-	<span class="n">Port</span> <span class="mi">5</span>  <span class="p">{</span>  <span class="mi">16</span><span class="p">,</span>  <span class="mi">17</span> <span class="p">}</span>   <span class="n">grey</span>
-	<span class="n">Port</span> <span class="mi">6</span>  <span class="p">{</span> <span class="n">A10</span><span class="p">,</span> <span class="n">A15</span> <span class="p">}</span>   <span class="n">universal</span>
-	<span class="n">Port</span> <span class="mi">7</span>  <span class="p">{</span>  <span class="n">A9</span><span class="p">,</span> <span class="n">A14</span> <span class="p">}</span>   <span class="n">universal</span>
-	<span class="n">Port</span> <span class="mi">8</span>  <span class="p">{</span>  <span class="n">A8</span><span class="p">,</span> <span class="n">A13</span> <span class="p">}</span>   <span class="n">universal</span>
-	<span class="n">Port</span> <span class="mi">9</span>  <span class="p">{</span>  <span class="n">A7</span><span class="p">,</span> <span class="n">A12</span> <span class="p">}</span>   <span class="n">universal</span>
-	<span class="n">Port</span> <span class="mi">10</span> <span class="p">{</span>  <span class="n">A6</span><span class="p">,</span> <span class="n">A11</span> <span class="p">}</span>   <span class="n">universal</span>
-	<span class="n">Port</span> <span class="mi">11</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A2</span> <span class="p">}</span>   <span class="n">light</span> <span class="n">sensor</span> <span class="mi">1</span>
-	<span class="n">Port</span> <span class="mi">12</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A3</span> <span class="p">}</span>   <span class="n">light</span> <span class="n">sensor</span> <span class="mi">2</span>
-	<span class="n">Port</span> <span class="mi">13</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A0</span> <span class="p">}</span>   <span class="n">temperature</span> <span class="n">sensor</span>
-	<span class="n">Port</span> <span class="mi">14</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A1</span> <span class="p">}</span>   <span class="n">sound</span> <span class="n">sensor</span>
-	<span class="n">Port</span> <span class="mi">15</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">NC</span> <span class="p">}</span>
-	<span class="n">Port</span> <span class="mi">16</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">NC</span> <span class="p">}</span>
-<span class="p">}</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Als Beispiel: der Universal Port 6 ist an den analogen Pin 10 und Analogen Pin 15 des Arduino Mikrocontrollers angeschlossen. <em>NC</em> steht für <em>Not Connected</em>. Ports 1 bis 10 sind RJ25 Ports (dazu mehr im Kapitel zu den RJ25 Anschlüssen).</p>
-</div>
-<div class="paragraph">
-<p>Es sind aber nicht alle Komponenten über diese Ports/Pins (des Arduino 2560 Mega) anzusteuern:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>Pin 44 = 12 RGB LED Ring
-Pin 45 = Buzzer
-Pin 13 = Blaue LED (built-in LED)</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Die Motoren können zwar recht einfach durch die Bibliothek angesteuert werden, hier sind aber nochmal die Pins (falls man die Motoren klassisch über den Arduino ansteuern möchte, siehe Kapitel über die Motorensteuerung <a href="#sec:motoren">[sec:motoren]</a>):</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code>ENA A  = pin 19
-ENA B  = pin 42
-PWMA   = pin 11
-DIR A2 = pin 49
-DIR A1 = pin 48
-
-ENB A  = pin 18
-ENB B  = pin 43
-PWMB   = pin 10
-DIR B1 = pin 47
-DIR B2 = pin 46</code></pre>
-</div>
-</div>
 <div class="sect2">
-<h3 id="_kleines_testbeispiel">4.1. Kleines Testbeispiel</h3>
+<h3 id="_ein_erstes_testprogramm">3.4. Ein erstes Testprogramm</h3>
 <div class="paragraph">
 <p>Um das Aufspielen des Programms zu testen, kann man die eingebaute LED auf Pin 13 (wie bei jedem Arduino Board) blinken lassen. Das Programm dazu entspricht dem typischen Arduino Blink-Beispielprogramm:</p>
 </div>
@@ -1005,13 +924,127 @@ DIR B2 = pin 46</code></pre>
 <div class="content">
 <img src="../images/auriga-Builtin-LED.gif" alt="auriga Builtin LED">
 </div>
-<div class="title">Abbildung 8. Auriga Built-in LED</div>
+<div class="title">Abbildung 7. Auriga Built-in LED</div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_onboard_leds_und_rgb_ring">5. OnBoard LEDs und RGB Ring</h2>
+<h2 id="chap:basics">4. Auriga-Pin/Ports Referenz</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Auf dem <em>Auriga</em>-Board ist ein normaler Arduino Mega 2560 Prozessor verbaut. Dieser hat insgesamt 54 digitale Ein- und Ausgangspins, wovon 15 mittels PWM angesteuert werden können. Außerdem hat er noch 16 analoge Inputs und 4 UARTs. Das sollte doch für einen kleinen Roboter reichen. Für die Programmierung dieses Mikroprozessors muss man natürlich wissen, welche Pins davon wofür genutzt werden.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In diesem Kapitel wird ein Überblick über diese Pins und deren Verwendung gegeben. Die Informationen in diesem Kapitel sind als Referenz zu verstehen, da die einzelnen Ports und Pins in den nachfolgenden Kapiteln für alle Komponenten nochmal einzeln eingeführt und erklärt werden. Wer möchte, kann also gerne zum ersten echten Programmierkapitel (<a href="#chap:LEDs">Abschnitt 5</a>zum Thema <em>OnBoard LEDs und RGB Ring</em> ) vorspringen und einfach bei Bedarf hierher zurück kommen.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Einige der Ein- und Ausgänge sind direkt mit Komponenten auf dem Auriga-Board verbunden. Andere sind mit externen Ports und Anschlüssen verbunden. Die Details dazu findet man auf dem <a href="../downloads/MeAuriga_Schaltplan.pdf">Auriga Schaltplan</a>. Der ist allerdings nicht leicht zulesen und enthält auch viele Informationen, welche man bei Verwendung der MakeBlock-Programmierbibliothek gar nicht benötigt.</p>
+</div>
+<div class="paragraph">
+<p>Daher ist es sinnvoller, sich das sogenannte Pinout-Diagramm anzuschauen.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/auriga_pinout.png" alt="auriga pinout">
+</div>
+<div class="title">Abbildung 8. Auriga Board PinOut Diagramm</div>
+</div>
+<div class="paragraph">
+<p>Das Pinout-Diagramm gibt es auch als <a href="../downloads/MeAuriga_Pinout.pdf">Auriga Pinout PDF</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="_ports_und_zugeordnete_arduino_pins">4.1. Ports und zugeordnete Arduino-Pins</h3>
+<div class="paragraph">
+<p>Innerhalb der Makeblock-Bibliothek werden Sensoren und Aktoren über Ports angesprochen, statt direkt Pins zu bezeichnen. Dies liegt daran, dass die Makeblock-Bibliothek auch für andere mBot Modelle ähnlich verwendet wird. Die Zuordnung von Ports zu Pins ist in Quelltext-Header-Dateien hinterlegt, welche für die unterschiedlichen mBot-Bausätze anders heißen. Die für <em>Auriga</em>-Board verwendete Diese sind in der Makeblock-Bibliothek in der Datei <code>MeAuriga.h</code> definiert:</p>
+</div>
+<div class="listingblock">
+<div class="title">Auszug aus der Header-Datei <em>MeAuriga.h</em></div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="n">MePort_Sig</span> <span class="n">mePort</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span> <span class="o">=</span>
+<span class="p">{</span>
+	<span class="p">{</span> <span class="n">NC</span><span class="p">,</span> <span class="n">NC</span> <span class="p">},</span> <span class="p">{</span>   <span class="mi">5</span><span class="p">,</span>   <span class="mi">4</span> <span class="p">},</span> <span class="p">{</span>   <span class="mi">3</span><span class="p">,</span>   <span class="mi">2</span> <span class="p">},</span> <span class="p">{</span>   <span class="mi">7</span><span class="p">,</span>   <span class="mi">6</span> <span class="p">},</span> <span class="p">{</span>   <span class="mi">9</span><span class="p">,</span>   <span class="mi">8</span> <span class="p">},</span>
+	<span class="p">{</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span> <span class="p">},</span> <span class="p">{</span> <span class="n">A10</span><span class="p">,</span> <span class="n">A15</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">A9</span><span class="p">,</span> <span class="n">A14</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">A8</span><span class="p">,</span> <span class="n">A13</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">A7</span><span class="p">,</span> <span class="n">A12</span> <span class="p">},</span>
+	<span class="c1">//             LIGHT2        LIGHT1        TEMP          SOUND</span>
+	<span class="p">{</span> <span class="n">A6</span><span class="p">,</span><span class="n">A11</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A2</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A3</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A0</span> <span class="p">},</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A1</span> <span class="p">},</span>
+	<span class="p">{</span> <span class="n">NC</span><span class="p">,</span> <span class="n">NC</span> <span class="p">},</span> <span class="p">{</span> <span class="n">NC</span><span class="p">,</span> <span class="n">NC</span> <span class="p">},</span>
+<span class="p">};</span>
+
+<span class="c1">// etwas umformatiert und kommentiert</span>
+<span class="n">MePort_Sig</span> <span class="n">mePort</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="n">Port</span> <span class="mi">0</span>  <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">NC</span> <span class="p">}</span>   <span class="n">Not</span> <span class="n">connected</span>
+	<span class="n">Port</span> <span class="mi">1</span>  <span class="p">{</span>   <span class="mi">5</span><span class="p">,</span>   <span class="mi">4</span> <span class="p">}</span>   <span class="n">red</span>
+	<span class="n">Port</span> <span class="mi">2</span>  <span class="p">{</span>   <span class="mi">3</span><span class="p">,</span>   <span class="mi">2</span> <span class="p">}</span>   <span class="n">red</span>
+	<span class="n">Port</span> <span class="mi">3</span>  <span class="p">{</span>   <span class="mi">7</span><span class="p">,</span>   <span class="mi">6</span> <span class="p">}</span>   <span class="n">red</span>
+	<span class="n">Port</span> <span class="mi">4</span>  <span class="p">{</span>   <span class="mi">9</span><span class="p">,</span>   <span class="mi">8</span> <span class="p">}</span>   <span class="n">red</span>
+	<span class="n">Port</span> <span class="mi">5</span>  <span class="p">{</span>  <span class="mi">16</span><span class="p">,</span>  <span class="mi">17</span> <span class="p">}</span>   <span class="n">grey</span>
+	<span class="n">Port</span> <span class="mi">6</span>  <span class="p">{</span> <span class="n">A10</span><span class="p">,</span> <span class="n">A15</span> <span class="p">}</span>   <span class="n">universal</span>
+	<span class="n">Port</span> <span class="mi">7</span>  <span class="p">{</span>  <span class="n">A9</span><span class="p">,</span> <span class="n">A14</span> <span class="p">}</span>   <span class="n">universal</span>
+	<span class="n">Port</span> <span class="mi">8</span>  <span class="p">{</span>  <span class="n">A8</span><span class="p">,</span> <span class="n">A13</span> <span class="p">}</span>   <span class="n">universal</span>
+	<span class="n">Port</span> <span class="mi">9</span>  <span class="p">{</span>  <span class="n">A7</span><span class="p">,</span> <span class="n">A12</span> <span class="p">}</span>   <span class="n">universal</span>
+	<span class="n">Port</span> <span class="mi">10</span> <span class="p">{</span>  <span class="n">A6</span><span class="p">,</span> <span class="n">A11</span> <span class="p">}</span>   <span class="n">universal</span>
+	<span class="n">Port</span> <span class="mi">11</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A2</span> <span class="p">}</span>   <span class="n">light</span> <span class="n">sensor</span> <span class="mi">1</span>
+	<span class="n">Port</span> <span class="mi">12</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A3</span> <span class="p">}</span>   <span class="n">light</span> <span class="n">sensor</span> <span class="mi">2</span>
+	<span class="n">Port</span> <span class="mi">13</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A0</span> <span class="p">}</span>   <span class="n">temperature</span> <span class="n">sensor</span>
+	<span class="n">Port</span> <span class="mi">14</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">A1</span> <span class="p">}</span>   <span class="n">sound</span> <span class="n">sensor</span>
+	<span class="n">Port</span> <span class="mi">15</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">NC</span> <span class="p">}</span>
+	<span class="n">Port</span> <span class="mi">16</span> <span class="p">{</span>  <span class="n">NC</span><span class="p">,</span>  <span class="n">NC</span> <span class="p">}</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Jeder Makeblock-Port ist an 2 Arduino-Pins angeschlossen (siehe Pinout und auch Erklärung dazu in <a href="#sec:rj25">[sec:rj25]</a>). Diese Pins werden als <em>Slot1</em> und <em>Slot2</em> bezeichnet. <em>NC</em> steht für <em>Not Connected</em>. Ports 1 bis 10 sind RJ25 Ports (dazu mehr im Kapitel zu den RJ25 Anschlüssen).</p>
+</div>
+<div class="paragraph">
+<p>Als Beispiel: der Port 6 ist an den analogen Pin 10 und Analogen Pin 15 des Arduino Mikrocontrollers angeschlossen.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_weitere_verwendete_pins_des_arduino_mega_2560_prozessors">4.2. Weitere verwendete Pins des Arduino Mega 2560 Prozessors</h3>
+<div class="paragraph">
+<p>Es sind aber auch einige Komponenten direkt über IO Pins des Arduino 2560 Mega anzusteuern:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>Pin 44 = 12 RGB LED Ring
+Pin 45 = Buzzer
+Pin 13 = Blaue LED (built-in LED)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Die Motoren können zwar recht einfach durch die Bibliothek angesteuert werden, hier sind aber nochmal die Pins (falls man die Motoren klassisch über den Arduino ansteuern möchte, siehe Kapitel über die Motorensteuerung <a href="#sec:motors">Abschnitt 8</a>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>ENA A  = pin 19
+ENA B  = pin 42
+PWMA   = pin 11
+DIR A2 = pin 49
+DIR A1 = pin 48
+
+ENB A  = pin 18
+ENB B  = pin 43
+PWMB   = pin 10
+DIR B1 = pin 47
+DIR B2 = pin 46</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="chap:LEDs">5. OnBoard LEDs und RGB Ring</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Auf dem Auriga-Board sind zahlreiche LEDs verbaut. In diesem Kapitel geht es darum, diese LEDs zum Leuchte zu bringen.</p>
@@ -1314,7 +1347,7 @@ ausgelesen.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) ist der Sound-Sensor auf dem Auriga-Boardan Port 14 angeschlossen (siehe Variable <code>mePort</code> in der Datei <code>MeAuriga.h</code> und Erklärung dazu in <a href="#sec::basics">[sec::basics]</a>.</p>
+<p>Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) ist der Sound-Sensor auf dem Auriga-Boardan Port 14 angeschlossen (siehe Variable <code>mePort</code> in der Datei <code>MeAuriga.h</code> und Erklärung dazu in <a href="#chap:basics">Abschnitt 4</a>.</p>
 </div>
 </td>
 </tr>
@@ -1380,7 +1413,7 @@ ausgelesen.</p>
 <td class="content">
 <div class="paragraph">
 <p>Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) sind die Lichtsensoren auf dem Auriga-Board
-an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der Datei <code>MeAuriga.h</code> und Erklärung dazu in <a href="#sec::basics">[sec::basics]</a>.</p>
+an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der Datei <code>MeAuriga.h</code> und Erklärung dazu in <a href="#chap:basics">Abschnitt 4</a>.</p>
 </div>
 </td>
 </tr>
@@ -1723,7 +1756,7 @@ die Frequenz einstellen. Das hat auch den Vorteil, dass man ohne Wartezeiten par
 </div>
 </div>
 <div class="sect1">
-<h2 id="_motorsteuerung">8. Motorsteuerung</h2>
+<h2 id="sec:motors">8. Motorsteuerung</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Jetzt wird endlich mal was bewegt. In diesem Teil geht es um die Programmierung der Motoren.</p>
@@ -2009,7 +2042,7 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 <div id="footer">
 <div id="footer-text">
 Version 1.0 (16.02.2025)<br>
-Last updated 2025-02-16 15:14:25 +0100
+Last updated 2025-02-16 17:54:52 +0100
 </div>
 </div>
 </body>

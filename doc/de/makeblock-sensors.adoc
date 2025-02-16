@@ -17,7 +17,7 @@ ausgelesen.
 
 [IMPORTANT]
 ====
-Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) ist der Sound-Sensor auf dem Auriga-Boardan Port 14 angeschlossen (siehe Variable `mePort` in der Datei `MeAuriga.h` und Erklärung dazu in <<sec::basics>>.
+Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) ist der Sound-Sensor auf dem Auriga-Boardan Port 14 angeschlossen (siehe Variable `mePort` in der Datei `MeAuriga.h` und Erklärung dazu in <<chap:basics>>.
 ====
 
 Die Klasse hat nur eine sinnvolle Memberfunction: `strength()`, was die Lautstärke im Bereich 140 bis ~600 ausgibt.
@@ -60,7 +60,7 @@ Es gibt zwei Helligkeitssensoren auf dem Auriga Board:
 [IMPORTANT]
 ====
 Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) sind die Lichtsensoren auf dem Auriga-Board
-an den Ports 11 und 12 angeschlossen (siehe Variable `mePort` in der Datei `MeAuriga.h` und Erklärung dazu in <<sec::basics>>.
+an den Ports 11 und 12 angeschlossen (siehe Variable `mePort` in der Datei `MeAuriga.h` und Erklärung dazu in <<chap:basics>>.
 ====
 
 

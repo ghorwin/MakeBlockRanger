@@ -1,8 +1,9 @@
 :imagesdir: ../images
 
+[[chap:LEDs]]
 # OnBoard LEDs und RGB Ring
 
-Auf dem Auriga-Board sind zahlreiche LEDs verbaut. In diesem Kapitel geht es darum, diese LEDs zum Leuchte zu bringen.
+Nun beginnen wir mit der Programmierung. Auf dem Auriga-Board sind zahlreiche LEDs verbaut. In diesem Kapitel geht es darum, diese LEDs zum Leuchte zu bringen.
 
 ## Allgemeines
 
@@ -70,7 +71,7 @@ void loop() {
 .Rote und blaue Kommunikations-Modul-LEDs
 image::comm-red-blue-LEDs.gif[align="left"]
 
-Es gibt zwei weitere LEDs auf dem Auriga Board, die zwei kleinen roten und blauen LEDs in der Nähe des USB Anschlusses. Diese werden in der Makeblock Bibliothek nicht verwendet, auch nicht in der Firmware. Man kann diese aber mit den Arduino-Standardpins ansprechen, wenn man denn erstmal weiß, an welchen Pins diese LEDs angeklemmt sind.
+Es gibt zwei weitere LEDs auf dem Auriga Board und zwar die zwei kleinen roten und blauen LEDs in der Nähe des USB Anschlusses. Diese werden in der Makeblock Bibliothek nicht verwendet, auch nicht in der Firmware. Man kann diese aber mit den Arduino-Standardpins ansprechen, wenn man denn erstmal weiß, an welchen Pins diese LEDs angeklemmt sind.
 
 Daher schaut man zuerst mal in den Schaltplan link:downloads/MeAuriga_Schaltplan.pdf[MeAuriga_Schaltplan.pdf]. 
 Die zwei LEDs sind im Abschnitt _程序更新&无线遥控 (dt. Programmaktualisierung und drahtlose Fernbedienung)_ aufgeführt:
@@ -78,8 +79,7 @@ Die zwei LEDs sind im Abschnitt _程序更新&无线遥控 (dt. Programmaktualis
 .Auszug Schaltplan OnBoard LEDs
 image::Schaltplanauszug_OnBoard_LEDs.png[align="left"]
 
-Diese LEDs sind mit den Pins D0/RX0 und D1/TX0 des MEGA2560 Mikrocontrollers verbunden. Diese LEDs werden hauptsächlich dafür benutzt, die Kommunikation über diese Ports anzuzeigen.
-Die Anoden der LEDs sind mit +5 Volt verbunden. Also **leuchten** sie, wenn der jeweilige Pin (Kathodenseite) auf **GND gezogen wird (LOW)**.
+Diese LEDs sind mit den Pins D0/RX0 und D1/TX0 des MEGA2560 Mikrocontrollers verbunden. Diese LEDs werden hauptsächlich dafür benutzt, die Kommunikation über diese Ports anzuzeigen. Die Anoden der LEDs sind mit +5 Volt verbunden. Also **leuchten** sie, wenn der jeweilige Pin (Kathodenseite) auf **GND gezogen wird (LOW)**.
 
 [WARNING]
 ====
@@ -89,7 +89,7 @@ Die LEDs sind auch mit dem BLE (Bluetooth Low Energy) und UART Modulen (Universa
 ### Beispielprogramm
 
 ```c++
-// Programm für den Arduino Mega
+// Programm für wechselseitiges Ein- und Ausschalten der KommunikationsLEDs
 
 // Auf dem Auriga Board sind die LEDs an Pin 0 und 1 geklemmt und mit +5V verbunden
 int BlueLed = 0;
@@ -118,13 +118,28 @@ Als Zusatzmodul für das Auriga-Board gibt es einen RGB Ring (Typ: ws12812).
 .Rings aus 12 RGBS
 image::RGBRing.gif[]
 
-Der LED Ring wird über einen Controller angesteuert, der am PWM PIN 44 am Arduino Mega 2560 angeschlossen ist.
-
+Der LED Ring wird über einen Controller angesteuert, der am PWM PIN 44 am ATmega 2560 angeschlossen ist.
 Die Programmierung des Controllers ist in der Klasse `MeRGBLed` implementiert, welche über die Include-Datei `MeRGBLed.h` eingebunden wird. Der RGB-Controller selbst wird über das WS2811/2812 Protokoll angesprochen, was aber die `MeRGBLed`-Klasse übernimmt.
+
+[NOTE]
+====
+Wer genauer wissen will, wie das Protokoll auf dem an PIN 44 angeschlossenen LED Controllerchip funktioniert, kann das hier nachlesen:
+
+https://www.arrow.com/en/research-and-events/articles/protocol-for-the-ws2812b-programmable-led
+
+Wenn man dann mal in den Code der Klasse MeRGBLed innerhalb der MakeBlock Bibliothek schaut, dann findet man die im Text erwähnten Timings und den Assembler code zum Übertragen der Daten.
+
+```c
+#define w_zeropulse (350)  // +- 150 ns
+#define w_onepulse  (900)  // +- 150 ns
+#define w_totalperiod (1250)
+```
+====
 
 Grundsätzlich hält die Klasse eine Datenstruktur für die RGB-Informationen jeder einzelnen RGB. Die Konfiguration der RGB kann nun durch Zugriffsfunktionen wie `setColorAt()` geändert werden. Dabei wird zunächst nur der interne Zustand des Klassenobjekts geändert. Die Ansteuerung des Controllers selbst und damit das Umschalten der LEDs erfolgt erst beim Aufruf von `show()`.
 
-Die LED 0 (bzw. 1. LED) ist übrigends die LED auf "1 Uhr", wenn man sich das Bild oben anschaut. Die oberste LED ("12 Uhr") ist die LED 11.
+Die LED 0 (bzw. 1. LED) ist übrigends die LED auf "1 Uhr", wenn man sich das Bild oben anschaut. Die oberste LED ("12 Uhr") ist die LED 11 und LED 2 (bzw. 3. LED) zeigt in Richtung "Vorwärts" des Land Raider Modells.
+
 
 ### Beispielprogramm
 
@@ -174,7 +189,7 @@ void loop() {
 Grundlegende Herangehensweise ist immer:
 
 - Farbe ändern einzelner LEDs mit `setColorAt()` oder aller zusammen mit `setColor()`
-- dann die Farben an den Controller und damit an die LED übertragen mit `show()`
+- dann die Farben an den Controller und damit an den LED-Ring übertragen mit `show()`
 
 
 ### Die wichtigsten Funktionen der MeRGBLed Klasse
@@ -197,7 +212,6 @@ Den RGB-Ring kann man prima für verschiedene Sachen nutzen, bspw.:
 - zur Anzeige von Sensordaten, bspw. den Abstand beim Entfernungssensor
 - Kompassrichtung anzeigen oder Fahrrichtung
 - die verstrichenen Sekunden oder den Zeitverlauf anzeigen
-- oder einfach nur eine coole Knight-Raider Animation bauen
-
+- oder einfach nur eine coole Knight-Rider Animation bauen
 
 

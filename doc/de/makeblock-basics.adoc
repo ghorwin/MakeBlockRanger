@@ -1,15 +1,27 @@
 :imagesdir: ../images
 
-[[sec:basics]]
-# Die Grundlagen der Auriga-Programmierung
+[[chap:basics]]
+# Auriga-Pin/Ports Referenz
 
-Bevor man mit der Programmierung loslegt, hilft es, sich einen kleinen Überblick über die Möglichkeiten zu verschaffen. De Informationen in diesem Kapitel sind aber eher als Referenz zu verstehen, da die einzelnen Ports und Pins in den nachfolgenden Kapiteln für alle Komponenten nochmal einzeln eingeführt und erklärt werden.
+Auf dem _Auriga_-Board ist ein ATmega2560 Prozessor verbaut wie auf dem Arduino Mega 2560 Board (link:../Atmel-2549-8-bit-AVR-Microcontroller-ATmega640-1280-1281-2560-2561_datasheet.pdf[Datenblatt] ). Dieser hat insgesamt 54 digitale Ein- und Ausgangspins, wovon 15 mittels PWM angesteuert werden können. Außerdem hat er noch 16 analoge Inputs und 4 UARTs. Das sollte doch für einen kleinen Roboter reichen. Für die Programmierung dieses Mikroprozessors muss man natürlich wissen, welche Pins davon wofür genutzt werden.
+
+[NOTE]
+====
+In diesem Kapitel wird ein Überblick über diese Pins und deren Verwendung gegeben. Die Informationen in diesem Kapitel sind als Referenz zu verstehen, da die einzelnen Ports und Pins in den nachfolgenden Kapiteln für alle Komponenten nochmal einzeln eingeführt und erklärt werden. Wer möchte, kann also gerne zum ersten echten Programmierkapitel (<<chap:LEDs>>zum Thema _OnBoard LEDs und RGB Ring_ ) vorspringen und einfach bei Bedarf hierher zurück kommen.
+====
+
+Einige der Ein- und Ausgänge sind direkt mit Komponenten auf dem Auriga-Board verbunden. Andere sind mit externen Ports und Anschlüssen verbunden. Die Details dazu findet man auf dem link:../downloads/MeAuriga_Schaltplan.pdf[Auriga Schaltplan]. Der ist allerdings nicht leicht zulesen und enthält auch viele Informationen, welche man bei Verwendung der MakeBlock-Programmierbibliothek gar nicht benötigt.
+
+Daher ist es sinnvoller, sich das sogenannte Pinout-Diagramm anzuschauen.
 
 .Auriga Board PinOut Diagramm
 image::auriga_pinout.png[]
 
-Wenn man das Board mit der Makeblock-Bibliothek programmieren will, muss man die Port-Nummern kennen. Diese sind in der Makeblock-Bibliothek in der Datei `MeAuriga.h` definiert: 
-Jeder Makeblock-Port ist an 2 Arduino-Pins angeschlossen (siehe auch Erklärung dazu in <<sec:rj25>>. Diese Pins werden als _Slot1_ und _Slot2_ bezeichnet. 
+Das Pinout-Diagramm gibt es auch als link:../downloads/MeAuriga_Pinout.pdf[Auriga Pinout PDF].
+
+## Ports und zugeordnete Arduino-Pins
+
+Innerhalb der Makeblock-Bibliothek werden Sensoren und Aktoren über Ports angesprochen, statt direkt Pins zu bezeichnen. Dies liegt daran, dass die Makeblock-Bibliothek auch für andere mBot Modelle ähnlich verwendet wird. Die Zuordnung von Ports zu Pins ist in Quelltext-Header-Dateien hinterlegt, welche für die unterschiedlichen mBot-Bausätze anders heißen. Die für _Auriga_-Board verwendete Diese sind in der Makeblock-Bibliothek in der Datei `MeAuriga.h` definiert: 
 
 .Auszug aus der Header-Datei 'MeAuriga.h'
 ```c++
@@ -44,9 +56,14 @@ MePort_Sig mePort[17] = {
 }
 ```
 
-Als Beispiel: der Universal Port 6 ist an den analogen Pin 10 und Analogen Pin 15 des Arduino Mikrocontrollers angeschlossen. _NC_ steht für _Not Connected_. Ports 1 bis 10 sind RJ25 Ports (dazu mehr im Kapitel zu den RJ25 Anschlüssen).
+Jeder Makeblock-Port ist an 2 Pins angeschlossen. Diese Pins werden als _Slot1_ und _Slot2_ bezeichnet. _NC_ steht für _Not Connected_. Ports 1 bis 10 sind RJ25 Ports (dazu mehr im Kapitel zu den RJ25 Anschlüssen <<chap:rj25>>).
 
-Es sind aber nicht alle Komponenten über diese Ports/Pins (des Arduino 2560 Mega) anzusteuern:
+Als Beispiel: der Port 6 ist an den analogen Pin 10 und analogen Pin 15 des Mikrocontrollers angeschlossen. 
+
+
+## Weitere verwendete Pins des Mega 2560 Prozessors
+
+Einige Komponenten sind direkt über IO Pins anzusteuern:
 
 ```
 Pin 44 = 12 RGB LED Ring
@@ -54,7 +71,7 @@ Pin 45 = Buzzer
 Pin 13 = Blaue LED (built-in LED)
 ```
 
-Die Motoren können zwar recht einfach durch die Bibliothek angesteuert werden, hier sind aber nochmal die Pins (falls man die Motoren klassisch über den Arduino ansteuern möchte, siehe Kapitel über die Motorensteuerung <<sec:motoren>>):
+Die Motoren können zwar recht einfach durch die Bibliothek angesteuert werden, hier sind aber nochmal die Pins (falls man die Motoren klassisch über den Arduino ansteuern möchte, siehe Kapitel über die Motorensteuerung <<chap:motors>>):
 
 ```
 ENA A  = pin 19
@@ -69,41 +86,6 @@ PWMB   = pin 10
 DIR B1 = pin 47
 DIR B2 = pin 46
 ```
-
-
-## Kleines Testbeispiel
-
-Um das Aufspielen des Programms zu testen, kann man die eingebaute LED auf Pin 13 (wie bei jedem Arduino Board) blinken lassen. Das Programm dazu entspricht dem typischen Arduino Blink-Beispielprogramm:
-
-
-.Triviales Beispielprogramm für ein Arduino-Board. Die eingebaute LED wird ein- und ausgeschaltet. Um sie von der rhythmisch blinkenden anderen blauen LED zu unterscheiden, lassen wir sie lang-kurz blinken.
-```c++
-// Eingebaute LED auf dem Arduino-Board blinken lassen
-// Dies ist quasi das Standard-Test-Programm für die meisten Arduino-Boards
-
-int BlueLed = LED_BUILTIN; // Pin 13
-
-void setup() {
-  pinMode( BlueLed, OUTPUT);
-}
-
-void loop() {
-  // lang an
-  digitalWrite( BlueLed, HIGH);
-  delay (2000);
-  // kurz aus
-  digitalWrite( BlueLed, LOW);
-  delay (500);
-}
-```
-
-[NOTE]
-====
-Die LED ist etwas schwer zu erkennen und liegt einseitig etwas verdeckt. Sehr sinnvoll ist damit ihre Ansteuerung nicht, aber zum Testen kann man das ja mal machen.
-====
-
-.Auriga Built-in LED
-image::auriga-Builtin-LED.gif[align="left"]
 
 
 
