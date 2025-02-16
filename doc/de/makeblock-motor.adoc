@@ -1,0 +1,239 @@
+# Motorsteuerung
+
+Jetzt wird endlich mal was bewegt. In diesem Teil geht es um die Programmierung der Motoren.
+
+## Allgemeines
+
+Am Auriga-Board gibt es zwei Motorports. Jeder der Motoren kann über einen PWM Pin (für die Geschwindigkeit) und zwei Richtungspins angesteuert werden.
+Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Verwendung der Makeblock Bibliothek.
+
+Grundsätzlich bewegen sich die Motoren nur, wenn die Spannungsversorgung über die Batterien erfolt. Das ist auch ganz praktisch, da man so den Robotor angesteckt an den Computer programmieren kann, ohne Angst zu haben, dass er vom Tisch rollt.
+
+
+## Direkte Ansteuerung über PWM und digitale Pins
+
+Aus dem Schaltplan kann man die Bezeichnung der digitalen Pins (D46-D49) und die PWM Pins (D10, D11) entnehmen:
+
+.Motor-Ports an der Auriga-Platine
+image::auriga_motorports.png[]
+
+Die Pins werden nun wie folgt angesprochen:
+
+- PWMA und PWMB erhalten Drehgeschwindigkeiten im Bereich von 0..255 
+- DIRA1 und DIRA2 regeln die Richtung des Motors A (links) und müssen jeweils entgegengesetzt geschaltet sein
+- DIRB1 und DIRB2 regeln die Richtung des Motors B (rechts) und müssen jeweils entgegengesetzt geschaltet sein
+
+
+### Beispielprogramm - Direkte Ansteuerung
+
+```c++
+// Testprogramm für die Ansteuerung der DC-Motoren mittels Arduino Pin Bibliothek
+
+#define PWMA  11 // Motor A/Links
+#define DIRA1 49
+#define DIRA2 48
+#define PWMB  10 // Motor B/Rights
+#define DIRB1 47
+#define DIRB2 46
+
+void setup() {
+  // PWM und Richtungspins setzen
+  pinMode(PWMA,  OUTPUT);  
+  pinMode(DIRA1, OUTPUT); 
+  pinMode(DIRA2, OUTPUT);
+  pinMode(PWMB,  OUTPUT);  
+  pinMode(DIRB1, OUTPUT); 
+  pinMode(DIRB1, OUTPUT);
+
+  // kurze Wartephase zur Initialisierung
+  delay (20);
+}
+
+void leftMotorSpeed(int speed) {
+  if (speed >= 0) {
+    analogWrite (PWMA,  speed);
+    digitalWrite(DIRA1, LOW);
+    digitalWrite(DIRA2, HIGH);
+  }
+  else {
+    analogWrite (PWMA,  -speed);
+    digitalWrite(DIRA1, HIGH);
+    digitalWrite(DIRA2, LOW);
+  }
+}
+
+void rightMotorSpeed(int speed) {
+  if (speed >= 0) {
+      analogWrite (PWMB,  speed);
+      digitalWrite(DIRB1, HIGH);
+      digitalWrite(DIRB2, LOW);
+  }
+  else {
+    analogWrite (PWMB,  -speed);
+    digitalWrite(DIRB1, LOW);
+    digitalWrite(DIRB2, HIGH);
+  }
+}
+
+
+// Maximalgeschwindigkeit, falls die Akkus langsam schlapp machen, sollte man hier kleinere Zahlenwerte nehmen
+int maxSpeed = 255;
+int speed = 0;
+bool upward = true;
+
+void loop() {
+
+  // Steuerungsprogramm: 
+  // - Vorwärtsfahren und Geschwindigkeit in jeder Schleife erhöhen bis Maximalgeschwindikeit erreicht ist
+  // - dann langsamer werden und schließlich Rückwärtsfahren bis maximale Rückwärtsgeschwindigkeit erreicht ist
+  // - dann wieder umschalten auf vorwärts fahren
+  if (upward)
+    speed += 5;
+  else
+    speed -= 5;
+  if (speed > maxSpeed) {
+    upward = false;
+    speed = maxSpeed;
+  }
+  if (speed < -maxSpeed) {
+    upward = true;
+    speed = -maxSpeed;
+  }
+
+  // Motorgeschwindigkeiten anpassen
+  leftMotorSpeed(speed);
+  rightMotorSpeed(speed);
+
+  delay(50);
+}
+```
+
+Hier fährt der Roboter einfach nur vor und zurück und beschleunigt/bremst dabei.
+
+Wenn man den Robotor mit Maximalgeschwindigkeit fahren lässt, so schafft er bei vollen Batterien noch 0,56 m/s bzw. 2 km/h.
+
+
+## Ansteuerung über Encoder-Klasse der Bibliothek
+
+Die MakeBlock-Bibliothek bietet zahlreiche Klassen für die Programmierung von Encodern. Für die mitgelieferten DC-Motoren wird die Klasse `MeEncoderOnBoard` verwendet. Diese übernimmt, wie der Name schon sagt, die Programmierung der auf dem Board befindlichen Motorsteuerung.
+
+Diese Art der Programmierung hat den Vorteil, dass man die konkrete Geschwindigkeit und damit auch Position abfragen kann und somit - zumindest in Theorie - den Roboter sehr präzise bewegen kann. Allerdings ist die Programmierung auch etwas komplexer: man muss nämlich die Arduino-PWM Frequenzen umprogrammieren.
+
+Die Motoren liefern Bewegungsimpulse, die man zählen kann, um so Geschwindigkeit und Entfernung zu bestimmen. Damit man das präzise machen kann, ohne dass anderen Aufgaben im Mikroprozessor die Messung beeinträchtigen, verwendet man Interruptfunktionen. Dazu registriert man für jeden Motor eine Interruptfunktion, die immer dann aufgerufen wird, wenn am entsprechenden Pin ein RISING Signal anliegt (also der Eingangspin von LOW auf HIGH wechselt). In der Interruptfuktion wird dann ein Zähler hochgezählt, der dann für die Berechnung der Momentangeschwindigkeit und Bewegung verwendet wird. Die Berechnung selbst ist in der Klasse `MeEncoderOnBoard` gekapselt.
+
+### Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion
+
+Im Folgenden Testbeispiel kann man den Robotor begrenzt steuern:
+
+- Nach Start des Programms den SerialMonitor der Arduino-IDE aufrufen
+- in die Zeile "Nachricht" eine Zahl 0...6 eintippen und mit Enter abschicken
+- das Programm wertet diese Zahl aus und legt die Drehgeschwindigkeit der Motoren fest
+
+```c++
+/* Testprogramm für die Ansteuerung der DC Motoren via Makeblock Bibliothek */
+#include <MeAuriga.h>
+
+MeEncoderOnBoard Encoder_1(SLOT1);
+MeEncoderOnBoard Encoder_2(SLOT2);
+
+// Für präzise Messung der Geschwindigkeit (und damit Position) der Motoren 
+// werden die Pulse via Interruptfunktionen hoch/runtergezählt.
+// Jedes Mal, wenn der Interrupt-Pin eines Encoders von LOW auf HIGH wechselt (RISING),
+// wird die jeweilige isr_process_encoderX() Funktion aufgerufen und zählt einen 
+// Pulse hoch.
+
+// Interruptfunktion für Encoder 1
+void isr_process_encoder1(void) {
+  if (digitalRead(Encoder_1.getPortB()) == 0)
+    Encoder_1.pulsePosMinus();
+  else
+    Encoder_1.pulsePosPlus();
+}
+
+// Interruptfunktion für Encoder 2
+void isr_process_encoder2(void) {
+  if (digitalRead(Encoder_2.getPortB()) == 0)
+    Encoder_2.pulsePosMinus();
+  else
+    Encoder_2.pulsePosPlus();
+}
+
+
+int lastOutputMillis;
+
+void setup() {
+  // Festlegen der Interruptfunktionen für das Messen/Zählen der Bewegung
+  attachInterrupt(Encoder_1.getIntNum(), isr_process_encoder1, RISING);
+  attachInterrupt(Encoder_2.getIntNum(), isr_process_encoder2, RISING);
+  Serial.begin(115200);
+  
+  // Interne Timer der PWM auf 8KHz programmieren
+  TCCR1A = _BV(WGM10);
+  TCCR1B = _BV(CS11) | _BV(WGM12);
+
+  TCCR2A = _BV(WGM21) | _BV(WGM20);
+  TCCR2B = _BV(CS21);
+
+  // Variable für gelegentliche Ausgaben auf die serielle Schnittstelle
+  lastOutputMillis = millis();
+}
+
+void loop() {
+  // von der seriellen Schnittstelle lesen
+  if (Serial.available()) {
+    // Zeichen 0...6 werden gelesen
+    char a = Serial.read();
+    switch(a) {
+      case '0':
+        Encoder_1.setTarPWM(0);
+        Encoder_2.setTarPWM(0);
+      break;
+      case '1':
+        Encoder_1.setTarPWM(100);
+        Encoder_2.setTarPWM(-100);
+      break;
+      case '2':
+        Encoder_1.setTarPWM(200);
+        Encoder_2.setTarPWM(-200);
+      break;
+      case '3':
+        Encoder_1.setTarPWM(255);
+        Encoder_2.setTarPWM(-255);
+      break;
+      case '4':
+        Encoder_1.setTarPWM(-100);
+        Encoder_2.setTarPWM(100);
+      break;
+      case '5':
+        Encoder_1.setTarPWM(-200);
+        Encoder_2.setTarPWM(200);
+      break;
+      case '6':
+        Encoder_1.setTarPWM(-255);
+        Encoder_2.setTarPWM(255);
+      break;
+      default:
+      break;
+    }
+  }
+
+  // In der loop() Funktion wird die Geschwindigkeit im Motor geregelt
+  Encoder_1.loop();
+  Encoder_2.loop();
+
+  // alle 100 Millisekunden die Geschwindigkeit ausgeben
+  if (millis() > lastOutputMillis + 100) {
+    lastOutputMillis = millis();
+    // Geschwindigkeit in Umdrehungen pro Minute (rpm) auslesen und ausgeben
+    Serial.print("Speed 1:");
+    Serial.print(Encoder_1.getCurrentSpeed());
+    Serial.print(",Speed 2:");
+    Serial.println(Encoder_2.getCurrentSpeed());
+  }
+}
+```
+
+Es gibt verschiedene Funktionen, um die Geschwindigkeit der Motoren zu steuern. Die Klasse `MeEncoderOnBoard` hat auch Funktionen für das Fahren einer definierten Strecke oder zu einem Punkt. Dazu einfach mal in die Dokumentation der Klasse schauen.
+
+
+

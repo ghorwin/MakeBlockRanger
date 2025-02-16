@@ -1,0 +1,201 @@
+# OnBoard LEDs und RGB Ring
+
+Auf dem Auriga-Board sind zahlreiche LEDs verbaut. In diesem Kapitel geht es darum, diese LEDs zum Leuchte zu bringen.
+
+## Allgemeines
+
+Auf dem Board gibt es eine ganze Reihe von LEDs, die man programmieren kann. Da ist zunächst eine blaue Standard Arduino LED, die wie bei anderen Arduino Boards auf dem Pin 13 anzusprechen ist. Dann sind da noch 2 LEDs beim Kommunikationsmodul vorhanden, die primär Kommunikation über die serielle Schnittstelle (Bluetooth/USB) anzeigen. Dazu gibt es noch den 12er RGB LED Ring, bei dem man alle 12 LED unterschiedlich bunt einfärben kann und damit ein vielseitiges Anzeigegerät für Roboterzustände hat.
+
+Dann gibt es noch eine grüne "On"-Status-LED (nicht programmierbar, hart verdrahtet), 2 rote LEDs direkt unter dem RGB-Ring (auch nicht programmierbar) und die blaue, ryhtmisch blinkende LED oberhalb des Reset-Tasters (auch nicht programmierbar).
+
+
+## Standard built-in LED
+
+.Eingebaute Standard-LED auf dem Board
+image::auriga-Builtin-LED.gif[align="left"]
+
+Diese LED wird wie bei allen Arduino-Boards programmiert - man kann das Standard-Blink-Beispielprogramm nehmen:
+
+### Beispielprogramm
+
+```c++
+// Eingebaute LED auf dem Arduino-Board blinken lassen
+// Dies ist quasi das Standard-Test-Programm für die meisten Arduino-Boards
+
+int BlueLed = LED_BUILTIN; // Pin 13
+
+void setup() {
+  pinMode( BlueLed, OUTPUT);
+}
+
+void loop() {
+  // lang an
+  digitalWrite( BlueLed, HIGH);
+  delay (1000);
+  // kurz aus
+  digitalWrite( BlueLed, LOW);
+  delay (250);
+}
+```
+
+Die LED 13 ist an einen PWM-fähigen Pin angeschlossen, daher kann man die LED auch via PWM langsam ein- und ausblenden:
+
+```c++
+// Eingebaute LED auf dem Arduino-Board ein- und ausblenden
+
+int BlueLed = LED_BUILTIN; // Pin 13
+
+void setup() {
+  pinMode( BlueLed, OUTPUT);
+}
+
+void loop() {
+  for (int i=0; i<25; ++i) {
+    analogWrite(BlueLed, i*10);
+    delay (40);
+  }
+  for (int i=0; i<25; ++i) {
+    analogWrite(BlueLed, (25-i)*10);
+    delay (40);
+  }
+}
+
+```
+
+
+## OnBoard LEDs (Kommunikationsmodul)
+
+.Rote und blaue Kommunikations-Modul-LEDs
+image::comm-red-blue-LEDs.gif[align="left"]
+
+Es gibt zwei weitere LEDs auf dem Auriga Board, die zwei kleinen roten und blauen LEDs in der Nähe des USB Anschlusses. Diese werden in der Makeblock Bibliothek nicht verwendet, auch nicht in der Firmware. Man kann diese aber mit den Arduino-Standardpins ansprechen, wenn man denn erstmal weiß, an welchen Pins diese LEDs angeklemmt sind.
+
+Daher schaut man zuerst mal in den Schaltplan link:downloads/MeAuriga_Schaltplan.pdf[MeAuriga_Schaltplan.pdf]. 
+Die zwei LEDs sind im Abschnitt _程序更新&无线遥控 (dt. Programmaktualisierung und drahtlose Fernbedienung)_ aufgeführt:
+
+.Auszug Schaltplan OnBoard LEDs
+image::Schaltplanauszug_OnBoard_LEDs.png[align="left"]
+
+Diese LEDs sind mit den Pins D0/RX0 und D1/TX0 des MEGA2560 Mikrocontrollers verbunden. Diese LEDs werden hauptsächlich dafür benutzt, die Kommunikation über diese Ports anzuzeigen.
+Die Anoden der LEDs sind mit +5 Volt verbunden. Also **leuchten** sie, wenn der jeweilige Pin (Kathodenseite) auf **GND gezogen wird (LOW)**.
+
+[WARNING]
+====
+Die LEDs sind auch mit dem BLE (Bluetooth Low Energy) und UART Modulen (Universal Asynchronous Receiver/Transmitter) verbunden. Wenn man die LEDs direkt ansteuert, stört das diese Module. Wahrscheinlich ist das auch der Grund, warum die beiden LEDs in der Dokumentation und in der Bibliothek nicht aufgeführt sind.
+====
+
+### Beispielprogramm
+
+```c++
+// Programm für den Arduino Mega
+
+// Auf dem Auriga Board sind die LEDs an Pin 0 und 1 geklemmt und mit +5V verbunden
+int BlueLed = 0;
+int RedLed  = 1;
+
+void setup() {
+  pinMode( BlueLed, OUTPUT);
+  pinMode( RedLed, OUTPUT);
+}
+
+void loop() {
+  digitalWrite( BlueLed, LOW);  // Blau anschalten
+  digitalWrite( RedLed, HIGH);  // Rot ausschalten
+  delay (400);
+  digitalWrite( BlueLed, HIGH); // Blau ausschalten
+  digitalWrite( RedLed, LOW);   // Rot anschalten
+  delay (100);
+}
+```
+
+
+## 12er RGB LED Ring
+
+Als Zusatzmodul für das Auriga-Board gibt es einen RGB Ring (Typ: ws12812).
+
+.Rings aus 12 RGBS
+image::images/RGBRing.gif[]
+
+Der LED Ring wird über einen Controller angesteuert, der am PWM PIN 44 am Arduino Mega 2560 angeschlossen ist.
+
+Die Programmierung des Controllers ist in der Klasse `MeRGBLed` implementiert, welche über die Include-Datei `MeRGBLed.h` eingebunden wird. Der RGB-Controller selbst wird über das WS2811/2812 Protokoll angesprochen, was aber die `MeRGBLed`-Klasse übernimmt.
+
+Grundsätzlich hält die Klasse eine Datenstruktur für die RGB-Informationen jeder einzelnen RGB. Die Konfiguration der RGB kann nun durch Zugriffsfunktionen wie `setColorAt()` geändert werden. Dabei wird zunächst nur der interne Zustand des Klassenobjekts geändert. Die Ansteuerung des Controllers selbst und damit das Umschalten der LEDs erfolgt erst beim Aufruf von `show()`.
+
+Die LED 0 (bzw. 1. LED) ist übrigends die LED auf "1 Uhr", wenn man sich das Bild oben anschaut. Die oberste LED ("12 Uhr") ist die LED 11.
+
+### Beispielprogramm
+
+```c++
+// Testprogramm für den LED Ring auf dem Auriga Board.
+
+// Zuerst den Header für das Auriga-Board einbinden
+#include <MeAuriga.h>
+
+// Der Auriga on-board LED Ring hat 12 LEDs. Zur Vereinfachung der Lesbarkeit
+// legen wir hier ein Define fest.
+#define LEDNUM  12
+
+// Beim Auriga-Board steuern wird den on-board LED Ring an.
+// Die Klasse MeRGBLed bietet die Schnittstellenfunktionen dafür.
+// Im Constructor übergeben wir den Port 0
+MeRGBLed led( PORT0, LEDNUM );
+
+void setup() {
+  // LED Ring Controller ist am PWM PIN D44 angeschlossen
+  led.setpin( 44 );
+  // Nach dem Setzen des Pin muss minimal kurz gewartet werden.
+  // Wenn man den delay()-Aufruf vergisst, dann wird nach dem 
+  // led.show() Befehl die erste LED in grün angezeigt.
+  delay(1);
+  // nun können wir die initalen LED-Werte (alle AUS/SCHWARZ) setzen
+  // (Die Klasse MeRGBLed setzt anfänglich alle LEDs auf schwarz/aus, man kann
+  //  aber auch led.setColor(0,0,0) vor dem led.show() nochmal aufrufen)
+  led.show();
+}
+
+void loop() {
+  // wir setzen nun unterschiedliche Farben in den LEDs und schalten diese dann jeweils an
+  for (uint8_t i = 0; i < LEDNUM; ++i ) {
+    // alle ausschalten
+    led.setColor(0,0,0);
+    // die LED mit Index i anschalten
+    led.setColorAt( i, i*20, 0, (LEDNUM-i-1)*20 ); // i = 0...11
+    // LED Einstellungen an den LED controller übertragen
+    // (erst mit diesem Befehl ändern sich tatsächlich die Farben)
+    led.show();
+    delay(100);
+  }
+}
+```
+
+Grundlegende Herangehensweise ist immer:
+
+- Farbe ändern einzelner LEDs mit `setColorAt()` oder aller zusammen mit `setColor()`
+- dann die Farben an den Controller und damit an die LED übertragen mit `show()`
+
+
+### Die wichtigsten Funktionen der MeRGBLed Klasse
+
+```c++
+// Alle RGB mit der gleichen Farbe setzen
+bool MeRGBLed::setColor(uint8_t red, uint8_t green, uint8_t blue);
+// Alle RGB (index=0) setzen, oder einzelne (1-basierte Indizierung; index = 1...LEDNUM)
+bool MeRGBLed::setColor(uint8_t index, uint8_t red, uint8_t green, uint8_t blue);
+// Einzelne LED setzen (index = 0...LEDNUM-1); 0-basierte Indizierung der LED
+bool MeRGBLed::setColorAt(uint8_t index, uint8_t red, uint8_t green, uint8_t blue);
+// Gesetzte Farben an den Controller und damit an die LED übertragen (500 µs Wartezeit bei jedem Aufruf)
+bool MeRGBLed::show();
+```
+
+### Programmierideen
+
+Den RGB-Ring kann man prima für verschiedene Sachen nutzen, bspw.:
+
+- zur Anzeige von Sensordaten, bspw. den Abstand beim Entfernungssensor
+- Kompassrichtung anzeigen oder Fahrrichtung
+- die verstrichenen Sekunden oder den Zeitverlauf anzeigen
+- oder einfach nur eine coole Knight-Raider Animation bauen
+
+
+

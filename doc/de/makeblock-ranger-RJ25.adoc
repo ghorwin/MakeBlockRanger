@@ -1,0 +1,113 @@
+Title: MakeBlock Ranger : Teil 6 - RJ25 Ports und externe Zubehörkomponenten (Abstandssensor und Linienfolgesensor)
+Date: 2024-09-25 19:04
+Modified: 2024-09-25 19:04
+Category: Arduino
+Tags: Mikrocontroller, C/C++, Arduino, Makeblock Ranger, Auriga
+Slug: auriga-rj25
+lang: DE
+Author: Andreas Nicolai
+Summary: Ich beschreibe die 10 RJ25 Ports, deren Pin-Belegung und die Ansteuerung von Zubehörkomponenten wie dem Abstandssensor und dem Linienfolgesensor.
+
+## Allgemeines zu RJ25
+
+Die Steckerports am Auriga-Board sind RJ25 (6P6C) Stecker, siehe [Wikipedia RJ-Steckverbindung](https://de.wikipedia.org/wiki/RJ-Steckverbindung), wie sie auch für den Anschluss von Modems und Faxgeräten verwendet werden/wurden. Die Belegung der Pins ist im [Schaltplan](../downloads/MakeBlock/MeAuriga_Schaltplan.pdf) zu sehen, wie hier im Auszug für den Port 9:
+
+<center>
+<img src="../../images/auriga/RJ25_schaltplan_auszug.png" alt="RJ25 Belegung an Port 9"/>
+<img src="../../images/auriga/RJ25_pin_Belegung.png" alt="RJ25 Stecker"/>
+</center>
+
+Jeder dieser Stecker ist mit VCC und GND verbunden, sowie alle parallel an SDA und SCL (für die Kommunikation über das I2C Protokoll).
+Die mit S1 und S2 (Slot 1 und Slot 2) bezeichneten Leitungen sind je Port mit unterschiedlichen Pins am Arduino verbunden. Je nach Fähigkeiten dieser Pins sind die Ports unterschiedlich eingefärbt. Eine Gesamtübersicht über die Ports, deren Belegung und Stromversorgung ist im [Ersten Teil zum Auriga/mBot Ranger](auriga-first-steps-DE) gegeben.
+
+An diese Ports kann man nun diverse Zubehörbauteile anstecken (die aber häufig nicht ganz billig sind).
+
+Man kann auch einfach RJ25 Stecker kaufen und über die einzelnen Kabel beliebige elektronische Bauteile anklemmen/anlöten:
+
+<center>
+<img src="../../images/auriga/RJ25-adapter-Kabel.jpg" alt="RJ25 Adapter Kabel"/>
+</center>
+
+### Zubehör
+
+MakeBlock bietet selbst zahlreiches Zubehör mit dem RJ25 Stecker an:
+
+<center>
+<img src="../../images/auriga/auriga-rj25-addons.png" alt="RJ25 Zubehör"/>
+</center>
+
+- Joystick
+- ein Adapter (zum einfachen Anklemmen der 6 Leitungen)
+- 
+
+## Entfernungsmessung
+
+Zur Entfernungsmessung liegt im mBot Ranger Bausatz ein Ultraschallsensor dabei. Diesen kann man einfach an einen Port anstecken (Ports 6-10).
+
+<center>
+<img src="../../images/auriga/auriga_ultrasonicdistance.png" alt="Ultraschall Entfernungssensor"/>
+</center>
+
+
+Wie der Sensor intern funktioniert, ist auf der [Fundino Ultraschallsensor](https://funduino.de/nr-10-entfernung-messen) Seite beschrieben.
+
+In Kürze: Der Sensor emittiert eine Ultraschallwelle (wie die Fledermaus) und wenn diese auf ein Objekt trifft, wird die Welle zurückgeworfen. Die Schallgeschwindigkeit in Luft ist ungefähr 340 m/s (oder 34 cm/ms bzw. 0.034 cm/µs). Der Sensor misst die Zeit zwischen Senden und Empfangen der Schallwelle und kann daraus die Entfernung berechnen.
+
+Falls z.B. die Schallwelle durch ein Objekt zurückgeworfen wird, und seit dem Senden 1000 µs vergangen sind, dann hat die Schallwelle ZUM OBJEKT nur 500 µs benötigt. Das ergibt dann die Entfernung von 500 µs * 0.034 cm/µs = 17 cm.
+
+Der Sensor wird mittels der Klasse `MeUltrasonicSensor` angesteuert, welche folgende Funktionen bietet:
+
+```c++
+
+// Konstruktor
+MeUltrasonicSensor ultraSensor(uint8_t port);
+// Sets the Signal-Pin - diese Funktion kann benutzt werden, um z.B. den Port zu bestimmen,
+// an dem der Sensor gerade angesteckt ist
+void setpin(uint8_t SignalPin);
+// Misst die Entfernung in cm
+double  distanceCm (uint16_t maxDistanceInCm=400)
+// Misst die Entfernung in inch
+double  distanceInch (uint16_t maxDistanceInInch=180)
+// Misst Entfernungszeit
+long    measure (unsigned long maxIntervalInMikrosekunden=30000)
+```
+
+### Beispielprogramm
+
+```c++
+#include "MeAuriga.h"
+
+// Der Utrasonic-Sensor ist an Steckplatz 6 eingesteckt
+MeUltrasonicSensor ultraSensor(PORT_6);
+
+void setup() {
+  Serial.begin(115200);
+}
+
+void loop() {
+  Serial.print("Distance : ");
+  Serial.print(ultraSensor.distanceCm() );
+  Serial.println(" cm");
+  delay(100); // Das minimale Messinterval ist 100 ms
+}
+```
+
+Zwischen Senden und Empfangen benötigt der Sensor eine minimale Wartezeit von 100 ms.
+Wenn man den Sensor also abfragt, und kein `delay()` verwenden möchte (bspw. um nebenbei noch andere
+Sensoren abzufragen), dann muss man das Timing manuell implementieren.
+
+TODO :
+
+- Async-Messung
+- Einfallswinkel für Schallpegel
+- Genauigkeit ???
+
+
+
+## Linienverfolgungssensor
+
+<center>
+<img src="../../images/auriga/auriga_linefollower.png" alt="Linienverfolgungs-Sensor"/>
+</center>
+
+Weiter zu [Teil 7](../auriga-park-assistent-DE.html).

@@ -1,0 +1,138 @@
+:imagesdir: ./images
+
+# Aufspielen/Aktualisieren der Firmware und ein erstes Testprogramm
+
+## Verbindung des Auriga-Boards mit den Linux-PC
+
+Der erste Schritt zur Programmierung des Auriga Boards, ist es eine serielle Verbindung mit dem Board aufzubauen. Dazu verbindet man das Board via USB-Kabel mit dem PC. 
+
+[IMPORTANT]
+====
+Wie üblich unter Linux muss der Nutzer zum Zugriff auf COM Ports der Gruppe _dialout_ zugehören.
+====
+
+`sudo dmesg` sollte dann ausgeben, mit welchem COM-Port das Bord verbunden ist.
+
+```
+> sudo dmesg
+[ 1588.506008] usb 3-2: new full-speed USB device number 4 using xhci_hcd
+[ 1588.677924] usb 3-2: New USB device found, idVendor=1a86, idProduct=7523, bcdDevice= 2.64
+[ 1588.677942] usb 3-2: New USB device strings: Mfr=0, Product=2, SerialNumber=0
+[ 1588.677949] usb 3-2: Product: USB Serial
+[ 1588.686988] ch341 3-2:1.0: ch341-uart converter detected
+[ 1588.701256] usb 3-2: ch341-uart converter now attached to ttyUSB0
+```
+
+[NOTE]
+====
+Windows/Mac-Nutzer müssen erst den ch341-Treiber installieren (Internetsuche hilft).
+====
+
+
+### Behebung von brttly Problemen
+
+Bei Ubuntu 22.04 und einigen neueren Ubuntu Versionen wird beim Anschließend des Boards an den USB-Port die Verbindung mit `/dev/ttyUSB0` kurz hergestellt und gleich wieder unterbrochen (ab Ubuntu 24.04 scheint das aber kein Problem mehr zu sein).
+Ausgabe von `sudo dmesg` ist ähnlich wie:
+
+```
+[  284.973894] usb 3-4.2: ch34x converter now attached to ttyUSB0
+[  285.019333] usb 3-4.2: usbfs: interface 0 claimed by ch34x while 'brltty' sets config #1
+[  285.019883] ch34x ttyUSB0: ch34x converter now disconnected from ttyUSB0
+[  285.019895] ch34x 3-4.2:1.0: device disconnected
+```
+
+Das Problem liegt daran, dass der `brltty`-Dienst (braille display driver/Treiber für ein https://de.wikipedia.org/wiki/Braillezeile[Brailledisplay]) dazwischenfunkt. 
+
+Den brltty Dienst (Assistenzdienst) schaltet man wie folgt ab:
+
+```
+# Systemdienste deaktivieren
+sudo systemctl mask brltty.path
+sudo systemctl mask brltty.service
+
+# udev Regeln ausschalten
+for f in /usr/lib/udev/rules.d/*brltty*.rules; do
+    sudo ln -s /dev/null "/etc/udev/rules.d/$(basename "$f")"
+done
+# Dienste neu laden
+sudo udevadm control --reload-rules
+```
+
+Nun kann man das Board verbinden und sollte die Ausgabe oben im vorangehenden Abschnitt sehen. 
+
+
+## Firmware-Update / Neu-Installieren
+
+Der Makeblock Ranger bzw. das Board und der Prozessor werden mit einer vorinstallierten _Firmware_ geliefert. Das ist nichts anderes als ein Arduino-Programm. Dieses Programm enthält die Basisfunktionalität (wie im Handbuch beschrieben), einschließlich der Bluetooth Kommunikation mit dem SmartPhone.
+
+Dieses Programm (also die _Firmware_), ist im Quelltext verfügbar. Den kann man sich herunterladen (siehe unten) und nach Belieben anpassen und verändern. Das ist auch einer der Gründe, warum ich die MakeBlock Roboterbausätze ziemlich cool finde.  Außerdem kann man in der Firmware jede Menge abgucken.
+
+[TIP]
+====
+Wenn man nach dem Hochladen eigener Programme mal wieder die Originalfunktionalität haben will, spielt man einfach dieses Firmware-Programm hoch und hat wieder den Auslieferungszustand. Man kann also nichts kaputt machen :-)
+====
+
+Die originale Firmware stellt auch die Funktionalität für die "Live"-Tests in der mBlock-Umgebung (z.B. zum Sensor-Auslesen) bereit. Sobald man ein anderes Programm hochgeladen hat, funktioniert diese "Live"-Funktionalität nicht mehr. Wenn man also wieder mit mBlock arbeiten will, und dort die "Live-"Test Funktionalität braucht, lädt man einfach dei Firmware wieder hoch und mBlock funktioniert wieder wie bisher.
+
+[TIP]
+====
+Wie wir später sehen werden, kann man aber über den _Serial Monitor_ der Arduino-IDE alle Sensorwerte bequem ausgeben und brauch die mBlock Oberfläche gar nicht mehr.
+====
+
+
+### Firmware mit mBlock aktualisieren/zurücksetzen
+
+Die Firmware kann aber auch mit der mBlock Entwicklungsumgebung installiert werden.
+
+[WARNING]
+====
+In der aktuellen mBlock Webversion scheint der Download der Firmware allerdings nicht mehr robust zu funktionieren. Auch funktionieren die Treiber für Linux nicht mehr und auch sonst scheint die Software nicht (mehr) richtig zu funktionieren. Außerdem ist die original-Firmware seit 2020 nicht mehr weiterentwickelt worden. Daher sollte die Firmware besser wie nachfolgend beschrieben mit der Arduino-IDE aktualisiert werden. 
+====
+
+
+
+## Makeblock-Libraries über Arduino-IDE Bibliotheksverwaltung installieren
+
+Für das Compilieren der Firmware sind aber noch die Makeblock-Bibliotheken notwendig. Dafür gibt es zwei Methoden:
+
+1. Installation mittels Arduino-IDE Bibliotheksverwaltung (empfohlen!)
+2. Manuelle Installation der Bibliothek, oder
+
+### Installation via Bibliotheksmanager (empfohlen)
+
+Die Installation der makeblock-Bibliothek erfolgt analog zu anderen Arduino-Bibliotheken.
+
+Abgesehen von der Original-Bibliothek gibt es inzwischen verschiedene Forks mit aktualisierten Quelltexten, die einige Fehler beheben. In der aktuellen Version der Arduino-IDE ist eine solche aktualisierte Version auch direkt über den Bibliotheksmanager verfügbar (Bibliotheksverwaltung öffnen und im Filter _makeblock_ eingeben):
+
+.Bibliotheksmanager in der Arduino-IDE und ausgewählt MakeBlock Dive Updated Bibliothek
+image::arduino-ide-makeblock-library-install.png[]
+
+
+### Manuelle Installation
+
+Alternativ gibt es auch hier die Möglichkeit, die Bibliothek via Download des Quelltextes manuell zu installieren.
+
+[TIP]
+====
+So kann man aktualisierte Versionen einer Bibliothek installieren, ohne auf die offiziellen Bibliotheksquellen zu warten.
+Außerdem kann man so eigene Anpassungen in der Bibliothek (so man das braucht) integrieren.
+====
+
+Dazu lädt man den Quelltext herunter, z.B. den  https://github.com/nbourre/Makeblock-Libraries[MakeBlock Drive Updated Quelltext]. Die heruntergeladene Bibliothek kann in der Arduino-IDE via _Sketch->Bibliothek einbinden->.ZIP-Bibliothek hinzufügen..._ eingebunden werden.
+
+[WARNING]
+====
+Die offiziellen MakeBlock-Bibliotheken werden seit 2020 nicht mehr aktiv weiterentwickelt.
+Das offizielle https://github.com/Makeblock-official/Makeblock-Libraries.git[Makeblock-Libraries GitHub Repository] enthält die originalen Quelltexte. Man kann die Bibliothek auch über den Link über folgenden Link herunterladen: https://codeload.github.com/Makeblock-official/Makeblock-Libraries/zip/master[Makeblock-Libraries - ZIP].
+====
+
+
+## Firmware Update installieren / zurücksetzen
+
+Die Makeblock Bibliothek bringt als _Beispiel_-Programm die Firmware mit. Man wählt diese über _Datei->Beispiele->MakeBlock Drive Updated->Firmware_For_Auriga_ aus.
+
+Man muss dann in der Arduino-IDE noch den Port und die CPU einstellen: hier wählt man _Arduino Mega or Mega 2560_ aus.
+
+Dann kann man das Firmware-Programm übersetzen und hochladen. So kann man nach dem Ausprobieren eigener Programme stets den Originalzustand zurücksetzen.
+
+

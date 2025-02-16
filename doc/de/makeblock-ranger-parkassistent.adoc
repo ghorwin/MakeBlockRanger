@@ -1,0 +1,20 @@
+Title: MakeBlock Ranger : Teil 7 - Einparkassistent mit Licht- und Soundfeedback
+Date: 2024-09-25 19:04
+Modified: 2024-09-25 19:04
+Category: Arduino
+Tags: Mikrocontroller, C/C++, Arduino, Makeblock Ranger, Auriga
+Slug: auriga-park-assistent
+lang: DE
+Author: Andreas Nicolai
+Summary: Dieser Artikel beschreibt mal ein konkretes Projekt und die einzelnen Entwicklungsschritte. Es geht darum, eine Einparkautomatik für den Raider zu programmieren, sodass er vollautomatisch in eine Lücke unterschiedlicher Größe und mit unterschiedlichem Abstand dazu einparken kann.
+
+## Konzept
+
+- der Entfernungssensor wird seitlich am Raider montiert
+- der Raider fährt erstmal an den parkenden Autos/Hinternissen vorbei und misst den Abstand ->  der sollte eigentlich immer gleich bleiben, sonst steht der Raider schief
+- zunächst wird also der Raider an den Autos ausgerichtet, damit er parallel fährt
+- nun fährt er vorwärts, bis eine Lücke erkannt wird (bei Erkennung wird der RGB LED Ring entsprechend eingefärbt) und ein Signal ertönt
+- und sobald die Lücke zuende ist, wird geprüft, ob sie lang genug ist (wieder mit Licht + Sound Feedback)
+- falls die Lücke groß genug ist, parkt der Raider ein
+
+

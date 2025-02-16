@@ -1,0 +1,195 @@
+# OnBoard Sensoren (Licht, Schall, Temperature, Gyroscop)
+
+Hier geht es um das Auslesen der verschiedenen OnBoard-Sensoren auf dem Auriga-Board. Auf dem Auriga Board sind 4 Sensortypen platziert:
+
+- Schall/Lautstärke
+- Licht/Helligkeit (2 Mal, links und rechts)
+- Temperatur
+- Gyroscop/Neigungssensor
+
+Nachfolgend wird gezeigt, wie diese Sensoren einzeln auszulesen sind, und welche Genauigkeiten/Wertebereiche zu erwarten sind.
+
+## Lautstärke/Schall
+
+Der Sound-Sensor auf dem Auriga-Board wird über die Klasse `MeSoundSensor` (Include-Datei nur `MeAuriga.h`)
+ausgelesen.
+
+[IMPORTANT]
+====
+Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) ist der Sound-Sensor auf dem Auriga-Boardan Port 14 angeschlossen (siehe Variable `mePort` in der Datei `MeAuriga.h` und Erklärung dazu in <<sec::basics>>.
+====
+
+Die Klasse hat nur eine sinnvolle Memberfunction: `strength()`, was die Lautstärke im Bereich 140 bis ~600 ausgibt.
+
+### Beispielprogramm
+
+Liest kontinuierlich die Lautstärke aus und übergibt diese via serieller Verbindung an den PC und kann dort bspw. mit dem Serial Plotter der Arduino-IDE angezeigt werden.
+
+```c++
+// Testprogramm für den Sound-Sensor am Auriga-Board.
+// 
+// ACHTUNG: beim Auriga ist der Sound-Sensor am Port 14 angeschlossen.
+#include <MeAuriga.h>
+
+MeSoundSensor soundSensor(PORT_14);
+
+void setup() {
+  Serial.begin(115200);
+}
+
+void loop() {
+  Serial.print("value:");
+  Serial.println(soundSensor.strength() );
+  delay(50);
+}
+```
+
+.Im SerialPlotter sieht man die erfassten Werte, als ich mehrfach laut direkt über dem Auriga-Board geklatscht habe. In sehr leiser Umgebung rauscht das Signal bei ca. 130...140.
+image::auriga_soundsensor.png[]
+
+
+
+## Licht/Helligkeit
+
+Es gibt zwei Helligkeitssensoren auf dem Auriga Board:
+
+- neben Port 2, wird über PORT_11 angesteuert
+- neben Port 9, wird über PORT_12 angesteuert
+
+[IMPORTANT]
+====
+Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) sind die Lichtsensoren auf dem Auriga-Board
+an den Ports 11 und 12 angeschlossen (siehe Variable `mePort` in der Datei `MeAuriga.h` und Erklärung dazu in <<sec::basics>>.
+====
+
+
+Die Klasse `MeLightSensor` liest die Helligkeitswerte aus (im Bereich 0..1000) (Memberfunktion `read()`). 
+
+### Beispielprogramm
+
+
+```c++
+// Test für die Lichtsensoren
+#include <MeAuriga.h>
+
+MeLightSensor lightSensorRight(PORT_11); // Der Sensor neben Port 2
+MeLightSensor lightSensorLeft(PORT_12);  // Der Sensor neben Port 9
+
+void setup() {
+  Serial.begin(115200);
+}
+
+
+void loop() {
+  // Lichtsensoren auslesen
+  int right = lightSensorRight.read();
+  int left = lightSensorLeft.read();
+
+  // Werte via serieller Verbindung an PC senden
+  Serial.print("min:0,max:1000,");
+  Serial.print("left:");
+  Serial.print(left);
+  Serial.print(",right:");
+  Serial.println(right);
+  // alle 50 ms
+  delay(100);
+}
+```
+
+.Bei direkten Anleuchten mit einer Fahrradlampe wurde der Wert 1000 ausgegeben. In sehr dunklen Räumen (nur der Monitor in 30 cm Entfernung ist an), zeigt der Sensor Werte zwischen 1-3. Im Beispiel oben habe ich wechselseitig den einen und dann den anderen Sensor mit der Hand abgedeckt.
+image::auriga_lightsensors.png[]
+
+_Interessant:_ bei moderatem Licht von Energiesparlampen zeigt der Sensor (wellenförmige schwankende) Werte zwischen 55 und 140 an.
+
+_Auch interessant:_ Wenn man den Ranger seitlich ans Fenster stellt, so werden leicht unterschiedliche Helligkeitswerte angezeigt. Eine Drehung um 180° führt jedoch nicht zum Vertauschen der Helligkeitswerte beider Sensoren, wie man das vielleicht erwarten würde. Ein Regeln der Ausrichtung des Ranges basierend auf seitlich einfallendem Licht scheint eher schwierig zu sein (selber ausprobieren!).
+
+
+
+## Temperatur
+
+Auf dem Board ist ein DS18B20 Temperatursensor verbunden. Dieser wird über das Wire-Protokoll am Port 13 abgefragt. Die entsprechende Implementierung steckt in der Klasse `MeOnBoardTemp` mit der Member-Funktion `readValue()` (bzw. `readAnalog()` für den Rohwert).
+
+### Beispielprogramm
+
+```c++
+// Test für den Temperatursensor
+#include <MeAuriga.h>
+
+// Der OnBoard-Temperatursensor wird über Port 13 angesprochen
+MeOnBoardTemp tempSensor(PORT_13);
+
+void setup() {
+  Serial.begin(115200);
+}
+
+void loop() {
+  Serial.print("Analogwert:");
+  Serial.print(tempSensor.readAnalog());
+  Serial.print(",Temperaturwert:");
+  Serial.println(tempSensor.readValue());
+  delay(1000);
+}
+```
+
+.Vom Sensor gelieferten Temperaturverlauf, wenn man den Arduino nach längerer Zeit (6h) erstmalig anschaltet. Ausgehend von der Raumtemperatur (ca. 22°) erwärmt sich das Board und der Sensor in wenigen Minuten auf über 25°C, wenn man noch ein paar LEDs anmacht, oder dem Mikroprozessor ordentlich was zu tun gibt, geht die Temperatur rauf auf knapp 30°C. 
+image::auriga_temperatursensor.png[]
+
+_Interessant:_ Der Temperatursensor wird maßgeblich durch die Energieabgabe von LEDs und des Prozessors allgemein beeinflusst. Die Umgebungstemperatur lässt sich damit nur sehr ungenau messen, da die Wärmezirkulation zum Sensor durch das Plastikgehäuse behindert ist.
+
+
+
+## Gyroskop
+
+Das Auriga-Board hat einen Neigungssensor verbaut. Dieser liefert für die 3 Achsen x,y,z jeweils Neigungswerte/Ausrichtungswerte und dazu die Beschleunigungen auf den 3 Achsen.
+
+Die Achsenzuordnung ist dabei wie folgt:
+
+- X-Achse : Kippen um die Querachse (_der Anstieg beim Fahren auf einen Hügel_): -90° (nach unten)...90° (nach oben)
+- Y-Achse : Kippen um die Längsachse; -90° (nach rechts gedreht) ...90° (nach links gedreht)
+- Z-Achse :  N, O, S, W Ausrichtung; 0° = der USB-Port zeigt nach Norden; -180°/180° = der USB-Port zeigt nach Süden; -90° = der USB-Port zeigt nach Westen
+
+
+Entsprechend ist die X-Beschleunigung die Beschleunigung vorwärts und Y-Beschleunigung die Drehbeschleunigung. Interessant ist die Z-Beschleunigung (Querbeschleunigung) beim schnellen Kurvenfahren.
+
+Zum Auslesen des Neigungssensors/Gyroskops verwendet man die Klasse `MeGyro` wie im nachfolgendem Beispiel gezeigt.
+
+### Beispielprogramm
+
+```c++
+// Testprogramm für den Neigungssensor
+#include <MeAuriga.h>
+
+MeGyro gyro(0, GYRO_DEFAULT_ADDRESS);
+
+void setup() {
+  Serial.begin(115200);
+
+  // Klasse initialisieren
+  gyro.begin();
+}
+
+void loop() {
+  // Aktualisiere Zustand des gyro-Objects (liest Sensoren aus und berechnet Winkel/Beschleunigungen)
+  // Alternativ kann man auch fast_update() verwenden
+  gyro.update();
+
+  // greife auf die Sensordaten zu
+  Serial.print("Angle-X:");
+  Serial.print(gyro.getAngleX());
+  Serial.print(",Angle-Y:");
+  Serial.print(gyro.getAngleY());
+  Serial.print(",Angle-Z:");
+  Serial.print(gyro.getAngleZ());
+
+  Serial.print(",Gyro-X:");
+  Serial.print(gyro.getGyroX());
+  Serial.print(",Gyro-Y:");
+  Serial.print(gyro.getGyroY());
+  Serial.print(",Gyro-Z:");
+  Serial.println(gyro.getGyroZ());
+
+  delay(100);
+}
+```
+
+

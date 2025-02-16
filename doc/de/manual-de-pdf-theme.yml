@@ -1,0 +1,79 @@
+extends: default-for-print
+
+base:
+  font-size: 8
+
+font:
+  catalog:
+    merge: true 
+    Roboto:
+      normal: RobotoCondensed-Light.ttf
+      italic: RobotoCondensed-LightItalic.ttf
+      bold: RobotoCondensed-Bold.ttf
+      bold_italic: RobotoCondensed-BoldItalic.ttf
+    Noto Serif:
+      normal: RobotoCondensed-Light.ttf
+      italic: RobotoCondensed-LightItalic.ttf
+      bold: RobotoCondensed-Bold.ttf
+      bold_italic: RobotoCondensed-BoldItalic.ttf
+      
+toc:
+  font-size: 7
+
+toc-h2:
+  font-style: bold
+
+heading:
+  h1-font-size: $base-font-size * 2.2
+  h2-font-size: $base-font-size * 1.6
+  h3-font-size: $base-font-size * 1.4
+  h4-font-size: $base-font-size * 1.1
+
+title-page:
+  text-align: center
+  logo:
+    image: image:../images/VICUS_Logo.png[align=center,pdfwidth=75%]
+    top: 0cm
+  authors:
+    content: ~
+
+page:
+  margin: [3cm, 2.5cm, 3cm, 2cm]
+
+image:
+  align: center
+  
+code:
+  font-size: 9
+
+header:
+  height: 2.5cm
+  line-height: 1
+  recto:
+    left:
+      content: 'image::../images/Logo_VICUS_horizontal.png[pdfwidth="5cm"]'
+  verso:
+    right:
+      content: 'image::../images/Logo_VICUS_horizontal.png[pdfwidth="5cm"]'
+
+footer:
+  height: 0.75in
+  line-height: 1
+  recto:
+    right:
+      content: 'Seite {page-number} von {page-count}'
+    center:
+      content: 'VICUS User Manual'
+    left:
+      content: 'v{revnumber}'
+  verso:
+    left:
+      content: 'Seite {page-number} von {page-count}'
+    center:
+      content: 'VICUS User Manual'
+    right:
+      content: 'v{revnumber}'
+
+thematic-break:
+  margin-bottom: 50
+  

@@ -1,0 +1,132 @@
+:imagesdir: ./images
+
+# Töne mit dem passiven Buzzer auf dem Board
+
+Hier steuern wir den passiven Buzzer auf dem Board an.
+
+## Allgemeines
+
+Auf dem Auriga-Board ist ein passiver Buzzer verbaut, welcher an einen PWM-Pin angeschlossen ist. Der Buzzer ist an Pin 45 angeschlossen.
+
+image::auriga_buzzer.png[]
+
+Beim Blick in die Include-Datei `MeAuriga.h` fällt einem am Schluss der Datei folgende Quelltext auf:
+
+```c++
+#define   pinMode(45,OUTPUT),digitalWrite(45, HIGH)
+#define buzzerOff() pinMode(45,OUTPUT),digitalWrite(45, LOW)
+```
+
+Hier wird also beim Einschalten der Pegel auf HIGH gezogen und beim Ausschalten der Pegel wieder auf LOW. Das ist allerdings Code, der für einen aktiven Buzzer gedacht ist, und wahrscheinlich vergessen wurde, zu entfernen.
+
+[CAUTION]
+====
+Für den MakeBlock ranger sind die Funktionen `buzzerOn()` und `buzzerOff()` [underline]#nicht# zu verwenden.
+====
+
+Um den passiven Buzzer anzusteuern, verwendet man `tone()` und zum Ausschalten `noTone()`. Hier ist ein Beispiel, für die direkte Ansteuerung des Pins.
+
+### Beispielprogramm
+
+```c++
+#define BUZZER_PIN 45
+
+void setup()  {
+  pinMode(BUZZER_PIN, OUTPUT);
+}
+
+void loop()  {
+  tone(BUZZER_PIN, 131);   // c
+  delay(1200);
+
+  tone(BUZZER_PIN, 165);   // e
+  delay(400);
+
+  tone(BUZZER_PIN, 196);   // g
+  delay(1800);
+
+  noTone(BUZZER_PIN);     // aus
+  delay(4000);
+}
+```
+
+Hier ist noch ein Programm, bei dem aus dem einfachen Buzzer etwas interessantere Geräusche raus kommen.
+
+```c++
+#define BUZZER_PIN 45
+
+void setup()  {
+  pinMode(BUZZER_PIN, OUTPUT);
+}
+
+void loop()  {
+  for (int i=0; i<35; ++i) {
+    int freq = 80 + i*10;
+    int terz = freq*6.0/5;
+    for (int j=0; j<10; ++j) {
+      tone(BUZZER_PIN, freq);
+      delay(30);
+      tone(BUZZER_PIN, terz);
+      delay(30);
+    }
+  }
+  for (int i=35; i>1; --i) {
+    int freq = 80 + i*10;
+    int terz = freq*6.0/5;
+    for (int j=0; j<10; ++j) {
+      tone(BUZZER_PIN, freq);
+      delay(30);
+      tone(BUZZER_PIN, terz);
+      delay(30);
+    }
+  }
+
+}
+```
+
+
+[NOTE]
+====
+Eine Liste von Frequenzen für die ersten 6 Oktaven findet man im Arduino-Beispiel: `02. Digital->toneMelody` und der dort enthaltenen Datei `pitches.h`.
+====
+
+## Verwendung der Makeblock Klasse MeBuzzer
+
+In der Makeblock-Bibliothek gibt es noch die Klasse `MeBuzzer`. Diese kapselt den Zugriff, macht die Ansteuerung des Buzzers aber nicht wirklich einfacher.
+Man kann mittels der Member-Funktion `MeBuzzer::tone(frequenz, dauer in ms)` einen Ton ausgeben. Diese Funktion implementiert einen Software-PWM (d.h. in dieser Funktion wird der angegebene Buzzer-Pin sehr häufig an und aus geschaltet, wobei das Verhältnis der an/aus-Zeiten die Tonhöhe definiert). 
+Somit kann man auch externe Buzzer anschließen und dabei Ports mit digitalen Pins (keinen analogen Pins) nutzen.
+
+[WARNING]
+====
+Für die Verwendung des OnBoard-Buzzers sollte man die `MeBuzzer`-Klasse _nicht_ benutzen, sondern stattdessen wie im Beispiel oben via `tone()`
+die Frequenz einstellen. Das hat auch den Vorteil, dass man ohne Wartezeiten parallel zum Melodie abspielen noch Sensoren auslesen und andere Dinge steuern kann.
+====
+
+### Beispielprogramm
+
+```c++
+// Beispielprogramm für die Verwendung der MeBuzzer-Klasse
+// Diese Variante ist aber NICHT EMPFOHLEN (siehe Text)
+#include <MeAuriga.h>
+
+#define BUZZER_PIN 45
+
+MeBuzzer buzzer;
+
+void setup()  {
+  buzzer.setpin(BUZZER_PIN);
+  buzzer.noTone();
+}
+
+void loop()  {
+  buzzer.tone(262, 250);   //NOTE_C4
+  buzzer.tone(294, 250);   //NOTE_D4
+  buzzer.tone(330, 250);   //NOTE_E4
+  delay(2000);
+
+  buzzer.tone(587, 250);   //NOTE_D5
+  buzzer.tone(659, 250);   //NOTE_E5
+  buzzer.tone(523, 250);   //NOTE_C5
+  delay(2000);
+}
+```
