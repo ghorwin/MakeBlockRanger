@@ -35,7 +35,7 @@ bzw. die darin verbaute Auriga-Platine mit dem Arduino-Prozessor.
 
 [NOTE]
 ====
-In diesem Tutorial wird Linux (konkret Ubuntu) verwendet. Linux bringt die Treiber für den ch341-Chip bereits mit, während man unter Windows hier noch die Treiber installieren muss. Bei Gelegenheit würde ich 
+In diesem Tutorial wird Linux (konkret Ubuntu) verwendet. Linux bringt die Treiber für den ch341-Chip bereits mit, während man unter Windows hier noch die Treiber installieren muss. Bei Gelegenheit würde ich das nochmal dokumentieren (ansonsten hilft hier einfach eine Websuche).
 ====
 
 Der _MakeBlock Ranger_, oder besser gesagt das Gehirn davon, das Auriga Board mit dem Arduino Mega 2560 Prozessor wird angeschlossen und erklärt, wie man die Entwicklungsbibliotheken einrichtet und die Firmware aktualisiert bzw. nach dem Aufspielen eigener Programme wieder zurücksetzt. Dieser Text erklärt auch ein paar Hintergründe und wie die RJ25 Ports mit den Arduino-Pins verbunden sind und gibt allgemein erstmal eine Orientierung, wie das Ganze so funktioniert.
@@ -88,11 +88,11 @@ Viele nachfolgend und in den anderen Teilen beschriebene Details habe ich aus de
 
 Hier sind noch einige Dokumente, die ich zusammengetragen habe:
 
-- link:downloads/Makeblock_Leaflet_mBot-Ranger_2018Q3_V1-1-1_View.pdf[MakeBlock Ranger Flyer]
-- link:downloads/mBot-Ranger_Blue_Instruction_Book.pdf[mBot Ranger (Bau-)Anleitung]
-- link:downloads/getting_started_with_mBlock.pdf[mBlock Entwicklungsumgebung - Getting Started]
-- link:downloads/MeAuriga_Schaltplan.pdf[Auriga Schaltplan]
-- link:downloads/MeAuriga_Pinout.pdf[Auriga Pinout]
+- link:../downloads/Makeblock_Leaflet_mBot-Ranger_2018Q3_V1-1-1_View.pdf[MakeBlock Ranger Flyer]
+- link:../downloads/mBot-Ranger_Blue_Instruction_Book.pdf[mBot Ranger (Bau-)Anleitung]
+- link:../downloads/getting_started_with_mBlock.pdf[mBlock Entwicklungsumgebung - Getting Started]
+- link:../downloads/MeAuriga_Schaltplan.pdf[Auriga Schaltplan]
+- link:../downloads/MeAuriga_Pinout.pdf[Auriga Pinout]
 
 
 // chapter 2

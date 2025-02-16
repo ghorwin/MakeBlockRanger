@@ -1,18 +1,22 @@
 #!/bin/bash
 
-echo '*** copying images ***' &&
+echo '*** Generating docs ***' &&
+(cd de;./build_html.sh) &&
+
+
+echo '*** Copying images ***' &&
 cp -r images/* ../docs/images/ &&
 
-echo '*** copying css ***' &&
+echo '*** Copying css ***' &&
 cp -r css/* ../docs/css/ &&
 
-echo '*** copying downloadables ***' &&
-cp -r downloads/* docs/downloads/ &&
+echo '*** Copying downloadables ***' &&
+cp -r downloads/* ../docs/downloads/ &&
 
-echo '*** copying fonts ***' &&
-cp -r fonts/* docs/fonts/ &&
+echo '*** Copying fonts ***' &&
+cp -r fonts/* ../docs/fonts/ &&
 
-echo '*** copying webpages ***' &&
-cp -r de/index.html docs/de/index.html
+echo '*** Copying webpages ***' &&
+cp de/index.html ../docs/de/
 
 
