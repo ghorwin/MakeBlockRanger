@@ -1,4 +1,4 @@
-:imagesdir: ./images
+:imagesdir: ../images
 
 # Töne mit dem passiven Buzzer auf dem Board
 

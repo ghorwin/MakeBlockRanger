@@ -1,23 +1,22 @@
-Makeblock mBot Ranger
-=====================
+Makeblock mBot Ranger: Eine Anleitung zur Programmierung des Roboterbausatzes mit der ArduinoIDE
+================================================================================================
 Andreas Nicolai <andreas.nicolai@gmx.net>
 v1.0 (11.01.2025)
 // v1.0 date_on_line_above
 :Author Initials: AN
 :toc: left
 :toclevels: 3
-:toc-title: Inhaltsverzeichnis
 :icons: font
-:imagesdir: ./images
+:imagesdir: ../images
 :numbered:
 :website: https://schneggenport.de
 :source-highlighter: rouge
 :rouge-style: custom
 :title-page:
-//:stylesdir: ./css
-//:stylesheet: roboto_ubuntu.css
+:stylesdir: ../css
+:stylesheet: roboto_ubuntu.css
 :xrefstyle: short
-
+:toc-title: Inhaltsverzeichnis
 :caution-caption: Achtung
 :example-caption: Beispiel
 :figure-caption: Abbildung

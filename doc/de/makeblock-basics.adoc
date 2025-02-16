@@ -1,4 +1,4 @@
-:imagesdir: ./images
+:imagesdir: ../images
 
 [[sec:basics]]
 # Die Grundlagen der Auriga-Programmierung
