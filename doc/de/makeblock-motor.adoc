@@ -329,10 +329,113 @@ Die Ansteuerung via setzen der Ziel-PWM ist di einfachste und direkteste Möglic
 
 Hierbei wird die aktuelle Geschwindigkeit andauernd mit der Sollgeschwindigkeit verglichen. Die Abweichung (der Regelfehler) wird dazu benutzt, um die Leistung/PWM der Motoren solange anzupassen, bis die Ist-Geschwindigkeit der Soll-Geschwindigkeit entspricht und der Regelfehler (nahezu) 0 wird.
 
+.Beispielprogramm für die adaptive Regelung der Geschwindigkeit
+```c++
+// Testprogramm für die Ansteuerung der DC Motoren via Makeblock Bibliothek
+#include <MeAuriga.h>
 
+MeEncoderOnBoard Encoder_1(SLOT1);
+MeEncoderOnBoard Encoder_2(SLOT2);
 
+// Interruptfunktion für Encoder 1
+void isr_process_encoder1(void) {
+  if (digitalRead(Encoder_1.getPortB()) == 0)     Encoder_1.pulsePosMinus();
+  else                                            Encoder_1.pulsePosPlus();
+}
 
+// Interruptfunktion für Encoder 2
+void isr_process_encoder2(void) {
+  if (digitalRead(Encoder_2.getPortB()) == 0)     Encoder_2.pulsePosMinus();
+  else                                            Encoder_2.pulsePosPlus();
+}
 
+int lastOutputMillis;
+int targetSpeedRPM;
+char buf[4];
+int buffIndex;
+
+void setup() {
+  // Festlegen der Interruptfunktionen für das Messen/Zählen der Bewegung
+  attachInterrupt(Encoder_1.getIntNum(), isr_process_encoder1, RISING);
+  attachInterrupt(Encoder_2.getIntNum(), isr_process_encoder2, RISING);
+  Serial.begin(115200);
+  
+  // Interne Timer der PWM auf 8KHz programmieren
+  TCCR1A = _BV(WGM10);
+  TCCR1B = _BV(CS11) | _BV(WGM12);
+
+  TCCR2A = _BV(WGM21) | _BV(WGM20);
+  TCCR2B = _BV(CS21);
+
+  // die PID Reglerparameter einstellen, eigentlich nur den P-Teil des Reglers, denn der Integral und Differentialteil
+  // funktionieren gar nicht erst 
+  // (der Differentialteil ist bei einem Motor auch nicht sinnvoll, außer der Fahrtwiderstand
+  // ändert sich abrupt... was aber eher unwahrscheinlich ist)
+  Encoder_1.setSpeedPid(0.18, 0, 0);
+  Encoder_2.setSpeedPid(0.18, 0, 0);
+
+  // Variable für gelegentliche Ausgaben auf die serielle Schnittstelle
+  lastOutputMillis = millis();
+  targetSpeedRPM = 0;
+  buffIndex = 0;
+}
+
+void loop() {
+  // von der seriellen Schnittstelle lesen
+
+  // eine maximal 3-stellige Zahl von der seriellen Schnittstelle lesen
+  char lastChar;
+  while (Serial.available() && buffIndex<4) {
+    lastChar = Serial.read();
+    // Falls noch weniger < 3 Zeichen und kein Zeilenende, Zeichen in Puffer schieben
+    if (lastChar != '\n' && buffIndex != 3)
+      buf[buffIndex++] = lastChar;
+    else {
+      // Zeichenkette in Puffer mit \0 beenden
+      buf[buffIndex] = '\0';
+      // Text in Zahl umwandeln
+      targetSpeedRPM = atoi(buf);
+      Serial.print("targetspeed = ");
+      Serial.println(targetSpeedRPM);
+      // Motorzielgeschwindigkeiten anpassen
+      Encoder_1.runSpeed(-targetSpeedRPM);
+      Encoder_2.runSpeed(targetSpeedRPM);
+      buffIndex = 0;
+    }
+  }
+
+  // In der loop() Funktion wird die Geschwindigkeit im Motor geregelt
+  Encoder_1.loop();
+  Encoder_2.loop();
+
+  // alle 100 Millisekunden die Geschwindigkeit und Duty Cycle ausgeben
+  if (millis() > lastOutputMillis + 100) {
+    lastOutputMillis = millis();
+    Serial.print("TargetSpeed:");
+    Serial.print(targetSpeedRPM);
+    Serial.print(",Speed1:");
+    Serial.print(-Encoder_1.getCurrentSpeed());
+    Serial.print(",PWM1:");
+    Serial.print(-Encoder_1.getCurPwm());
+    Serial.print(",Speed2:");
+    Serial.print(Encoder_2.getCurrentSpeed());
+    Serial.print(",PWM2:");
+    Serial.println(Encoder_2.getCurPwm());
+  }
+}
+```
+
+In diesem Programm wird die geforderte Geschwindigkeit über die serielle Schnittstelle gelesen. Im SerialPlotter oder SerialMonitor kann man dazu eine 3-stellige Zahl eingeben. In jedem Schleifendurchlauf wird ein neues Zeichen von der seriellen Schnittstelle in einen Pufferspeicher gelesen, bis entweder ein Zeilenendzeichen (`\n`) folgt, oder das 4. Zeichen gelesen wurde. Dann wird der Text im  Pufferspeicher mit einem `\0` beendet und in eine Zahl gewandelt. Diese wird dann als Soll-Drehzahl übergeben (in der etwas unzutreffenden Funktion `runSpeed()`. Der Controller berechnet in der stets aufgerufenen `MeEncoderOnBoard::loop()`-Funktion den Regelfehler und passt den Duty Cycle (PWM) entsprechend an.
+
+.Geregelte Motorleistung, getestet mit 4 Geschwindigkeiten (50, 100, 200, und Max. 340 rpm) sieht das so aus (ein Motor wieder mit Kette, der andere frei drehend):
+image::auriga_encoder_speed_8kHz_RPM_controlled.png[]
+
+Man sieht sehr schön, dass der Regler es eigentlich ganz gut schafft, bei beiden Motoren die geforderten Drehzahlen zu erreichen. Nur in der höchsten Stufe schafft es der Motor mit Kette nicht ganz die geforderte Drehzahl zu erreichen, denn er läuft schon konstant am obersten Limit (Duty Cycle 100%). Aufgrund der unterschiedlichen Reibwiderstände muss der Motor mit der Ketten (hellblau) stets einen deutlich höheren Duty Cycle fahren, um die Drehzahl zu erreichen.
+
+[WARNING]
+====
+Die Implementierung des PID-Reglers ist unvollständig - eigentlich funktioniert nur der P-Teil des Reglers. Aber im Rahmen der möglichen Genauigkeiten passt das soweit.
+====
 
 ## Programmierung des Rangers OHNE Makeblock-Bibliothek mit robuster Entfernungsmessung
 
