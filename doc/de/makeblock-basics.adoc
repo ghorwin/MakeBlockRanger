@@ -71,7 +71,7 @@ Pin 45 = Buzzer
 Pin 13 = Blaue LED (built-in LED)
 ```
 
-Die Motoren können zwar recht einfach durch die Bibliothek angesteuert werden, hier sind aber nochmal die Pins (falls man die Motoren klassisch über den Arduino ansteuern möchte, siehe Kapitel über die Motorensteuerung <<chap:motors>>):
+Die Motoren können zwar recht einfach durch die Bibliothek angesteuert werden, hier sind aber nochmal die Pins (falls man die Motoren klassisch über Arduino Pin PWM-write-Befehle ansteuern möchte, siehe Kapitel über die Motorensteuerung <<chap:motors>>):
 
 ```
 ENA A  = pin 19

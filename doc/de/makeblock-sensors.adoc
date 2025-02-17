@@ -1,12 +1,13 @@
 :imagesdir: ../images
-# OnBoard Sensoren (Licht, Schall, Temperature, Gyroscop)
+
+# OnBoard Sensoren (Licht, Schall, Temperature, Gyroskop)
 
 Hier geht es um das Auslesen der verschiedenen OnBoard-Sensoren auf dem Auriga-Board. Auf dem Auriga Board sind 4 Sensortypen platziert:
 
 - Schall/Lautstärke
 - Licht/Helligkeit (2 Mal, links und rechts)
 - Temperatur
-- Gyroscop/Neigungssensor
+- Gyroskop/Neigungssensor
 
 Nachfolgend wird gezeigt, wie diese Sensoren einzeln auszulesen sind, und welche Genauigkeiten/Wertebereiche zu erwarten sind.
 
@@ -17,7 +18,7 @@ ausgelesen.
 
 [IMPORTANT]
 ====
-Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) ist der Sound-Sensor auf dem Auriga-Boardan Port 14 angeschlossen (siehe Variable `mePort` in der Datei `MeAuriga.h` und Erklärung dazu in <<chap:basics>>.
+Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) ist der Sound-Sensor auf dem Auriga-Board an Port 14 angeschlossen (siehe Variable `mePort` in der Datei `MeAuriga.h` und Erklärung dazu in <<chap:basics>>.
 ====
 
 Die Klasse hat nur eine sinnvolle Memberfunction: `strength()`, was die Lautstärke im Bereich 140 bis ~600 ausgibt.
@@ -102,7 +103,7 @@ image::auriga_lightsensors.png[]
 
 _Interessant:_ bei moderatem Licht von Energiesparlampen zeigt der Sensor (wellenförmige schwankende) Werte zwischen 55 und 140 an.
 
-_Auch interessant:_ Wenn man den Ranger seitlich ans Fenster stellt, so werden leicht unterschiedliche Helligkeitswerte angezeigt. Eine Drehung um 180° führt jedoch nicht zum Vertauschen der Helligkeitswerte beider Sensoren, wie man das vielleicht erwarten würde. Ein Regeln der Ausrichtung des Ranges basierend auf seitlich einfallendem Licht scheint eher schwierig zu sein (selber ausprobieren!).
+_Auch interessant:_ Wenn man den Ranger seitlich ans Fenster stellt, so werden leicht unterschiedliche Helligkeitswerte angezeigt. Eine Drehung um 180° führt jedoch wieder Erwarten _nicht_ zum Vertauschen der Helligkeitswerte beider Sensoren, wie man das vielleicht erwarten würde. Ein Regeln der Ausrichtung des Ranges basierend auf seitlich einfallendem Licht scheint eher schwierig zu sein (selber ausprobieren!).
 
 
 
@@ -132,22 +133,25 @@ void loop() {
 }
 ```
 
-.Vom Sensor gelieferten Temperaturverlauf, wenn man den Arduino nach längerer Zeit (6h) erstmalig anschaltet. Ausgehend von der Raumtemperatur (ca. 22°) erwärmt sich das Board und der Sensor in wenigen Minuten auf über 25°C, wenn man noch ein paar LEDs anmacht, oder dem Mikroprozessor ordentlich was zu tun gibt, geht die Temperatur rauf auf knapp 30°C. 
+.Vom Sensor gelieferter Temperaturverlauf, wenn man den Arduino nach längerer Zeit (6h) erstmalig anschaltet. Ausgehend von der Raumtemperatur (ca. 22°) erwärmt sich das Board und der Sensor in wenigen Minuten auf über 25°C, wenn man noch ein paar LEDs anmacht, oder dem Mikroprozessor ordentlich was zu tun gibt, geht die Temperatur rauf auf knapp 30°C.
 image::auriga_temperatursensor.png[]
 
-_Interessant:_ Der Temperatursensor wird maßgeblich durch die Energieabgabe von LEDs und des Prozessors allgemein beeinflusst. Die Umgebungstemperatur lässt sich damit nur sehr ungenau messen, da die Wärmezirkulation zum Sensor durch das Plastikgehäuse behindert ist.
+[CAUTION]
+====
+Der Temperatursensor wird maßgeblich durch die Energieabgabe von LEDs und des Prozessors allgemein beeinflusst. Die Umgebungstemperatur lässt sich damit nur sehr ungenau messen, da die Wärmezirkulation zum Sensor durch das Plastikgehäuse behindert ist.
+====
 
 
 
 ## Gyroskop
 
-Das Auriga-Board hat einen Neigungssensor verbaut. Dieser liefert für die 3 Achsen x,y,z jeweils Neigungswerte/Ausrichtungswerte und dazu die Beschleunigungen auf den 3 Achsen.
+Das Auriga-Board hat einen Neigungssensor verbaut. Dieser liefert für die 3 Achsen x,y,z jeweils Neigungswerte/Ausrichtungswerte und dazu die Beschleunigungen auf den 3 Achsen. 
 
 Die Achsenzuordnung ist dabei wie folgt:
 
 - X-Achse : Kippen um die Querachse (_der Anstieg beim Fahren auf einen Hügel_): -90° (nach unten)...90° (nach oben)
-- Y-Achse : Kippen um die Längsachse; -90° (nach rechts gedreht) ...90° (nach links gedreht)
-- Z-Achse :  N, O, S, W Ausrichtung; 0° = der USB-Port zeigt nach Norden; -180°/180° = der USB-Port zeigt nach Süden; -90° = der USB-Port zeigt nach Westen
+- Y-Achse : Kippen um die Längsachse; -90° (nach rechts geneigt) ...90° (nach links geneigt)
+- Z-Achse :  N, O, S, W Ausrichtung; 0° = der USB-Port am Auriga zeigt dann nach Norden; -180°/180° = der USB-Port zeigt nach Süden; -90° = der USB-Port zeigt nach Westen
 
 
 Entsprechend ist die X-Beschleunigung die Beschleunigung vorwärts und Y-Beschleunigung die Drehbeschleunigung. Interessant ist die Z-Beschleunigung (Querbeschleunigung) beim schnellen Kurvenfahren.
@@ -193,4 +197,12 @@ void loop() {
 }
 ```
 
+
+## Programmierideen
+
+- Der Roboter soll im Dunkeln das LED-Licht anschalten (aber beeinflusst das nicht die Helligkeitsmessung?)
+- Der Roboter soll sich zur Lärmquelle hinbewegen (dazu braucht man noch den Antrieb aus <<chap:motors>>)
+- Der Roboter fährt ein Rampe hoch und hält dann auf der waagerechten Fläche wieder an
+
+Für den Nervous Bird (das umgedrehte Pendel) ist der Neigungssensor essentiell, damit man hier das Gleichgewicht hält. Die Programmierung eines solchen Robotermodells, der beim anschubsen selbständig vor-/zurück fährt und das Gleichgewicht behält, ist aber ein anspruchsvolleres Projekt.
 

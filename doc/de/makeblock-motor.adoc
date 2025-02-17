@@ -7,18 +7,25 @@ Jetzt wird endlich mal was bewegt. In diesem Teil geht es um die Programmierung 
 
 ## Allgemeines
 
-Am Auriga-Board gibt es zwei Motorports. Jeder der Motoren kann über einen PWM Pin (für die Geschwindigkeit) und zwei Richtungspins angesteuert werden.
-Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Verwendung der Makeblock Bibliothek.
+Am Auriga-Board gibt es zwei Motorports. Jeder der Motoren kann über einen PWM Pin (für die Geschwindigkeit) und zwei Richtungspins angesteuert werden. Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Verwendung der Makeblock Bibliothek.
 
-Grundsätzlich bewegen sich die Motoren nur, wenn die Spannungsversorgung über die Batterien erfolt. Das ist auch ganz praktisch, da man so den Robotor angesteckt an den Computer programmieren kann, ohne Angst zu haben, dass er vom Tisch rollt.
+[NOTE]
+====
+Grundsätzlich bewegen sich die Motoren nur, wenn die Spannungsversorgung über die Batterien erfolgt (die Motoren brauchen eine Spannung > 7V, was der USB-Port ja nicht liefern kann). Das ist auch ganz praktisch, da man so den Robotor angesteckt an den Computer programmieren kann, ohne Angst zu haben, dass er vom Tisch rollt.
+====
+
+Die Motoren werden an die beiden Motorports angesteckt:
+
+.Motor-Ports an der Auriga-Platine
+image::auriga_motorports.png[]
 
 
 ## Direkte Ansteuerung über PWM und digitale Pins
 
 Aus dem Schaltplan kann man die Bezeichnung der digitalen Pins (D46-D49) und die PWM Pins (D10, D11) entnehmen:
 
-.Motor-Ports an der Auriga-Platine
-image::auriga_motorports.png[]
+.Schaltplanauszug für die Motoransteuerung
+image::encoder_schaltplanauszug.png[]
 
 Die Pins werden nun wie folgt angesprochen:
 
@@ -113,25 +120,33 @@ void loop() {
 
 Hier fährt der Roboter einfach nur vor und zurück und beschleunigt/bremst dabei.
 
-Wenn man den Robotor mit Maximalgeschwindigkeit fahren lässt, so schafft er bei vollen Batterien noch 0,56 m/s bzw. 2 km/h.
+[TIP]
+====
+Wenn man den Land Raider mit Maximalgeschwindigkeit fahren lässt, so schafft er bei vollen Batterien noch **0,56 m/s** bzw. **2 km/h**. Das reicht locker, um durch eine Legostadt zu düsen und spektakuläre Videos aus der Legomännelperspektive zu filmen.
+====
+
 
 
 ## Ansteuerung über Encoder-Klasse der Bibliothek
 
 Die MakeBlock-Bibliothek bietet zahlreiche Klassen für die Programmierung von Encodern. Für die mitgelieferten DC-Motoren wird die Klasse `MeEncoderOnBoard` verwendet. Diese übernimmt, wie der Name schon sagt, die Programmierung der auf dem Board befindlichen Motorsteuerung.
 
-Diese Art der Programmierung hat den Vorteil, dass man die konkrete Geschwindigkeit und damit auch Position abfragen kann und somit - zumindest in Theorie - den Roboter sehr präzise bewegen kann. Allerdings ist die Programmierung auch etwas komplexer: man muss nämlich die Arduino-PWM Frequenzen umprogrammieren.
+Diese Art der Programmierung hat den Vorteil, dass man die konkrete Geschwindigkeit und damit auch Position abfragen kann und somit - zumindest in Theorie - den Roboter sehr präzise bewegen kann.
 
-Die Motoren liefern Bewegungsimpulse, die man zählen kann, um so Geschwindigkeit und Entfernung zu bestimmen. Damit man das präzise machen kann, ohne dass anderen Aufgaben im Mikroprozessor die Messung beeinträchtigen, verwendet man Interruptfunktionen. Dazu registriert man für jeden Motor eine Interruptfunktion, die immer dann aufgerufen wird, wenn am entsprechenden Pin ein RISING Signal anliegt (also der Eingangspin von LOW auf HIGH wechselt). In der Interruptfuktion wird dann ein Zähler hochgezählt, der dann für die Berechnung der Momentangeschwindigkeit und Bewegung verwendet wird. Die Berechnung selbst ist in der Klasse `MeEncoderOnBoard` gekapselt.
+Die Encoder liefern Bewegungsimpulse, die man zählen kann, um so Geschwindigkeit und Entfernung zu bestimmen. Damit man das präzise machen kann, ohne dass anderen Aufgaben im Mikroprozessor die Messung beeinträchtigen, verwendet man Interruptfunktionen. Dazu registriert man für jeden Motor eine Interruptfunktion, die immer dann aufgerufen wird, wenn am entsprechenden Pin ein RISING Signal anliegt (also der Eingangspin von LOW auf HIGH wechselt). In der Interruptfuktion wird dann ein Zähler hochgezählt, der dann für die Berechnung der Momentangeschwindigkeit und Bewegung verwendet wird. Die Berechnung selbst ist in der Klasse `MeEncoderOnBoard` gekapselt.
+
 
 ### Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion
 
 Im Folgenden Testbeispiel kann man den Robotor begrenzt steuern:
 
 - Nach Start des Programms den SerialMonitor der Arduino-IDE aufrufen
-- in die Zeile "Nachricht" eine Zahl 0...6 eintippen und mit Enter abschicken
+- in die Zeile "Nachricht" des SerialMonitor eine Zahl 0...6 eintippen und mit Enter abschicken
 - das Programm wertet diese Zahl aus und legt die Drehgeschwindigkeit der Motoren fest
 
+Das Testbeispiel enthält eine Menge Details, welche weiter unten erklärt werden.
+
+.Kleines Testprogramm für die Motorsteuerung und Messung der Geschwindigkeit mittels der Encoder-Bibliothek
 ```c++
 /* Testprogramm für die Ansteuerung der DC Motoren via Makeblock Bibliothek */
 #include <MeAuriga.h>
@@ -227,7 +242,7 @@ void loop() {
   // alle 100 Millisekunden die Geschwindigkeit ausgeben
   if (millis() > lastOutputMillis + 100) {
     lastOutputMillis = millis();
-    // Geschwindigkeit in Umdrehungen pro Minute (rpm) auslesen und ausgeben
+    // Erreichte Geschwindigkeit
     Serial.print("Speed 1:");
     Serial.print(Encoder_1.getCurrentSpeed());
     Serial.print(",Speed 2:");
@@ -236,7 +251,83 @@ void loop() {
 }
 ```
 
-Es gibt verschiedene Funktionen, um die Geschwindigkeit der Motoren zu steuern. Die Klasse `MeEncoderOnBoard` hat auch Funktionen für das Fahren einer definierten Strecke oder zu einem Punkt. Dazu einfach mal in die Dokumentation der Klasse schauen.
+In diesem Code werden einige fortgeschrittene Arduino-Programmier-Techniken verwendet, die nachfolgend etwas genauer beleuchtet werden.
+
+
+### Interrupts für Encoder-Signale
+
+Die in den Motoren verbauten Encoder liefern an jeweils 2 Pins die Encoder-Signale aus, wobei jeweils einer der Pins ein Interrupt-fähiger Pin ist. Zunächst werden die Funktionen `isr_process_encoder1()` und `isr_process_encoder2()` an Interrupts gebunden, wobei auf den Wechsel des Pegels von low auf high reagiert wird (`RISING`):
+
+```c++
+// Verknüpfung einer Interrupt-Funktion
+attachInterrupt(Encoder_1.getIntNum(), isr_process_encoder1, RISING);
+```
+
+Die Funktion `Encoder_1.getIntNum()` liefert dabei die Interruptnummer für den interruptfähigen Pin.
+
+[NOTE]
+====
+Auf dem Mega 2560 gibt es mehrere Interrupt-fähige Pins, unter anderem Pin 18 und 19, welche mit dem Encoder verbunden sind (siehe auch Pinout-Diagramm, M1 und M2, wo D19/INT1 und D18/INT3 steht. Diesen Pins wird im Mega 2560 jeweils eine Interrupt-Nummer zugewiesen. Normalerweise bekommt man die über die Funktion `digitalPinToInterrupt()` die zu einem Interrupt-fähigen Pin zugehörige Internetnummer und genau dies liefert die Funktion `getIntNum()`.
+
+```c
+int interruptNr1 = digitalPinToInterrupt(19);  // -> interrupt 4, genau wie Encoder_1.getIntNum()
+int interruptNr2 = digitalPinToInterrupt(18);  // -> interrupt 5, genau wie Encoder_2.getIntNum()
+```
+
+Siehe auch Erklärung zu den Interrupt-Nummern in https://docs.arduino.cc/language-reference/funktionen/external-interrupts/attachInterrupt/
+====
+
+
+Wie bei Encodern üblich wird die Flanke des einen Pins überwacht, und dann durch den (etwas versetzten Pegel des 2. Pins) die Drehrichtung bestimmt. Dies geschicht in der Interrupt-Funktion:
+
+```c
+void isr_process_encoder1(void) {
+  // Encoder_1.getPortA() -> Pin 19
+  // Encoder_1.getPortB() -> Pin 42
+  
+  // wenn der 2. Encoder-Pin gleichzeitig High ist, dreht sich der Encoder vorwärts
+  if (digitalRead(Encoder_1.getPortB()) == 0)
+    Encoder_1.pulsePosMinus();
+  else
+    // sonst rückwärts
+    Encoder_1.pulsePosPlus();
+}
+```
+
+Die Encoder zählen jetzt also bei jedem Aufruf einen Puls höher oder runter. In der in jedem Durchlauf aufgerufenen Funktion `MeEncoderOnBoard::loop()` wird die Funktion `MeEncoderOnBoard::updateSpeed()` aufgerufen, welche letztlich die Anzahl der Pulse seit dem letzten Aufruf von `updateSpeed()` in die Drehgeschwindigkeit umrechnet.
+
+### Testlauf und Geschwindigkeitsmessung mit und ohne Kette
+
+Wenn man jetzt das Programm mal testet, zuerst noch ohne den Codeblock in der `setup()` Funktion mit den umprogrammierten PWM-Timern, und die Geschwindigkeiten plottet erhält man ein interessantes Bild:
+
+.Ausgabe der Motorgeschwindigkeiten mit originalen PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend
+image::auriga_encoder_speed_original_PWM_timer_one_belt.png[]
+
+Da die Kette schwingt und auch nicht gleichmäßig steif ist, führt dies zu ungleichmäßigen Drehbewegungen des Motors. Um diesen Einfluss zu sehen, habe ich an einen Motor die Kette angebaut und am anderen Motor nicht. Klar erkennbar im Diagramm ist auch die Bremswirkung dder Kette insgesamt - der Motor mit Kette dreht langsamer.
+
+Außerdem wird die Ziel-PWM-Geschwindigkeit offensichtlich nicht ganz erreicht. Dies liegt daran, dass das generierte PWM-Signal zu langsam ist. Um dies zu beheben, kann der PWM-Timer des Arduino umprogrammiert werden, sodass er mit 8kHz läuft. Dies passiert im Codeblock:
+
+```c
+  // Interne Timer der PWM auf 8KHz programmieren
+  TCCR1A = _BV(WGM10);
+  TCCR1B = _BV(CS11) | _BV(WGM12);
+
+  TCCR2A = _BV(WGM21) | _BV(WGM20);
+  TCCR2B = _BV(CS21);
+```
+
+Erneut getestet sieht die Geschwindigkeitsausgabe deutlich besser aus:
+
+.Ausgabe der Motorgeschwindigkeiten mit umprogrammierten PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend
+image::auriga_encoder_speed_8kHz_PWM_timer_one_belt.png[]
+
+Beim freilaufenden Motor wird die festgelegte Soll-Geschwindigkeit offenbar gut erreicht. Beim Motor mit Kette bleibt die Sollgeschwindigkeit etwas hinter der festgelegten Geschwindigkeit, was ja an der Bremswirkung liegt.
+
+Wenn man jetzt den Roboter aber sehr präzise steuern möchte, sowohl was die Geschwindigkeit betrifft, also auch den zurückgelegten Weg, muss man sich natürlich noch darum kümmern, wie man die PWM-Geschwindigkeiten in reale Geschwindigkeiten überträgt.
+
+## Alternative Steuerungsfunktionen in der Encoder-Bibliothek
+
+Es gibt verschiedene Funktionen und Modi, um die Geschwindigkeit der Motoren zu steuern. Im obigen Beispiel wurde die Funktion `setTarPWM()` (_set target PWM_) verwendet.
 
 
 

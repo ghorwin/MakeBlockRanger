@@ -24,7 +24,7 @@ Hier wird also beim Einschalten der Pegel auf HIGH gezogen und beim Ausschalten 
 Für den MakeBlock ranger sind die Funktionen `buzzerOn()` und `buzzerOff()` [underline]#nicht# zu verwenden.
 ====
 
-Um den passiven Buzzer anzusteuern, verwendet man `tone()` und zum Ausschalten `noTone()`. Hier ist ein Beispiel, für die direkte Ansteuerung des Pins.
+Um den passiven Buzzer anzusteuern, verwendet man `tone()` und zum Ausschalten `noTone()`. Hier ist ein Beispiel für die direkte Ansteuerung des Pins.
 
 ### Beispielprogramm
 
@@ -92,14 +92,21 @@ Eine Liste von Frequenzen für die ersten 6 Oktaven findet man im Arduino-Beispi
 
 ## Verwendung der Makeblock Klasse MeBuzzer
 
-In der Makeblock-Bibliothek gibt es noch die Klasse `MeBuzzer`. Diese kapselt den Zugriff, macht die Ansteuerung des Buzzers aber nicht wirklich einfacher.
+[CAUTION]
+====
+Nur für den Anschluss externer Buzzer sinnvoll!
+====
+
+In der Makeblock-Bibliothek gibt es noch die Klasse `MeBuzzer`. Diese kapselt den Zugriff zwar etwas, macht die Ansteuerung des Buzzers aber nicht wirklich einfacher. 
+
 Man kann mittels der Member-Funktion `MeBuzzer::tone(frequenz, dauer in ms)` einen Ton ausgeben. Diese Funktion implementiert einen Software-PWM (d.h. in dieser Funktion wird der angegebene Buzzer-Pin sehr häufig an und aus geschaltet, wobei das Verhältnis der an/aus-Zeiten die Tonhöhe definiert). 
-Somit kann man auch externe Buzzer anschließen und dabei Ports mit digitalen Pins (keinen analogen Pins) nutzen.
+
+Somit kann man auch externe Buzzer anschließen und dabei Ports mit digitalen Pins (keine analogen/PWM Pins) nutzen.
+
 
 [WARNING]
 ====
-Für die Verwendung des OnBoard-Buzzers sollte man die `MeBuzzer`-Klasse _nicht_ benutzen, sondern stattdessen wie im Beispiel oben via `tone()`
-die Frequenz einstellen. Das hat auch den Vorteil, dass man ohne Wartezeiten parallel zum Melodie abspielen noch Sensoren auslesen und andere Dinge steuern kann.
+Für die Verwendung des OnBoard-Buzzers sollte man die `MeBuzzer`-Klasse _nicht_ benutzen, sondern stattdessen wie im Beispiel oben via `tone()` die Frequenz einstellen. Das hat auch den Vorteil, dass man ohne Wartezeiten parallel zum Melodie abspielen noch Sensoren auslesen und andere Dinge steuern kann.
 ====
 
 ### Beispielprogramm

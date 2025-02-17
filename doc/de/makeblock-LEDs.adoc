@@ -14,6 +14,8 @@ Dann gibt es noch eine grüne "On"-Status-LED (nicht programmierbar, hart verdra
 
 ## Standard built-in LED
 
+Die eingebaute blaue LED auf dem Board ist eher schlecht zu sehen (im Vergleich zu der regelmäßig blinkenden blauen "an"-Status LED):
+
 .Eingebaute Standard-LED auf dem Board
 image::auriga-Builtin-LED.gif[align="left"]
 
