@@ -340,7 +340,7 @@ pre.rouge {
 <div class="details">
 <span id="author" class="author">Andreas Nicolai</span><br>
 <span id="email" class="email"><a href="mailto:andreas.nicolai@gmx.net">andreas.nicolai@gmx.net</a></span><br>
-<span id="revnumber">version 1.0 (16.02.2025)</span>
+<span id="revnumber">version 1.0 (17.02.2025)</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -409,7 +409,7 @@ pre.rouge {
 </li>
 </ul>
 </li>
-<li><a href="#_onboard_sensoren_licht_schall_temperature_gyroscop">6. OnBoard Sensoren (Licht, Schall, Temperature, Gyroscop)</a>
+<li><a href="#_onboard_sensoren_licht_schall_temperature_gyroskop">6. OnBoard Sensoren (Licht, Schall, Temperature, Gyroskop)</a>
 <ul class="sectlevel2">
 <li><a href="#_lautstärkeschall">6.1. Lautstärke/Schall</a>
 <ul class="sectlevel3">
@@ -431,6 +431,7 @@ pre.rouge {
 <li><a href="#_beispielprogramm_7">6.4.1. Beispielprogramm</a></li>
 </ul>
 </li>
+<li><a href="#_programmierideen_2">6.5. Programmierideen</a></li>
 </ul>
 </li>
 <li><a href="#_töne_mit_dem_passiven_buzzer_auf_dem_board">7. Töne mit dem passiven Buzzer auf dem Board</a>
@@ -458,8 +459,11 @@ pre.rouge {
 <li><a href="#_ansteuerung_über_encoder_klasse_der_bibliothek">8.3. Ansteuerung über Encoder-Klasse der Bibliothek</a>
 <ul class="sectlevel3">
 <li><a href="#_beispielprogramm_ansteuerung_mittels_bibliotheksfunktion">8.3.1. Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion</a></li>
+<li><a href="#_interrupts_für_encoder_signale">8.3.2. Interrupts für Encoder-Signale</a></li>
+<li><a href="#_testlauf_und_geschwindigkeitsmessung_mit_und_ohne_kette">8.3.3. Testlauf und Geschwindigkeitsmessung mit und ohne Kette</a></li>
 </ul>
 </li>
+<li><a href="#_alternative_steuerungsfunktionen_in_der_encoder_bibliothek">8.4. Alternative Steuerungsfunktionen in der Encoder-Bibliothek</a></li>
 </ul>
 </li>
 <li><a href="#_abschließende_bemerkungen">9. Abschließende Bemerkungen</a></li>
@@ -1033,7 +1037,7 @@ Pin 13 = Blaue LED (built-in LED)</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Die Motoren können zwar recht einfach durch die Bibliothek angesteuert werden, hier sind aber nochmal die Pins (falls man die Motoren klassisch über den Arduino ansteuern möchte, siehe Kapitel über die Motorensteuerung <a href="#chap:motors">Abschnitt 8</a>):</p>
+<p>Die Motoren können zwar recht einfach durch die Bibliothek angesteuert werden, hier sind aber nochmal die Pins (falls man die Motoren klassisch über Arduino Pin PWM-write-Befehle ansteuern möchte, siehe Kapitel über die Motorensteuerung <a href="#chap:motors">Abschnitt 8</a>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1070,6 +1074,9 @@ DIR B2 = pin 46</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_standard_built_in_led">5.2. Standard built-in LED</h3>
+<div class="paragraph">
+<p>Die eingebaute blaue LED auf dem Board ist eher schlecht zu sehen (im Vergleich zu der regelmäßig blinkenden blauen "an"-Status LED):</p>
+</div>
 <div class="imageblock text-left">
 <div class="content">
 <img src="../images/auriga-Builtin-LED.gif" alt="auriga Builtin LED">
@@ -1343,7 +1350,7 @@ Die Programmierung des Controllers ist in der Klasse <code>MeRGBLed</code> imple
 </div>
 </div>
 <div class="sect1">
-<h2 id="_onboard_sensoren_licht_schall_temperature_gyroscop">6. OnBoard Sensoren (Licht, Schall, Temperature, Gyroscop)</h2>
+<h2 id="_onboard_sensoren_licht_schall_temperature_gyroskop">6. OnBoard Sensoren (Licht, Schall, Temperature, Gyroskop)</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Hier geht es um das Auslesen der verschiedenen OnBoard-Sensoren auf dem Auriga-Board. Auf dem Auriga Board sind 4 Sensortypen platziert:</p>
@@ -1360,7 +1367,7 @@ Die Programmierung des Controllers ist in der Klasse <code>MeRGBLed</code> imple
 <p>Temperatur</p>
 </li>
 <li>
-<p>Gyroscop/Neigungssensor</p>
+<p>Gyroskop/Neigungssensor</p>
 </li>
 </ul>
 </div>
@@ -1381,7 +1388,7 @@ ausgelesen.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) ist der Sound-Sensor auf dem Auriga-Boardan Port 14 angeschlossen (siehe Variable <code>mePort</code> in der Datei <code>MeAuriga.h</code> und Erklärung dazu in <a href="#chap:basics">Abschnitt 4</a>.</p>
+<p>Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) ist der Sound-Sensor auf dem Auriga-Board an Port 14 angeschlossen (siehe Variable <code>mePort</code> in der Datei <code>MeAuriga.h</code> und Erklärung dazu in <a href="#chap:basics">Abschnitt 4</a>.</p>
 </div>
 </td>
 </tr>
@@ -1497,7 +1504,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <p><em>Interessant:</em> bei moderatem Licht von Energiesparlampen zeigt der Sensor (wellenförmige schwankende) Werte zwischen 55 und 140 an.</p>
 </div>
 <div class="paragraph">
-<p><em>Auch interessant:</em> Wenn man den Ranger seitlich ans Fenster stellt, so werden leicht unterschiedliche Helligkeitswerte angezeigt. Eine Drehung um 180° führt jedoch nicht zum Vertauschen der Helligkeitswerte beider Sensoren, wie man das vielleicht erwarten würde. Ein Regeln der Ausrichtung des Ranges basierend auf seitlich einfallendem Licht scheint eher schwierig zu sein (selber ausprobieren!).</p>
+<p><em>Auch interessant:</em> Wenn man den Ranger seitlich ans Fenster stellt, so werden leicht unterschiedliche Helligkeitswerte angezeigt. Eine Drehung um 180° führt jedoch wieder Erwarten <em>nicht</em> zum Vertauschen der Helligkeitswerte beider Sensoren, wie man das vielleicht erwarten würde. Ein Regeln der Ausrichtung des Ranges basierend auf seitlich einfallendem Licht scheint eher schwierig zu sein (selber ausprobieren!).</p>
 </div>
 </div>
 </div>
@@ -1533,10 +1540,21 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <div class="content">
 <img src="../images/auriga_temperatursensor.png" alt="auriga temperatursensor">
 </div>
-<div class="title">Abbildung 15. Vom Sensor gelieferten Temperaturverlauf, wenn man den Arduino nach längerer Zeit (6h) erstmalig anschaltet. Ausgehend von der Raumtemperatur (ca. 22°) erwärmt sich das Board und der Sensor in wenigen Minuten auf über 25°C, wenn man noch ein paar LEDs anmacht, oder dem Mikroprozessor ordentlich was zu tun gibt, geht die Temperatur rauf auf knapp 30°C.</div>
+<div class="title">Abbildung 15. Vom Sensor gelieferter Temperaturverlauf, wenn man den Arduino nach längerer Zeit (6h) erstmalig anschaltet. Ausgehend von der Raumtemperatur (ca. 22°) erwärmt sich das Board und der Sensor in wenigen Minuten auf über 25°C, wenn man noch ein paar LEDs anmacht, oder dem Mikroprozessor ordentlich was zu tun gibt, geht die Temperatur rauf auf knapp 30°C.</div>
 </div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Achtung"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p><em>Interessant:</em> Der Temperatursensor wird maßgeblich durch die Energieabgabe von LEDs und des Prozessors allgemein beeinflusst. Die Umgebungstemperatur lässt sich damit nur sehr ungenau messen, da die Wärmezirkulation zum Sensor durch das Plastikgehäuse behindert ist.</p>
+<p>Der Temperatursensor wird maßgeblich durch die Energieabgabe von LEDs und des Prozessors allgemein beeinflusst. Die Umgebungstemperatur lässt sich damit nur sehr ungenau messen, da die Wärmezirkulation zum Sensor durch das Plastikgehäuse behindert ist.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -1554,10 +1572,10 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <p>X-Achse : Kippen um die Querachse (<em>der Anstieg beim Fahren auf einen Hügel</em>): -90° (nach unten)&#8230;&#8203;90° (nach oben)</p>
 </li>
 <li>
-<p>Y-Achse : Kippen um die Längsachse; -90° (nach rechts gedreht) &#8230;&#8203;90° (nach links gedreht)</p>
+<p>Y-Achse : Kippen um die Längsachse; -90° (nach rechts geneigt) &#8230;&#8203;90° (nach links geneigt)</p>
 </li>
 <li>
-<p>Z-Achse :  N, O, S, W Ausrichtung; 0° = der USB-Port zeigt nach Norden; -180°/180° = der USB-Port zeigt nach Süden; -90° = der USB-Port zeigt nach Westen</p>
+<p>Z-Achse :  N, O, S, W Ausrichtung; 0° = der USB-Port am Auriga zeigt dann nach Norden; -180°/180° = der USB-Port zeigt nach Süden; -90° = der USB-Port zeigt nach Westen</p>
 </li>
 </ul>
 </div>
@@ -1609,6 +1627,25 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_programmierideen_2">6.5. Programmierideen</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Der Roboter soll im Dunkeln das LED-Licht anschalten (aber beeinflusst das nicht die Helligkeitsmessung?)</p>
+</li>
+<li>
+<p>Der Roboter soll sich zur Lärmquelle hinbewegen (dazu braucht man noch den Antrieb aus <a href="#chap:motors">Abschnitt 8</a>)</p>
+</li>
+<li>
+<p>Der Roboter fährt ein Rampe hoch und hält dann auf der waagerechten Fläche wieder an</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Für den Nervous Bird (das umgedrehte Pendel) ist der Neigungssensor essentiell, damit man hier das Gleichgewicht hält. Die Programmierung eines solchen Robotermodells, der beim anschubsen selbständig vor-/zurück fährt und das Gleichgewicht behält, ist aber ein anspruchsvolleres Projekt.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1654,7 +1691,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </table>
 </div>
 <div class="paragraph">
-<p>Um den passiven Buzzer anzusteuern, verwendet man <code>tone()</code> und zum Ausschalten <code>noTone()</code>. Hier ist ein Beispiel, für die direkte Ansteuerung des Pins.</p>
+<p>Um den passiven Buzzer anzusteuern, verwendet man <code>tone()</code> und zum Ausschalten <code>noTone()</code>. Hier ist ein Beispiel für die direkte Ansteuerung des Pins.</p>
 </div>
 <div class="sect3">
 <h4 id="_beispielprogramm_8">7.1.1. Beispielprogramm</h4>
@@ -1735,10 +1772,28 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </div>
 <div class="sect2">
 <h3 id="_verwendung_der_makeblock_klasse_mebuzzer">7.2. Verwendung der Makeblock Klasse MeBuzzer</h3>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Achtung"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>In der Makeblock-Bibliothek gibt es noch die Klasse <code>MeBuzzer</code>. Diese kapselt den Zugriff, macht die Ansteuerung des Buzzers aber nicht wirklich einfacher.
-Man kann mittels der Member-Funktion <code>MeBuzzer::tone(frequenz, dauer in ms)</code> einen Ton ausgeben. Diese Funktion implementiert einen Software-PWM (d.h. in dieser Funktion wird der angegebene Buzzer-Pin sehr häufig an und aus geschaltet, wobei das Verhältnis der an/aus-Zeiten die Tonhöhe definiert).
-Somit kann man auch externe Buzzer anschließen und dabei Ports mit digitalen Pins (keinen analogen Pins) nutzen.</p>
+<p>Nur für den Anschluss externer Buzzer sinnvoll!</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In der Makeblock-Bibliothek gibt es noch die Klasse <code>MeBuzzer</code>. Diese kapselt den Zugriff zwar etwas, macht die Ansteuerung des Buzzers aber nicht wirklich einfacher.</p>
+</div>
+<div class="paragraph">
+<p>Man kann mittels der Member-Funktion <code>MeBuzzer::tone(frequenz, dauer in ms)</code> einen Ton ausgeben. Diese Funktion implementiert einen Software-PWM (d.h. in dieser Funktion wird der angegebene Buzzer-Pin sehr häufig an und aus geschaltet, wobei das Verhältnis der an/aus-Zeiten die Tonhöhe definiert).</p>
+</div>
+<div class="paragraph">
+<p>Somit kann man auch externe Buzzer anschließen und dabei Ports mit digitalen Pins (keine analogen/PWM Pins) nutzen.</p>
 </div>
 <div class="admonitionblock warning">
 <table>
@@ -1748,8 +1803,7 @@ Somit kann man auch externe Buzzer anschließen und dabei Ports mit digitalen Pi
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Für die Verwendung des OnBoard-Buzzers sollte man die <code>MeBuzzer</code>-Klasse <em>nicht</em> benutzen, sondern stattdessen wie im Beispiel oben via <code>tone()</code>
-die Frequenz einstellen. Das hat auch den Vorteil, dass man ohne Wartezeiten parallel zum Melodie abspielen noch Sensoren auslesen und andere Dinge steuern kann.</p>
+<p>Für die Verwendung des OnBoard-Buzzers sollte man die <code>MeBuzzer</code>-Klasse <em>nicht</em> benutzen, sondern stattdessen wie im Beispiel oben via <code>tone()</code> die Frequenz einstellen. Das hat auch den Vorteil, dass man ohne Wartezeiten parallel zum Melodie abspielen noch Sensoren auslesen und andere Dinge steuern kann.</p>
 </div>
 </td>
 </tr>
@@ -1798,11 +1852,30 @@ die Frequenz einstellen. Das hat auch den Vorteil, dass man ohne Wartezeiten par
 <div class="sect2">
 <h3 id="_allgemeines_3">8.1. Allgemeines</h3>
 <div class="paragraph">
-<p>Am Auriga-Board gibt es zwei Motorports. Jeder der Motoren kann über einen PWM Pin (für die Geschwindigkeit) und zwei Richtungspins angesteuert werden.
-Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Verwendung der Makeblock Bibliothek.</p>
+<p>Am Auriga-Board gibt es zwei Motorports. Jeder der Motoren kann über einen PWM Pin (für die Geschwindigkeit) und zwei Richtungspins angesteuert werden. Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Verwendung der Makeblock Bibliothek.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Grundsätzlich bewegen sich die Motoren nur, wenn die Spannungsversorgung über die Batterien erfolgt (die Motoren brauchen eine Spannung &gt; 7V, was der USB-Port ja nicht liefern kann). Das ist auch ganz praktisch, da man so den Robotor angesteckt an den Computer programmieren kann, ohne Angst zu haben, dass er vom Tisch rollt.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
-<p>Grundsätzlich bewegen sich die Motoren nur, wenn die Spannungsversorgung über die Batterien erfolt. Das ist auch ganz praktisch, da man so den Robotor angesteckt an den Computer programmieren kann, ohne Angst zu haben, dass er vom Tisch rollt.</p>
+<p>Die Motoren werden an die beiden Motorports angesteckt:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/auriga_motorports.png" alt="auriga motorports">
+</div>
+<div class="title">Abbildung 16. Motor-Ports an der Auriga-Platine</div>
 </div>
 </div>
 <div class="sect2">
@@ -1812,9 +1885,9 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../images/auriga_motorports.png" alt="auriga motorports">
+<img src="../images/encoder_schaltplanauszug.png" alt="encoder schaltplanauszug">
 </div>
-<div class="title">Abbildung 16. Motor-Ports an der Auriga-Platine</div>
+<div class="title">Abbildung 17. Schaltplanauszug für die Motoransteuerung</div>
 </div>
 <div class="paragraph">
 <p>Die Pins werden nun wie folgt angesprochen:</p>
@@ -1920,8 +1993,19 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 <div class="paragraph">
 <p>Hier fährt der Roboter einfach nur vor und zurück und beschleunigt/bremst dabei.</p>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>Wenn man den Robotor mit Maximalgeschwindigkeit fahren lässt, so schafft er bei vollen Batterien noch 0,56 m/s bzw. 2 km/h.</p>
+<p>Wenn man den Land Raider mit Maximalgeschwindigkeit fahren lässt, so schafft er bei vollen Batterien noch <strong>0,56 m/s</strong> bzw. <strong>2 km/h</strong>. Das reicht locker, um durch eine Legostadt zu düsen und spektakuläre Videos aus der Legomännelperspektive zu filmen.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -1931,10 +2015,10 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 <p>Die MakeBlock-Bibliothek bietet zahlreiche Klassen für die Programmierung von Encodern. Für die mitgelieferten DC-Motoren wird die Klasse <code>MeEncoderOnBoard</code> verwendet. Diese übernimmt, wie der Name schon sagt, die Programmierung der auf dem Board befindlichen Motorsteuerung.</p>
 </div>
 <div class="paragraph">
-<p>Diese Art der Programmierung hat den Vorteil, dass man die konkrete Geschwindigkeit und damit auch Position abfragen kann und somit - zumindest in Theorie - den Roboter sehr präzise bewegen kann. Allerdings ist die Programmierung auch etwas komplexer: man muss nämlich die Arduino-PWM Frequenzen umprogrammieren.</p>
+<p>Diese Art der Programmierung hat den Vorteil, dass man die konkrete Geschwindigkeit und damit auch Position abfragen kann und somit - zumindest in Theorie - den Roboter sehr präzise bewegen kann.</p>
 </div>
 <div class="paragraph">
-<p>Die Motoren liefern Bewegungsimpulse, die man zählen kann, um so Geschwindigkeit und Entfernung zu bestimmen. Damit man das präzise machen kann, ohne dass anderen Aufgaben im Mikroprozessor die Messung beeinträchtigen, verwendet man Interruptfunktionen. Dazu registriert man für jeden Motor eine Interruptfunktion, die immer dann aufgerufen wird, wenn am entsprechenden Pin ein RISING Signal anliegt (also der Eingangspin von LOW auf HIGH wechselt). In der Interruptfuktion wird dann ein Zähler hochgezählt, der dann für die Berechnung der Momentangeschwindigkeit und Bewegung verwendet wird. Die Berechnung selbst ist in der Klasse <code>MeEncoderOnBoard</code> gekapselt.</p>
+<p>Die Encoder liefern Bewegungsimpulse, die man zählen kann, um so Geschwindigkeit und Entfernung zu bestimmen. Damit man das präzise machen kann, ohne dass anderen Aufgaben im Mikroprozessor die Messung beeinträchtigen, verwendet man Interruptfunktionen. Dazu registriert man für jeden Motor eine Interruptfunktion, die immer dann aufgerufen wird, wenn am entsprechenden Pin ein RISING Signal anliegt (also der Eingangspin von LOW auf HIGH wechselt). In der Interruptfuktion wird dann ein Zähler hochgezählt, der dann für die Berechnung der Momentangeschwindigkeit und Bewegung verwendet wird. Die Berechnung selbst ist in der Klasse <code>MeEncoderOnBoard</code> gekapselt.</p>
 </div>
 <div class="sect3">
 <h4 id="_beispielprogramm_ansteuerung_mittels_bibliotheksfunktion">8.3.1. Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion</h4>
@@ -1947,14 +2031,18 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 <p>Nach Start des Programms den SerialMonitor der Arduino-IDE aufrufen</p>
 </li>
 <li>
-<p>in die Zeile "Nachricht" eine Zahl 0&#8230;&#8203;6 eintippen und mit Enter abschicken</p>
+<p>in die Zeile "Nachricht" des SerialMonitor eine Zahl 0&#8230;&#8203;6 eintippen und mit Enter abschicken</p>
 </li>
 <li>
 <p>das Programm wertet diese Zahl aus und legt die Drehgeschwindigkeit der Motoren fest</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>Das Testbeispiel enthält eine Menge Details, welche weiter unten erklärt werden.</p>
+</div>
 <div class="listingblock">
+<div class="title">Kleines Testprogramm für die Motorsteuerung und Messung der Geschwindigkeit mittels der Encoder-Bibliothek</div>
 <div class="content">
 <pre class="rouge highlight"><code data-lang="c++"><span class="cm">/* Testprogramm für die Ansteuerung der DC Motoren via Makeblock Bibliothek */</span>
 <span class="cp">#include</span> <span class="cpf">&lt;MeAuriga.h&gt;</span><span class="cp">
@@ -2050,7 +2138,7 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
   <span class="c1">// alle 100 Millisekunden die Geschwindigkeit ausgeben</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">lastOutputMillis</span> <span class="o">+</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">lastOutputMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
-    <span class="c1">// Geschwindigkeit in Umdrehungen pro Minute (rpm) auslesen und ausgeben</span>
+    <span class="c1">// Erreichte Geschwindigkeit</span>
     <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Speed 1:"</span><span class="p">);</span>
     <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Encoder_1</span><span class="p">.</span><span class="n">getCurrentSpeed</span><span class="p">());</span>
     <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">",Speed 2:"</span><span class="p">);</span>
@@ -2060,8 +2148,116 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 </div>
 </div>
 <div class="paragraph">
-<p>Es gibt verschiedene Funktionen, um die Geschwindigkeit der Motoren zu steuern. Die Klasse <code>MeEncoderOnBoard</code> hat auch Funktionen für das Fahren einer definierten Strecke oder zu einem Punkt. Dazu einfach mal in die Dokumentation der Klasse schauen.</p>
+<p>In diesem Code werden einige fortgeschrittene Arduino-Programmier-Techniken verwendet, die nachfolgend etwas genauer beleuchtet werden.</p>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_interrupts_für_encoder_signale">8.3.2. Interrupts für Encoder-Signale</h4>
+<div class="paragraph">
+<p>Die in den Motoren verbauten Encoder liefern an jeweils 2 Pins die Encoder-Signale aus, wobei jeweils einer der Pins ein Interrupt-fähiger Pin ist. Zunächst werden die Funktionen <code>isr_process_encoder1()</code> und <code>isr_process_encoder2()</code> an Interrupts gebunden, wobei auf den Wechsel des Pegels von low auf high reagiert wird (<code>RISING</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Verknüpfung einer Interrupt-Funktion</span>
+<span class="n">attachInterrupt</span><span class="p">(</span><span class="n">Encoder_1</span><span class="p">.</span><span class="n">getIntNum</span><span class="p">(),</span> <span class="n">isr_process_encoder1</span><span class="p">,</span> <span class="n">RISING</span><span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Die Funktion <code>Encoder_1.getIntNum()</code> liefert dabei die Interruptnummer für den interruptfähigen Pin.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Auf dem Mega 2560 gibt es mehrere Interrupt-fähige Pins, unter anderem Pin 18 und 19, welche mit dem Encoder verbunden sind (siehe auch Pinout-Diagramm, M1 und M2, wo D19/INT1 und D18/INT3 steht. Diesen Pins wird im Mega 2560 jeweils eine Interrupt-Nummer zugewiesen. Normalerweise bekommt man die über die Funktion <code>digitalPinToInterrupt()</code> die zu einem Interrupt-fähigen Pin zugehörige Internetnummer und genau dies liefert die Funktion <code>getIntNum()</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c"><span class="kt">int</span> <span class="n">interruptNr1</span> <span class="o">=</span> <span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="mi">19</span><span class="p">);</span>  <span class="c1">// -&gt; interrupt 4, genau wie Encoder_1.getIntNum()</span>
+<span class="kt">int</span> <span class="n">interruptNr2</span> <span class="o">=</span> <span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="mi">18</span><span class="p">);</span>  <span class="c1">// -&gt; interrupt 5, genau wie Encoder_2.getIntNum()</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Siehe auch Erklärung zu den Interrupt-Nummern in <a href="https://docs.arduino.cc/language-reference/funktionen/external-interrupts/attachInterrupt/" class="bare">https://docs.arduino.cc/language-reference/funktionen/external-interrupts/attachInterrupt/</a></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Wie bei Encodern üblich wird die Flanke des einen Pins überwacht, und dann durch den (etwas versetzten Pegel des 2. Pins) die Drehrichtung bestimmt. Dies geschicht in der Interrupt-Funktion:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c"><span class="kt">void</span> <span class="nf">isr_process_encoder1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Encoder_1.getPortA() -&gt; Pin 19</span>
+  <span class="c1">// Encoder_1.getPortB() -&gt; Pin 42</span>
+
+  <span class="c1">// wenn der 2. Encoder-Pin gleichzeitig High ist, dreht sich der Encoder vorwärts</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">Encoder_1</span><span class="p">.</span><span class="n">getPortB</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">Encoder_1</span><span class="p">.</span><span class="n">pulsePosMinus</span><span class="p">();</span>
+  <span class="k">else</span>
+    <span class="c1">// sonst rückwärts</span>
+    <span class="n">Encoder_1</span><span class="p">.</span><span class="n">pulsePosPlus</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Die Encoder zählen jetzt also bei jedem Aufruf einen Puls höher oder runter. In der in jedem Durchlauf aufgerufenen Funktion <code>MeEncoderOnBoard::loop()</code> wird die Funktion <code>MeEncoderOnBoard::updateSpeed()</code> aufgerufen, welche letztlich die Anzahl der Pulse seit dem letzten Aufruf von <code>updateSpeed()</code> in die Drehgeschwindigkeit umrechnet.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_testlauf_und_geschwindigkeitsmessung_mit_und_ohne_kette">8.3.3. Testlauf und Geschwindigkeitsmessung mit und ohne Kette</h4>
+<div class="paragraph">
+<p>Wenn man jetzt das Programm mal testet, zuerst noch ohne den Codeblock in der <code>setup()</code> Funktion mit den umprogrammierten PWM-Timern, und die Geschwindigkeiten plottet erhält man ein interessantes Bild:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/auriga_encoder_speed_original_PWM_timer_one_belt.png" alt="auriga encoder speed original PWM timer one belt">
+</div>
+<div class="title">Abbildung 18. Ausgabe der Motorgeschwindigkeiten mit originalen PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend</div>
+</div>
+<div class="paragraph">
+<p>Da die Kette schwingt und auch nicht gleichmäßig steif ist, führt dies zu ungleichmäßigen Drehbewegungen des Motors. Um diesen Einfluss zu sehen, habe ich an einen Motor die Kette angebaut und am anderen Motor nicht. Klar erkennbar im Diagramm ist auch die Bremswirkung dder Kette insgesamt - der Motor mit Kette dreht langsamer.</p>
+</div>
+<div class="paragraph">
+<p>Außerdem wird die Ziel-PWM-Geschwindigkeit offensichtlich nicht ganz erreicht. Dies liegt daran, dass das generierte PWM-Signal zu langsam ist. Um dies zu beheben, kann der PWM-Timer des Arduino umprogrammiert werden, sodass er mit 8kHz läuft. Dies passiert im Codeblock:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c">  <span class="c1">// Interne Timer der PWM auf 8KHz programmieren</span>
+  <span class="n">TCCR1A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM10</span><span class="p">);</span>
+  <span class="n">TCCR1B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS11</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM12</span><span class="p">);</span>
+
+  <span class="n">TCCR2A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM21</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM20</span><span class="p">);</span>
+  <span class="n">TCCR2B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS21</span><span class="p">);</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Erneut getestet sieht die Geschwindigkeitsausgabe deutlich besser aus:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/auriga_encoder_speed_8kHz_PWM_timer_one_belt.png" alt="auriga encoder speed 8kHz PWM timer one belt">
+</div>
+<div class="title">Abbildung 19. Ausgabe der Motorgeschwindigkeiten mit umprogrammierten PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend</div>
+</div>
+<div class="paragraph">
+<p>Beim freilaufenden Motor wird die festgelegte Soll-Geschwindigkeit offenbar gut erreicht. Beim Motor mit Kette bleibt die Sollgeschwindigkeit etwas hinter der festgelegten Geschwindigkeit, was ja an der Bremswirkung liegt.</p>
+</div>
+<div class="paragraph">
+<p>Wenn man jetzt den Roboter aber sehr präzise steuern möchte, sowohl was die Geschwindigkeit betrifft, also auch den zurückgelegten Weg, muss man sich natürlich noch darum kümmern, wie man die PWM-Geschwindigkeiten in reale Geschwindigkeiten überträgt.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_alternative_steuerungsfunktionen_in_der_encoder_bibliothek">8.4. Alternative Steuerungsfunktionen in der Encoder-Bibliothek</h3>
+<div class="paragraph">
+<p>Es gibt verschiedene Funktionen und Modi, um die Geschwindigkeit der Motoren zu steuern. Im obigen Beispiel wurde die Funktion <code>setTarPWM()</code> (<em>set target PWM</em>) verwendet.</p>
 </div>
 </div>
 </div>
@@ -2075,8 +2271,8 @@ Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Ve
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0 (16.02.2025)<br>
-Last updated 2025-02-16 22:36:20 +0100
+Version 1.0 (17.02.2025)<br>
+Last updated 2025-02-17 15:34:53 +0100
 </div>
 </div>
 </body>

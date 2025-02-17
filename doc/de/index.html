@@ -460,9 +460,10 @@ pre.rouge {
 <ul class="sectlevel3">
 <li><a href="#_beispielprogramm_ansteuerung_mittels_bibliotheksfunktion">8.3.1. Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion</a></li>
 <li><a href="#_interrupts_für_encoder_signale">8.3.2. Interrupts für Encoder-Signale</a></li>
+<li><a href="#_testlauf_und_geschwindigkeitsmessung_mit_und_ohne_kette">8.3.3. Testlauf und Geschwindigkeitsmessung mit und ohne Kette</a></li>
 </ul>
 </li>
-<li><a href="#_vorbereitete_bequemlichkeitsfunktionen_in_der_encoder_bibliothek">8.4. Vorbereitete Bequemlichkeitsfunktionen in der Encoder-Bibliothek</a></li>
+<li><a href="#_alternative_steuerungsfunktionen_in_der_encoder_bibliothek">8.4. Alternative Steuerungsfunktionen in der Encoder-Bibliothek</a></li>
 </ul>
 </li>
 <li><a href="#_abschließende_bemerkungen">9. Abschließende Bemerkungen</a></li>
@@ -2080,20 +2081,6 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
   <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">Encoder_2</span><span class="p">.</span><span class="n">getIntNum</span><span class="p">(),</span> <span class="n">isr_process_encoder2</span><span class="p">,</span> <span class="n">RISING</span><span class="p">);</span>
   <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
 
-  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Encoder 1: interruptpin="</span><span class="p">);</span>
-  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Encoder_1</span><span class="p">.</span><span class="n">getIntNum</span><span class="p">());</span>
-  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">", portA="</span><span class="p">);</span>
-  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Encoder_1</span><span class="p">.</span><span class="n">getPortA</span><span class="p">());</span>
-  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">", portB="</span><span class="p">);</span>
-  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">Encoder_1</span><span class="p">.</span><span class="n">getPortB</span><span class="p">());</span>
-
-  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Encoder 2: interruptpin="</span><span class="p">);</span>
-  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Encoder_2</span><span class="p">.</span><span class="n">getIntNum</span><span class="p">());</span>
-  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">", portA="</span><span class="p">);</span>
-  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Encoder_2</span><span class="p">.</span><span class="n">getPortA</span><span class="p">());</span>
-  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">", portB="</span><span class="p">);</span>
-  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">Encoder_2</span><span class="p">.</span><span class="n">getPortB</span><span class="p">());</span>
-
   <span class="c1">// Interne Timer der PWM auf 8KHz programmieren</span>
   <span class="n">TCCR1A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM10</span><span class="p">);</span>
   <span class="n">TCCR1B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS11</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM12</span><span class="p">);</span>
@@ -2222,6 +2209,9 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <div class="paragraph">
 <p>Die Encoder zählen jetzt also bei jedem Aufruf einen Puls höher oder runter. In der in jedem Durchlauf aufgerufenen Funktion <code>MeEncoderOnBoard::loop()</code> wird die Funktion <code>MeEncoderOnBoard::updateSpeed()</code> aufgerufen, welche letztlich die Anzahl der Pulse seit dem letzten Aufruf von <code>updateSpeed()</code> in die Drehgeschwindigkeit umrechnet.</p>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_testlauf_und_geschwindigkeitsmessung_mit_und_ohne_kette">8.3.3. Testlauf und Geschwindigkeitsmessung mit und ohne Kette</h4>
 <div class="paragraph">
 <p>Wenn man jetzt das Programm mal testet, zuerst noch ohne den Codeblock in der <code>setup()</code> Funktion mit den umprogrammierten PWM-Timern, und die Geschwindigkeiten plottet erhält man ein interessantes Bild:</p>
 </div>
@@ -2256,12 +2246,18 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </div>
 <div class="title">Abbildung 19. Ausgabe der Motorgeschwindigkeiten mit umprogrammierten PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend</div>
 </div>
+<div class="paragraph">
+<p>Beim freilaufenden Motor wird die festgelegte Soll-Geschwindigkeit offenbar gut erreicht. Beim Motor mit Kette bleibt die Sollgeschwindigkeit etwas hinter der festgelegten Geschwindigkeit, was ja an der Bremswirkung liegt.</p>
+</div>
+<div class="paragraph">
+<p>Wenn man jetzt den Roboter aber sehr präzise steuern möchte, sowohl was die Geschwindigkeit betrifft, also auch den zurückgelegten Weg, muss man sich natürlich noch darum kümmern, wie man die PWM-Geschwindigkeiten in reale Geschwindigkeiten überträgt.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_vorbereitete_bequemlichkeitsfunktionen_in_der_encoder_bibliothek">8.4. Vorbereitete Bequemlichkeitsfunktionen in der Encoder-Bibliothek</h3>
+<h3 id="_alternative_steuerungsfunktionen_in_der_encoder_bibliothek">8.4. Alternative Steuerungsfunktionen in der Encoder-Bibliothek</h3>
 <div class="paragraph">
-<p>Es gibt verschiedene Funktionen, um die Geschwindigkeit der Motoren zu steuern. Die Klasse <code>MeEncoderOnBoard</code> hat auch Funktionen für das Fahren einer definierten Strecke oder zu einem Punkt. Dazu einfach mal in die Dokumentation der Klasse schauen.</p>
+<p>Es gibt verschiedene Funktionen und Modi, um die Geschwindigkeit der Motoren zu steuern. Im obigen Beispiel wurde die Funktion <code>setTarPWM()</code> (<em>set target PWM</em>) verwendet.</p>
 </div>
 </div>
 </div>
@@ -2276,7 +2272,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <div id="footer">
 <div id="footer-text">
 Version 1.0 (17.02.2025)<br>
-Last updated 2025-02-17 15:23:18 +0100
+Last updated 2025-02-17 15:34:53 +0100
 </div>
 </div>
 </body>
