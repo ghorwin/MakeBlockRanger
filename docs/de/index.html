@@ -458,12 +458,13 @@ pre.rouge {
 </li>
 <li><a href="#_ansteuerung_über_encoder_klasse_der_bibliothek">8.3. Ansteuerung über Encoder-Klasse der Bibliothek</a>
 <ul class="sectlevel3">
-<li><a href="#_beispielprogramm_ansteuerung_mittels_bibliotheksfunktion">8.3.1. Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion</a></li>
+<li><a href="#sec:motor:encodertest">8.3.1. Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion</a></li>
 <li><a href="#_interrupts_für_encoder_signale">8.3.2. Interrupts für Encoder-Signale</a></li>
 <li><a href="#_testlauf_und_geschwindigkeitsmessung_mit_und_ohne_kette">8.3.3. Testlauf und Geschwindigkeitsmessung mit und ohne Kette</a></li>
 </ul>
 </li>
-<li><a href="#_alternative_steuerungsfunktionen_in_der_encoder_bibliothek">8.4. Alternative Steuerungsfunktionen in der Encoder-Bibliothek</a></li>
+<li><a href="#_motorleistung_adaptiv_regeln_mittels_in_der_encoder_klasse">8.4. Motorleistung adaptiv regeln mittels in der Encoder-Klasse</a></li>
+<li><a href="#_programmierung_des_rangers_ohne_makeblock_bibliothek_mit_robuster_entfernungsmessung">8.5. Programmierung des Rangers OHNE Makeblock-Bibliothek mit robuster Entfernungsmessung</a></li>
 </ul>
 </li>
 <li><a href="#_abschließende_bemerkungen">9. Abschließende Bemerkungen</a></li>
@@ -1881,11 +1882,11 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <div class="sect2">
 <h3 id="_direkte_ansteuerung_über_pwm_und_digitale_pins">8.2. Direkte Ansteuerung über PWM und digitale Pins</h3>
 <div class="paragraph">
-<p>Aus dem Schaltplan kann man die Bezeichnung der digitalen Pins (D46-D49) und die PWM Pins (D10, D11) entnehmen:</p>
+<p>Aus dem Schaltplan kann man die Bezeichnung der digitalen Pins (D46&#8230;&#8203;D49) und die PWM Pins (D10, D11) entnehmen:</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="../images/encoder_schaltplanauszug.png" alt="encoder schaltplanauszug">
+<img src="../images/auriga_schaltplanauszug_motor.png" alt="auriga schaltplanauszug motor">
 </div>
 <div class="title">Abbildung 17. Schaltplanauszug für die Motoransteuerung</div>
 </div>
@@ -1909,7 +1910,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <h4 id="_beispielprogramm_direkte_ansteuerung">8.2.1. Beispielprogramm - Direkte Ansteuerung</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Testprogramm für die Ansteuerung der DC-Motoren mittels Arduino Pin Bibliothek</span>
+<pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Testprogramm für die Ansteuerung der DC-Motoren via Arduino Pins</span>
 
 <span class="cp">#define PWMA  11 // Motor A/Links
 #define DIRA1 49
@@ -1993,20 +1994,6 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <div class="paragraph">
 <p>Hier fährt der Roboter einfach nur vor und zurück und beschleunigt/bremst dabei.</p>
 </div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Wenn man den Land Raider mit Maximalgeschwindigkeit fahren lässt, so schafft er bei vollen Batterien noch <strong>0,56 m/s</strong> bzw. <strong>2 km/h</strong>. Das reicht locker, um durch eine Legostadt zu düsen und spektakuläre Videos aus der Legomännelperspektive zu filmen.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 </div>
 </div>
 <div class="sect2">
@@ -2021,7 +2008,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <p>Die Encoder liefern Bewegungsimpulse, die man zählen kann, um so Geschwindigkeit und Entfernung zu bestimmen. Damit man das präzise machen kann, ohne dass anderen Aufgaben im Mikroprozessor die Messung beeinträchtigen, verwendet man Interruptfunktionen. Dazu registriert man für jeden Motor eine Interruptfunktion, die immer dann aufgerufen wird, wenn am entsprechenden Pin ein RISING Signal anliegt (also der Eingangspin von LOW auf HIGH wechselt). In der Interruptfuktion wird dann ein Zähler hochgezählt, der dann für die Berechnung der Momentangeschwindigkeit und Bewegung verwendet wird. Die Berechnung selbst ist in der Klasse <code>MeEncoderOnBoard</code> gekapselt.</p>
 </div>
 <div class="sect3">
-<h4 id="_beispielprogramm_ansteuerung_mittels_bibliotheksfunktion">8.3.1. Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion</h4>
+<h4 id="sec:motor:encodertest">8.3.1. Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion</h4>
 <div class="paragraph">
 <p>Im Folgenden Testbeispiel kann man den Robotor begrenzt steuern:</p>
 </div>
@@ -2044,7 +2031,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <div class="listingblock">
 <div class="title">Kleines Testprogramm für die Motorsteuerung und Messung der Geschwindigkeit mittels der Encoder-Bibliothek</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="c++"><span class="cm">/* Testprogramm für die Ansteuerung der DC Motoren via Makeblock Bibliothek */</span>
+<pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Testprogramm für die Ansteuerung der DC Motoren via Makeblock Bibliothek</span>
 <span class="cp">#include</span> <span class="cpf">&lt;MeAuriga.h&gt;</span><span class="cp">
 </span>
 <span class="n">MeEncoderOnBoard</span> <span class="nf">Encoder_1</span><span class="p">(</span><span class="n">SLOT1</span><span class="p">);</span>
@@ -2074,6 +2061,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 
 
 <span class="kt">int</span> <span class="n">lastOutputMillis</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">targetSpeedPWM</span><span class="p">;</span>
 
 <span class="kt">void</span> <span class="n">setup</span><span class="p">()</span> <span class="p">{</span>
   <span class="c1">// Festlegen der Interruptfunktionen für das Messen/Zählen der Bewegung</span>
@@ -2090,6 +2078,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 
   <span class="c1">// Variable für gelegentliche Ausgaben auf die serielle Schnittstelle</span>
   <span class="n">lastOutputMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+  <span class="n">targetSpeedPWM</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kt">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
@@ -2098,37 +2087,16 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
     <span class="c1">// Zeichen 0...6 werden gelesen</span>
     <span class="kt">char</span> <span class="n">a</span> <span class="o">=</span> <span class="n">Serial</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
     <span class="k">switch</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">case</span> <span class="sc">'0'</span><span class="p">:</span>
-        <span class="n">Encoder_1</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-        <span class="n">Encoder_2</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-      <span class="k">break</span><span class="p">;</span>
-      <span class="k">case</span> <span class="sc">'1'</span><span class="p">:</span>
-        <span class="n">Encoder_1</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
-        <span class="n">Encoder_2</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">);</span>
-      <span class="k">break</span><span class="p">;</span>
-      <span class="k">case</span> <span class="sc">'2'</span><span class="p">:</span>
-        <span class="n">Encoder_1</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
-        <span class="n">Encoder_2</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="p">);</span>
-      <span class="k">break</span><span class="p">;</span>
-      <span class="k">case</span> <span class="sc">'3'</span><span class="p">:</span>
-        <span class="n">Encoder_1</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="mi">255</span><span class="p">);</span>
-        <span class="n">Encoder_2</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="o">-</span><span class="mi">255</span><span class="p">);</span>
-      <span class="k">break</span><span class="p">;</span>
-      <span class="k">case</span> <span class="sc">'4'</span><span class="p">:</span>
-        <span class="n">Encoder_1</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">);</span>
-        <span class="n">Encoder_2</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
-      <span class="k">break</span><span class="p">;</span>
-      <span class="k">case</span> <span class="sc">'5'</span><span class="p">:</span>
-        <span class="n">Encoder_1</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="p">);</span>
-        <span class="n">Encoder_2</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
-      <span class="k">break</span><span class="p">;</span>
-      <span class="k">case</span> <span class="sc">'6'</span><span class="p">:</span>
-        <span class="n">Encoder_1</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="o">-</span><span class="mi">255</span><span class="p">);</span>
-        <span class="n">Encoder_2</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="mi">255</span><span class="p">);</span>
-      <span class="k">break</span><span class="p">;</span>
-      <span class="nl">default:</span>
-      <span class="k">break</span><span class="p">;</span>
+      <span class="k">case</span> <span class="sc">'0'</span><span class="p">:</span> <span class="n">targetSpeedPWM</span> <span class="o">=</span>    <span class="mi">0</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>  <span class="c1">// stop</span>
+      <span class="k">case</span> <span class="sc">'1'</span><span class="p">:</span> <span class="n">targetSpeedPWM</span> <span class="o">=</span>  <span class="mi">100</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>  <span class="c1">// slow forward</span>
+      <span class="k">case</span> <span class="sc">'2'</span><span class="p">:</span> <span class="n">targetSpeedPWM</span> <span class="o">=</span>  <span class="mi">200</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>  <span class="c1">// fast forward</span>
+      <span class="k">case</span> <span class="sc">'3'</span><span class="p">:</span> <span class="n">targetSpeedPWM</span> <span class="o">=</span>  <span class="mi">255</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>  <span class="c1">// fastest forward</span>
+      <span class="k">case</span> <span class="sc">'4'</span><span class="p">:</span> <span class="n">targetSpeedPWM</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>  <span class="c1">// slow backward</span>
+      <span class="k">case</span> <span class="sc">'5'</span><span class="p">:</span> <span class="n">targetSpeedPWM</span> <span class="o">=</span> <span class="o">-</span><span class="mi">200</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>  <span class="c1">// fast backward</span>
+      <span class="k">case</span> <span class="sc">'6'</span><span class="p">:</span> <span class="n">targetSpeedPWM</span> <span class="o">=</span> <span class="o">-</span><span class="mi">255</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>  <span class="c1">// fastest backward</span>
     <span class="p">}</span>
+    <span class="n">Encoder_1</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="o">-</span><span class="n">targetSpeedPWM</span><span class="p">);</span>
+    <span class="n">Encoder_2</span><span class="p">.</span><span class="n">setTarPWM</span><span class="p">(</span><span class="n">targetSpeedPWM</span><span class="p">);</span>
   <span class="p">}</span>
 
   <span class="c1">// In der loop() Funktion wird die Geschwindigkeit im Motor geregelt</span>
@@ -2138,9 +2106,11 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
   <span class="c1">// alle 100 Millisekunden die Geschwindigkeit ausgeben</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">lastOutputMillis</span> <span class="o">+</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">lastOutputMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Target speed [PWM]:"</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">targetSpeedPWM</span><span class="p">);</span>
     <span class="c1">// Erreichte Geschwindigkeit</span>
-    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Speed 1:"</span><span class="p">);</span>
-    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Encoder_1</span><span class="p">.</span><span class="n">getCurrentSpeed</span><span class="p">());</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">",Speed 1:"</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="o">-</span><span class="n">Encoder_1</span><span class="p">.</span><span class="n">getCurrentSpeed</span><span class="p">());</span>
     <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">",Speed 2:"</span><span class="p">);</span>
     <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">Encoder_2</span><span class="p">.</span><span class="n">getCurrentSpeed</span><span class="p">());</span>
   <span class="p">}</span>
@@ -2238,26 +2208,379 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </div>
 </div>
 <div class="paragraph">
-<p>Erneut getestet sieht die Geschwindigkeitsausgabe deutlich besser aus:</p>
+<p>Erneut getestet sieht die Geschwindigkeitsausgabe deutlich besser aus, d.h. auch die durch die Encoder erfasste Drehzahl ist auch bei kleineren Drehzahlen hinreichend proportional zur Sollgeschwindigkeit (in PWM).</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../images/auriga_encoder_speed_8kHz_PWM_timer_one_belt.png" alt="auriga encoder speed 8kHz PWM timer one belt">
 </div>
-<div class="title">Abbildung 19. Ausgabe der Motorgeschwindigkeiten mit umprogrammierten PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend</div>
+<div class="title">Abbildung 19. Ausgabe der Motorgeschwindigkeiten (in Umdrehungen pro Minute) mit umprogrammierten PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend</div>
 </div>
 <div class="paragraph">
 <p>Beim freilaufenden Motor wird die festgelegte Soll-Geschwindigkeit offenbar gut erreicht. Beim Motor mit Kette bleibt die Sollgeschwindigkeit etwas hinter der festgelegten Geschwindigkeit, was ja an der Bremswirkung liegt.</p>
 </div>
 <div class="paragraph">
-<p>Wenn man jetzt den Roboter aber sehr präzise steuern möchte, sowohl was die Geschwindigkeit betrifft, also auch den zurückgelegten Weg, muss man sich natürlich noch darum kümmern, wie man die PWM-Geschwindigkeiten in reale Geschwindigkeiten überträgt.</p>
+<p>Im Beispiel oben wurde die Geschwindigkeit in PWM angegeben und die Drehzahl vom Encoder in Umdrehungen pro Minute (RPM) abgelesen.
+Die Verhältnisse sind</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>132/100 = 1.32
+266/200 = 1.33
+339/255 = 1.33</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Damit kann man also die geforderte Drehzahl im Bereich -340&#8230;&#8203;340 mit der Formel einstellen:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>pwm = rpm/1.33</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Die Drehzahl eines unbelasteten Rades alleine sagt ja noch nichts über die Fahrgeschwindigkeit des Roboters aus. Dazu muss man erstmal Testmessungen machen. Und natürlich hängt die Geschwindigkeit dann auch noch vom Batterieladezustand ab und vom Anstieg und von der Reibung der Kette und und und&#8230;&#8203; Deshalb ist es sinnvoller, die Leistung anhand der geforderten Geschwindigkeit einzuregeln. Doch dazu später mehr&#8230;&#8203;</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Wenn man den Land Raider mit aufgeladenen Batterien und Maximalgeschwindigkeit fahren lässt, so schafft er bei vollen Batterien auf gerader Fläche immerhin <strong>0,56 m/s</strong> bzw. <strong>2 km/h</strong>. Das reicht locker, um durch eine Legostadt zu düsen und spektakuläre Videos aus der Legomännelperspektive zu filmen.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_alternative_steuerungsfunktionen_in_der_encoder_bibliothek">8.4. Alternative Steuerungsfunktionen in der Encoder-Bibliothek</h3>
+<h3 id="_motorleistung_adaptiv_regeln_mittels_in_der_encoder_klasse">8.4. Motorleistung adaptiv regeln mittels in der Encoder-Klasse</h3>
 <div class="paragraph">
-<p>Es gibt verschiedene Funktionen und Modi, um die Geschwindigkeit der Motoren zu steuern. Im obigen Beispiel wurde die Funktion <code>setTarPWM()</code> (<em>set target PWM</em>) verwendet.</p>
+<p>Die Ansteuerung via setzen der Ziel-PWM ist di einfachste und direkteste Möglichkeit, den Roboter zu steuern. Aber wie oben erwähnt kann man so kaum eine geforderte Fahrgeschwindigkeit bestimmen. Die Klasse <code>MeEncoderOnBoard</code> bietet aber noch eine zweite Variante, wie man die Geschwindigkeit bzw. Motorleistung definieren kann: einen klassischen PID Regler-Ansatz.</p>
+</div>
+<div class="paragraph">
+<p>Hierbei wird die aktuelle Geschwindigkeit andauernd mit der Sollgeschwindigkeit verglichen. Die Abweichung (der Regelfehler) wird dazu benutzt, um die Leistung/PWM der Motoren solange anzupassen, bis die Ist-Geschwindigkeit der Soll-Geschwindigkeit entspricht und der Regelfehler (nahezu) 0 wird.</p>
+</div>
+<div class="listingblock">
+<div class="title">Beispielprogramm für die adaptive Regelung der Geschwindigkeit</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Testprogramm für die Ansteuerung der DC Motoren via Makeblock Bibliothek</span>
+<span class="cp">#include</span> <span class="cpf">&lt;MeAuriga.h&gt;</span><span class="cp">
+</span>
+<span class="n">MeEncoderOnBoard</span> <span class="nf">Encoder_1</span><span class="p">(</span><span class="n">SLOT1</span><span class="p">);</span>
+<span class="n">MeEncoderOnBoard</span> <span class="nf">Encoder_2</span><span class="p">(</span><span class="n">SLOT2</span><span class="p">);</span>
+
+<span class="c1">// Interruptfunktion für Encoder 1</span>
+<span class="kt">void</span> <span class="nf">isr_process_encoder1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">Encoder_1</span><span class="p">.</span><span class="n">getPortB</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>     <span class="n">Encoder_1</span><span class="p">.</span><span class="n">pulsePosMinus</span><span class="p">();</span>
+  <span class="k">else</span>                                            <span class="n">Encoder_1</span><span class="p">.</span><span class="n">pulsePosPlus</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">// Interruptfunktion für Encoder 2</span>
+<span class="kt">void</span> <span class="n">isr_process_encoder2</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">Encoder_2</span><span class="p">.</span><span class="n">getPortB</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>     <span class="n">Encoder_2</span><span class="p">.</span><span class="n">pulsePosMinus</span><span class="p">();</span>
+  <span class="k">else</span>                                            <span class="n">Encoder_2</span><span class="p">.</span><span class="n">pulsePosPlus</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">lastOutputMillis</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">targetSpeedRPM</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">buffIndex</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="n">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// Festlegen der Interruptfunktionen für das Messen/Zählen der Bewegung</span>
+  <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">Encoder_1</span><span class="p">.</span><span class="n">getIntNum</span><span class="p">(),</span> <span class="n">isr_process_encoder1</span><span class="p">,</span> <span class="n">RISING</span><span class="p">);</span>
+  <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">Encoder_2</span><span class="p">.</span><span class="n">getIntNum</span><span class="p">(),</span> <span class="n">isr_process_encoder2</span><span class="p">,</span> <span class="n">RISING</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+
+  <span class="c1">// Interne Timer der PWM auf 8KHz programmieren</span>
+  <span class="n">TCCR1A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM10</span><span class="p">);</span>
+  <span class="n">TCCR1B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS11</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM12</span><span class="p">);</span>
+
+  <span class="n">TCCR2A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM21</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM20</span><span class="p">);</span>
+  <span class="n">TCCR2B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS21</span><span class="p">);</span>
+
+  <span class="c1">// die PID Reglerparameter einstellen, eigentlich nur den P-Teil des Reglers, denn der Integral und Differentialteil</span>
+  <span class="c1">// funktionieren gar nicht erst</span>
+  <span class="c1">// (der Differentialteil ist bei einem Motor auch nicht sinnvoll, außer der Fahrtwiderstand</span>
+  <span class="c1">// ändert sich abrupt... was aber eher unwahrscheinlich ist)</span>
+  <span class="n">Encoder_1</span><span class="p">.</span><span class="n">setSpeedPid</span><span class="p">(</span><span class="mf">0.18</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="n">Encoder_2</span><span class="p">.</span><span class="n">setSpeedPid</span><span class="p">(</span><span class="mf">0.18</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+  <span class="c1">// Variable für gelegentliche Ausgaben auf die serielle Schnittstelle</span>
+  <span class="n">lastOutputMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+  <span class="n">targetSpeedRPM</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">buffIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// von der seriellen Schnittstelle lesen</span>
+
+  <span class="c1">// eine maximal 3-stellige Zahl von der seriellen Schnittstelle lesen</span>
+  <span class="kt">char</span> <span class="n">lastChar</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">Serial</span><span class="p">.</span><span class="n">available</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">buffIndex</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">lastChar</span> <span class="o">=</span> <span class="n">Serial</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+    <span class="c1">// Falls noch weniger &lt; 3 Zeichen und kein Zeilenende, Zeichen in Puffer schieben</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">lastChar</span> <span class="o">!=</span> <span class="sc">'\n'</span> <span class="o">&amp;&amp;</span> <span class="n">buffIndex</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">)</span>
+      <span class="n">buf</span><span class="p">[</span><span class="n">buffIndex</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">lastChar</span><span class="p">;</span>
+    <span class="k">else</span> <span class="p">{</span>
+      <span class="c1">// Zeichenkette in Puffer mit \0 beenden</span>
+      <span class="n">buf</span><span class="p">[</span><span class="n">buffIndex</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+      <span class="c1">// Text in Zahl umwandeln</span>
+      <span class="n">targetSpeedRPM</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+      <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"targetspeed = "</span><span class="p">);</span>
+      <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">targetSpeedRPM</span><span class="p">);</span>
+      <span class="c1">// Motorzielgeschwindigkeiten anpassen</span>
+      <span class="n">Encoder_1</span><span class="p">.</span><span class="n">runSpeed</span><span class="p">(</span><span class="o">-</span><span class="n">targetSpeedRPM</span><span class="p">);</span>
+      <span class="n">Encoder_2</span><span class="p">.</span><span class="n">runSpeed</span><span class="p">(</span><span class="n">targetSpeedRPM</span><span class="p">);</span>
+      <span class="n">buffIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="c1">// In der loop() Funktion wird die Geschwindigkeit im Motor geregelt</span>
+  <span class="n">Encoder_1</span><span class="p">.</span><span class="n">loop</span><span class="p">();</span>
+  <span class="n">Encoder_2</span><span class="p">.</span><span class="n">loop</span><span class="p">();</span>
+
+  <span class="c1">// alle 100 Millisekunden die Geschwindigkeit und Duty Cycle ausgeben</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">lastOutputMillis</span> <span class="o">+</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">lastOutputMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"TargetSpeed:"</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">targetSpeedRPM</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">",Speed1:"</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="o">-</span><span class="n">Encoder_1</span><span class="p">.</span><span class="n">getCurrentSpeed</span><span class="p">());</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">",PWM1:"</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="o">-</span><span class="n">Encoder_1</span><span class="p">.</span><span class="n">getCurPwm</span><span class="p">());</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">",Speed2:"</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Encoder_2</span><span class="p">.</span><span class="n">getCurrentSpeed</span><span class="p">());</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">",PWM2:"</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">Encoder_2</span><span class="p">.</span><span class="n">getCurPwm</span><span class="p">());</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In diesem Programm wird die geforderte Geschwindigkeit über die serielle Schnittstelle gelesen. Im SerialPlotter oder SerialMonitor kann man dazu eine 3-stellige Zahl eingeben. In jedem Schleifendurchlauf wird ein neues Zeichen von der seriellen Schnittstelle in einen Pufferspeicher gelesen, bis entweder ein Zeilenendzeichen (<code>\n</code>) folgt, oder das 4. Zeichen gelesen wurde. Dann wird der Text im  Pufferspeicher mit einem <code>\0</code> beendet und in eine Zahl gewandelt. Diese wird dann als Soll-Drehzahl übergeben (in der etwas unzutreffenden Funktion <code>runSpeed()</code>. Der Controller berechnet in der stets aufgerufenen <code>MeEncoderOnBoard::loop()</code>-Funktion den Regelfehler und passt den Duty Cycle (PWM) entsprechend an.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/auriga_encoder_speed_8kHz_RPM_controlled.png" alt="auriga encoder speed 8kHz RPM controlled">
+</div>
+<div class="title">Abbildung 20. Geregelte Motorleistung, getestet mit 4 Geschwindigkeiten (50, 100, 200, und Max. 340 rpm) sieht das so aus (ein Motor wieder mit Kette, der andere frei drehend):</div>
+</div>
+<div class="paragraph">
+<p>Man sieht sehr schön, dass der Regler es eigentlich ganz gut schafft, bei beiden Motoren die geforderten Drehzahlen zu erreichen. Nur in der höchsten Stufe schafft es der Motor mit Kette nicht ganz die geforderte Drehzahl zu erreichen, denn er läuft schon konstant am obersten Limit (Duty Cycle 100%). Aufgrund der unterschiedlichen Reibwiderstände muss der Motor mit der Ketten (hellblau) stets einen deutlich höheren Duty Cycle fahren, um die Drehzahl zu erreichen.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Die Implementierung des PID-Reglers ist unvollständig - eigentlich funktioniert nur der P-Teil des Reglers. Aber im Rahmen der möglichen Genauigkeiten passt das soweit.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_programmierung_des_rangers_ohne_makeblock_bibliothek_mit_robuster_entfernungsmessung">8.5. Programmierung des Rangers OHNE Makeblock-Bibliothek mit robuster Entfernungsmessung</h3>
+<div class="paragraph">
+<p>Die Makeblock-Bibliothek und die Klasse <code>MeEncoderOnBoard</code> sind für präzise Steuerungen des Roboters nicht wirklich optimal, da das Regelsignal (Geschwindigkeit) durch das stets automatische Rücksetzen beim Auswerten ziemlich zappelt. Wenn man mehr Kontrolle über die Regelung haben möchte, kommt man an einer eigenen Behandlung der Encoder nicht drum herum.</p>
+</div>
+<div class="paragraph">
+<p>Hier ist ein Beispielcode, der fast das Gleiche macht, wie das Listing in <a href="#sec:motor:encodertest">Abschnitt 8.3.1</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="c1">// Testprogramm für die Ansteuerung der DC Motoren OHNE Makeblock Bibliothek</span>
+
+<span class="cp">#define PWMA  11 // Motor A/Links
+#define DIRA1 49
+#define DIRA2 48
+#define PWMB  10 // Motor B/Rights
+#define DIRB1 47
+#define DIRB2 46
+</span>
+<span class="cp">#define ENCODER1_PIN1 19
+#define ENCODER1_PIN2 42
+</span>
+<span class="cp">#define ENCODER2_PIN1 18
+#define ENCODER2_PIN2 43
+</span>
+<span class="cp">#define RPM2PWMFACTOR 1.33
+#define PULSESPERREVOLUTION 353.403
+</span>
+<span class="k">class</span> <span class="nc">Encoder</span> <span class="p">{</span>
+<span class="nl">public:</span>
+  <span class="n">Encoder</span><span class="p">(</span><span class="kt">int</span> <span class="n">pin1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pin2</span><span class="p">)</span> <span class="o">:</span> <span class="n">m_pin1</span><span class="p">(</span><span class="n">pin1</span><span class="p">),</span> <span class="n">m_pin2</span><span class="p">(</span><span class="n">pin2</span><span class="p">),</span> <span class="n">m_pulses</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="n">m_speedMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span> <span class="p">}</span>
+
+  <span class="kt">float</span> <span class="n">rpmPerMinute</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">deltaT</span> <span class="o">=</span> <span class="n">millis</span><span class="p">()</span> <span class="o">-</span> <span class="n">m_speedMillis</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">pulsePerSecond</span> <span class="o">=</span> <span class="n">m_pulses</span><span class="o">*</span><span class="mf">1000.0</span><span class="o">/</span><span class="n">deltaT</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">rpmPerMinute</span> <span class="o">=</span> <span class="n">pulsePerSecond</span><span class="o">*</span><span class="mi">60</span><span class="o">/</span><span class="n">PULSESPERREVOLUTION</span><span class="p">;</span> <span class="c1">// 353.403 Pulse pro Umdrehung</span>
+    <span class="k">return</span> <span class="n">rpmPerMinute</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kt">void</span> <span class="n">resetPulses</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">m_speedMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+    <span class="n">m_pulses</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kt">int</span> <span class="n">m_pin1</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">m_pin2</span><span class="p">;</span>
+  <span class="kt">long</span> <span class="n">m_pulses</span><span class="p">;</span>
+  <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">m_speedMillis</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">Encoder</span> <span class="n">encoder1</span><span class="p">(</span><span class="n">ENCODER1_PIN1</span><span class="p">,</span> <span class="n">ENCODER1_PIN2</span><span class="p">);</span>
+<span class="n">Encoder</span> <span class="n">encoder2</span><span class="p">(</span><span class="n">ENCODER2_PIN1</span><span class="p">,</span> <span class="n">ENCODER2_PIN2</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">startMillis</span><span class="p">;</span>
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">lastOutputMillis</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">targetPWM</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">buffIndex</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+
+<span class="c1">// Für präzise Messung der Geschwindigkeit (und damit Position) der Motoren</span>
+<span class="c1">// werden die Pulse via Interruptfunktionen hoch/runtergezählt.</span>
+<span class="c1">// Jedes Mal, wenn der Interrupt-Pin eines Encoders von LOW auf HIGH wechselt (RISING),</span>
+<span class="c1">// wird die jeweilige isr_process_encoderX() Funktion aufgerufen und zählt einen</span>
+<span class="c1">// Pulse hoch.</span>
+
+<span class="c1">// Interruptfunktion für Encoder 1</span>
+<span class="kt">void</span> <span class="n">isr_process_encoder1</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">encoder1</span><span class="p">.</span><span class="n">m_pin2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="o">--</span><span class="n">encoder1</span><span class="p">.</span><span class="n">m_pulses</span><span class="p">;</span>
+  <span class="k">else</span>
+    <span class="o">++</span><span class="n">encoder1</span><span class="p">.</span><span class="n">m_pulses</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Interruptfunktion für Encoder 2</span>
+<span class="kt">void</span> <span class="n">isr_process_encoder2</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">digitalRead</span><span class="p">(</span><span class="n">encoder2</span><span class="p">.</span><span class="n">m_pin2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="o">--</span><span class="n">encoder2</span><span class="p">.</span><span class="n">m_pulses</span><span class="p">;</span>
+  <span class="k">else</span>
+    <span class="o">++</span><span class="n">encoder2</span><span class="p">.</span><span class="n">m_pulses</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// PWM und Richtungspins setzen</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">PWMA</span><span class="p">,</span>  <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">DIRA1</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">DIRA2</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">PWMB</span><span class="p">,</span>  <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">DIRB1</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">DIRB1</span><span class="p">,</span> <span class="n">OUTPUT</span><span class="p">);</span>
+
+<span class="c1">// WICHTIG: INPUTs mit PullUp Widerständen!</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">ENCODER1_PIN1</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">ENCODER1_PIN1</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">ENCODER2_PIN2</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
+  <span class="n">pinMode</span><span class="p">(</span><span class="n">ENCODER2_PIN2</span><span class="p">,</span> <span class="n">INPUT_PULLUP</span><span class="p">);</span>
+
+  <span class="c1">// kurze Wartephase zur Initialisierung</span>
+  <span class="n">delay</span> <span class="p">(</span><span class="mi">20</span><span class="p">);</span>
+
+  <span class="c1">// Festlegen der Interruptfunktionen für das Messen/Zählen der Bewegung</span>
+  <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">ENCODER1_PIN1</span><span class="p">),</span> <span class="n">isr_process_encoder1</span><span class="p">,</span> <span class="n">RISING</span><span class="p">);</span>
+  <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">ENCODER2_PIN1</span><span class="p">),</span> <span class="n">isr_process_encoder2</span><span class="p">,</span> <span class="n">RISING</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+
+  <span class="c1">// Interne Timer der PWM auf 8KHz programmieren</span>
+  <span class="n">TCCR1A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM10</span><span class="p">);</span>
+  <span class="n">TCCR1B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS11</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM12</span><span class="p">);</span>
+
+  <span class="n">TCCR2A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM21</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM20</span><span class="p">);</span>
+  <span class="n">TCCR2B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS21</span><span class="p">);</span>
+
+  <span class="c1">// Variable für gelegentliche Ausgaben auf die serielle Schnittstelle</span>
+  <span class="n">lastOutputMillis</span> <span class="o">=</span> <span class="n">startMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">leftMotorSpeed</span><span class="p">(</span><span class="kt">int</span> <span class="n">targetPWM</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">targetPWM</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">analogWrite</span> <span class="p">(</span><span class="n">PWMA</span><span class="p">,</span>  <span class="n">targetPWM</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">DIRA1</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">DIRA2</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="n">analogWrite</span> <span class="p">(</span><span class="n">PWMA</span><span class="p">,</span>  <span class="o">-</span><span class="n">targetPWM</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">DIRA1</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">DIRA2</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">rightMotorSpeed</span><span class="p">(</span><span class="kt">int</span> <span class="n">targetPWM</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">targetPWM</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">analogWrite</span> <span class="p">(</span><span class="n">PWMB</span><span class="p">,</span>  <span class="n">targetPWM</span><span class="p">);</span>
+      <span class="n">digitalWrite</span><span class="p">(</span><span class="n">DIRB1</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+      <span class="n">digitalWrite</span><span class="p">(</span><span class="n">DIRB2</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span>
+    <span class="n">analogWrite</span> <span class="p">(</span><span class="n">PWMB</span><span class="p">,</span>  <span class="o">-</span><span class="n">targetPWM</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">DIRB1</span><span class="p">,</span> <span class="n">LOW</span><span class="p">);</span>
+    <span class="n">digitalWrite</span><span class="p">(</span><span class="n">DIRB2</span><span class="p">,</span> <span class="n">HIGH</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+
+  <span class="c1">// eine maximal 3-stellige Zahl von der seriellen Schnittstelle lesen</span>
+  <span class="kt">char</span> <span class="n">lastChar</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">Serial</span><span class="p">.</span><span class="n">available</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">buffIndex</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">lastChar</span> <span class="o">=</span> <span class="n">Serial</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+    <span class="c1">// Falls noch weniger &lt; 3 Zeichen und kein Zeilenende, Zeichen in Puffer schieben</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">lastChar</span> <span class="o">!=</span> <span class="sc">'\n'</span> <span class="o">&amp;&amp;</span> <span class="n">buffIndex</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">)</span>
+      <span class="n">buf</span><span class="p">[</span><span class="n">buffIndex</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">lastChar</span><span class="p">;</span>
+    <span class="k">else</span> <span class="p">{</span>
+      <span class="c1">// Zeichenkette in Puffer mit \0 beenden</span>
+      <span class="n">buf</span><span class="p">[</span><span class="n">buffIndex</span><span class="p">]</span> <span class="o">=</span> <span class="sc">'\0'</span><span class="p">;</span>
+      <span class="c1">// Text in Zahl umwandeln</span>
+      <span class="n">targetPWM</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+      <span class="c1">// auf Wertebereich -255 bis 255 begrenzen</span>
+      <span class="n">targetPWM</span> <span class="o">=</span> <span class="n">constrain</span><span class="p">(</span><span class="n">targetPWM</span><span class="p">,</span> <span class="o">-</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">);</span>
+      <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"targetspeed = "</span><span class="p">);</span>
+      <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">targetPWM</span><span class="p">);</span>
+      <span class="c1">// Motorgeschwindigkeiten anpassen</span>
+      <span class="n">leftMotorSpeed</span><span class="p">(</span><span class="n">targetPWM</span><span class="p">);</span>
+      <span class="n">rightMotorSpeed</span><span class="p">(</span><span class="n">targetPWM</span><span class="p">);</span>
+      <span class="c1">// den Counter zurücksetzen</span>
+      <span class="n">encoder1</span><span class="p">.</span><span class="n">resetPulses</span><span class="p">();</span>
+      <span class="n">encoder2</span><span class="p">.</span><span class="n">resetPulses</span><span class="p">();</span>
+      <span class="n">buffIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="c1">// alle 100 Millisekunden die Geschwindigkeit ausgeben</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">lastOutputMillis</span> <span class="o">+</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">lastOutputMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+    <span class="c1">// Ausgabe: Zeit [s]  \t Ziel-PWM \t Speed 1 [rpm] \t Speed 2 [rpm]</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">((</span><span class="n">millis</span><span class="p">()</span> <span class="o">-</span> <span class="n">startMillis</span><span class="p">)</span><span class="o">*</span><span class="mf">0.001</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"</span><span class="se">\t</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">targetPWM</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"</span><span class="se">\t</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="o">-</span><span class="n">encoder1</span><span class="p">.</span><span class="n">rpmPerMinute</span><span class="p">());</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"</span><span class="se">\t</span><span class="s">"</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">encoder2</span><span class="p">.</span><span class="n">rpmPerMinute</span><span class="p">());</span>
+    <span class="c1">// den Counter zurücksetzen</span>
+    <span class="n">encoder1</span><span class="p">.</span><span class="n">resetPulses</span><span class="p">();</span>
+    <span class="n">encoder2</span><span class="p">.</span><span class="n">resetPulses</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Man kann im SerialMonitor or SerialPlotter nun die Sollleistung in PWM (-255..255) angeben.</p>
 </div>
 </div>
 </div>
@@ -2272,7 +2595,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <div id="footer">
 <div id="footer-text">
 Version 1.0 (17.02.2025)<br>
-Last updated 2025-02-17 15:34:53 +0100
+Last updated 2025-02-17 22:00:40 +0100
 </div>
 </div>
 </body>

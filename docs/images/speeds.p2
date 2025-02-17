@@ -99,21 +99,21 @@
 		<Mapper name="8kHz">
 			<Extractors>
 				<Extractor>
-					<DataIOFileName>auriga_encoder_speed_8Khz_PWM_timer.tsv?-</DataIOFileName>
+					<DataIOFileName>auriga_encoder_speed_8kHz_PWM_timer.tsv?-</DataIOFileName>
 					<CutType>NoCut</CutType>
 					<DataFormat>DF_2D</DataFormat>
 					<DataType>T_REFERENCE</DataType>
 					<ColumnLabel>Target PWM</ColumnLabel>
 				</Extractor>
 				<Extractor>
-					<DataIOFileName>auriga_encoder_speed_8Khz_PWM_timer.tsv?rpm</DataIOFileName>
+					<DataIOFileName>auriga_encoder_speed_8kHz_PWM_timer.tsv?rpm</DataIOFileName>
 					<CutType>NoCut</CutType>
 					<DataFormat>DF_2D</DataFormat>
 					<DataType>T_REFERENCE</DataType>
 					<ColumnLabel>Speed 1</ColumnLabel>
 				</Extractor>
 				<Extractor>
-					<DataIOFileName>auriga_encoder_speed_8Khz_PWM_timer.tsv?rpm</DataIOFileName>
+					<DataIOFileName>auriga_encoder_speed_8kHz_PWM_timer.tsv?rpm</DataIOFileName>
 					<CutType>NoCut</CutType>
 					<DataFormat>DF_2D</DataFormat>
 					<DataType>T_REFERENCE</DataType>
@@ -268,21 +268,21 @@
 		<Mapper name="8kHz - one belt">
 			<Extractors>
 				<Extractor>
-					<DataIOFileName>auriga_encoder_speed_8Khz_PWM_timer_one_belt.tsv?-</DataIOFileName>
+					<DataIOFileName>auriga_encoder_speed_8kHz_PWM_timer_one_belt.tsv?-</DataIOFileName>
 					<CutType>NoCut</CutType>
 					<DataFormat>DF_2D</DataFormat>
 					<DataType>T_REFERENCE</DataType>
 					<ColumnLabel>Target PWM</ColumnLabel>
 				</Extractor>
 				<Extractor>
-					<DataIOFileName>auriga_encoder_speed_8Khz_PWM_timer_one_belt.tsv?rpm</DataIOFileName>
+					<DataIOFileName>auriga_encoder_speed_8kHz_PWM_timer_one_belt.tsv?rpm</DataIOFileName>
 					<CutType>NoCut</CutType>
 					<DataFormat>DF_2D</DataFormat>
 					<DataType>T_REFERENCE</DataType>
 					<ColumnLabel>Speed 1</ColumnLabel>
 				</Extractor>
 				<Extractor>
-					<DataIOFileName>auriga_encoder_speed_8Khz_PWM_timer_one_belt.tsv?rpm</DataIOFileName>
+					<DataIOFileName>auriga_encoder_speed_8kHz_PWM_timer_one_belt.tsv?rpm</DataIOFileName>
 					<CutType>NoCut</CutType>
 					<DataFormat>DF_2D</DataFormat>
 					<DataType>T_REFERENCE</DataType>
@@ -350,13 +350,330 @@
 				</ChartProperties>
 			</ChartModel>
 		</Mapper>
+		<Mapper name="8kHz - one belt - without library">
+			<Extractors>
+				<Extractor>
+					<DataIOFileName>auriga_encoder_speed_8kHz_PWM_timer_without_library.tsv?-</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Target PWM</ColumnLabel>
+				</Extractor>
+				<Extractor>
+					<DataIOFileName>auriga_encoder_speed_8kHz_PWM_timer_without_library.tsv?rpm</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Speed 1</ColumnLabel>
+				</Extractor>
+				<Extractor>
+					<DataIOFileName>auriga_encoder_speed_8kHz_PWM_timer_without_library.tsv?rpm</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Speed 2</ColumnLabel>
+				</Extractor>
+			</Extractors>
+			<ChartModel chartType="2D">
+				<SeriesProperties>
+					<Series>
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<MarkerColor>#000000</MarkerColor>
+					</Series>
+					<Series leftAxis="false">
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<PenColor>#00aaff</PenColor>
+						<MarkerColor>#00aaff</MarkerColor>
+					</Series>
+					<Series leftAxis="false">
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<PenColor>#ff5500</PenColor>
+						<MarkerColor>#ff5500</MarkerColor>
+					</Series>
+				</SeriesProperties>
+				<AxisProperties>
+					<Axis index="0" autoscale="false">
+						<TitleText>Zeit [$unit]</TitleText>
+						<TitleFont>Roboto Condensed,9,-1,5,75,0,0,0,0,0</TitleFont>
+						<LabelFont>Roboto Condensed,9,-1,5,50,0,0,0,0,0</LabelFont>
+						<IBK:Unit name="AxisUnit">s</IBK:Unit>
+						<Maximum>18</Maximum>
+						<MaxMajorScale>10</MaxMajorScale>
+						<GridPenStyle>1</GridPenStyle>
+						<MinorGridVisible>false</MinorGridVisible>
+						<DateTimeZero>978307200000</DateTimeZero>
+					</Axis>
+					<Axis index="1">
+						<TitleText>$quantity [$unit]</TitleText>
+						<TitleFont>Roboto Condensed,9,-1,5,75,0,0,0,0,0</TitleFont>
+						<LabelFont>Roboto Condensed,9,-1,5,50,0,0,0,0,0</LabelFont>
+						<IBK:Unit name="AxisUnit">-</IBK:Unit>
+						<MinorGridVisible>false</MinorGridVisible>
+						<DateTimeZero>978307200000</DateTimeZero>
+					</Axis>
+					<Axis index="2" enabled="false">
+						<TitleText>Speed [$unit]</TitleText>
+						<TitleFont>Roboto Condensed,9,-1,5,75,0,0,0,0,0</TitleFont>
+						<LabelFont>Roboto Condensed,9,-1,5,50,0,0,0,0,0</LabelFont>
+						<IBK:Unit name="AxisUnit">rpm</IBK:Unit>
+						<DateTimeZero>978307200000</DateTimeZero>
+					</Axis>
+				</AxisProperties>
+				<ChartProperties>
+					<TitleText>8kHz PWM Timings</TitleText>
+					<TitleFont>Roboto Condensed,9,-1,5,75,0,0,0,0,0</TitleFont>
+					<AxisScalesInside>true</AxisScalesInside>
+					<Legend>
+						<Position>Inside</Position>
+						<Alignment>1</Alignment>
+						<MaxColumns>1</MaxColumns>
+						<Font>Roboto Condensed,9,-1,5,50,0,0,0,0,0</Font>
+					</Legend>
+				</ChartProperties>
+			</ChartModel>
+		</Mapper>
+		<Mapper name="Drehzahlgeregelt">
+			<Extractors>
+				<Extractor>
+					<DataIOFileName>auriga_encoder_speed_8kHz_RPM_controlled.tsv?rpm</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Target speed</ColumnLabel>
+				</Extractor>
+				<Extractor>
+					<DataIOFileName>auriga_encoder_speed_8kHz_RPM_controlled.tsv?rpm</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Speed 1</ColumnLabel>
+				</Extractor>
+				<Extractor>
+					<DataIOFileName>auriga_encoder_speed_8kHz_RPM_controlled.tsv?rpm</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Speed 2</ColumnLabel>
+				</Extractor>
+				<Extractor>
+					<DataIOFileName>auriga_encoder_speed_8kHz_RPM_controlled.tsv?-</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Leistung 1</ColumnLabel>
+				</Extractor>
+				<Extractor>
+					<DataIOFileName>auriga_encoder_speed_8kHz_RPM_controlled.tsv?-</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Leistung 2</ColumnLabel>
+				</Extractor>
+			</Extractors>
+			<ChartModel chartType="2D">
+				<SeriesProperties>
+					<Series>
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<PenColor>#96e100</PenColor>
+						<MarkerColor>#96e100</MarkerColor>
+					</Series>
+					<Series>
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<PenColor>#00aaff</PenColor>
+						<MarkerColor>#00aaff</MarkerColor>
+					</Series>
+					<Series>
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<PenColor>#ff5500</PenColor>
+						<MarkerColor>#ff5500</MarkerColor>
+					</Series>
+					<Series leftAxis="false">
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<PenStyle>2</PenStyle>
+						<PenColor>#00aaff</PenColor>
+						<MarkerColor>#00aaff</MarkerColor>
+					</Series>
+					<Series leftAxis="false">
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<PenStyle>2</PenStyle>
+						<PenColor>#ff0000</PenColor>
+						<MarkerColor>#ff0000</MarkerColor>
+					</Series>
+				</SeriesProperties>
+				<AxisProperties>
+					<Axis index="0">
+						<TitleText>Zeit [$unit]</TitleText>
+						<TitleFont>Roboto Condensed,9,-1,5,75,0,0,0,0,0</TitleFont>
+						<LabelFont>Roboto Condensed,9,-1,5,50,0,0,0,0,0</LabelFont>
+						<IBK:Unit name="AxisUnit">s</IBK:Unit>
+						<Maximum>20</Maximum>
+						<GridPenStyle>1</GridPenStyle>
+						<MinorGridVisible>false</MinorGridVisible>
+						<DateTimeZero>978307200000</DateTimeZero>
+					</Axis>
+					<Axis index="1" autoscale="false">
+						<TitleText>Drehzahl [rpm]</TitleText>
+						<TitleFont>Roboto Condensed,9,-1,5,75,0,0,0,0,0</TitleFont>
+						<LabelFont>Roboto Condensed,9,-1,5,50,0,0,0,0,0</LabelFont>
+						<IBK:Unit name="AxisUnit">rpm</IBK:Unit>
+						<Maximum>500</Maximum>
+						<MinorGridVisible>false</MinorGridVisible>
+						<DateTimeZero>978307200000</DateTimeZero>
+					</Axis>
+					<Axis index="2" enabled="false" autoscale="false">
+						<TitleText>Duty Cycle [0..255]</TitleText>
+						<TitleFont>Roboto Condensed,9,-1,5,75,0,0,0,0,0</TitleFont>
+						<LabelFont>Roboto Condensed,9,-1,5,50,0,0,0,0,0</LabelFont>
+						<IBK:Unit name="AxisUnit">-</IBK:Unit>
+						<Maximum>256</Maximum>
+						<DateTimeZero>978307200000</DateTimeZero>
+					</Axis>
+				</AxisProperties>
+				<ChartProperties>
+					<TitleText>Drehzahlgeregelt</TitleText>
+					<TitleFont>Roboto Condensed,9,-1,5,75,0,0,0,0,0</TitleFont>
+					<AxisScalesInside>true</AxisScalesInside>
+					<Legend>
+						<Position>Inside</Position>
+						<Alignment>1</Alignment>
+						<IconStyle>1</IconStyle>
+						<MaxColumns>1</MaxColumns>
+						<Font>Roboto Condensed,9,-1,5,50,0,0,0,0,0</Font>
+					</Legend>
+				</ChartProperties>
+			</ChartModel>
+		</Mapper>
+		<Mapper name="Drehzahlgeregelt - slow speed">
+			<Extractors>
+				<Extractor>
+					<DataIOFileName>slow-speed.tsv?rpm</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Target speed</ColumnLabel>
+				</Extractor>
+				<Extractor>
+					<DataIOFileName>slow-speed.tsv?rpm</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Speed 1</ColumnLabel>
+				</Extractor>
+				<Extractor>
+					<DataIOFileName>slow-speed.tsv?rpm</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Speed 2</ColumnLabel>
+				</Extractor>
+				<Extractor>
+					<DataIOFileName>slow-speed.tsv?-</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Leistung 1</ColumnLabel>
+				</Extractor>
+				<Extractor>
+					<DataIOFileName>slow-speed.tsv?-</DataIOFileName>
+					<CutType>NoCut</CutType>
+					<DataFormat>DF_2D</DataFormat>
+					<DataType>T_REFERENCE</DataType>
+					<ColumnLabel>Leistung 2</ColumnLabel>
+				</Extractor>
+			</Extractors>
+			<ChartModel chartType="2D">
+				<SeriesProperties>
+					<Series>
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<PenColor>#96e100</PenColor>
+						<MarkerColor>#96e100</MarkerColor>
+					</Series>
+					<Series>
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<PenColor>#00aaff</PenColor>
+						<MarkerColor>#00aaff</MarkerColor>
+					</Series>
+					<Series>
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<PenColor>#ff5500</PenColor>
+						<MarkerColor>#ff5500</MarkerColor>
+					</Series>
+					<Series leftAxis="false">
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<PenStyle>2</PenStyle>
+						<PenColor>#00aaff</PenColor>
+						<MarkerColor>#00aaff</MarkerColor>
+					</Series>
+					<Series leftAxis="false">
+						<TitleText>$quantity</TitleText>
+						<PenWidth>1</PenWidth>
+						<PenStyle>2</PenStyle>
+						<PenColor>#ff0000</PenColor>
+						<MarkerColor>#ff0000</MarkerColor>
+					</Series>
+				</SeriesProperties>
+				<AxisProperties>
+					<Axis index="0">
+						<TitleText>Zeit [$unit]</TitleText>
+						<TitleFont>Roboto Condensed,9,-1,5,75,0,0,0,0,0</TitleFont>
+						<LabelFont>Roboto Condensed,9,-1,5,50,0,0,0,0,0</LabelFont>
+						<IBK:Unit name="AxisUnit">s</IBK:Unit>
+						<Maximum>20</Maximum>
+						<GridPenStyle>1</GridPenStyle>
+						<MinorGridVisible>false</MinorGridVisible>
+						<DateTimeZero>978307200000</DateTimeZero>
+					</Axis>
+					<Axis index="1" autoscale="false">
+						<TitleText>Drehzahl [rpm]</TitleText>
+						<TitleFont>Roboto Condensed,9,-1,5,75,0,0,0,0,0</TitleFont>
+						<LabelFont>Roboto Condensed,9,-1,5,50,0,0,0,0,0</LabelFont>
+						<IBK:Unit name="AxisUnit">rpm</IBK:Unit>
+						<Maximum>120</Maximum>
+						<MinorGridVisible>false</MinorGridVisible>
+						<DateTimeZero>978307200000</DateTimeZero>
+					</Axis>
+					<Axis index="2" enabled="false">
+						<TitleText>Duty Cycle [0..255]</TitleText>
+						<TitleFont>Roboto Condensed,9,-1,5,75,0,0,0,0,0</TitleFont>
+						<LabelFont>Roboto Condensed,9,-1,5,50,0,0,0,0,0</LabelFont>
+						<IBK:Unit name="AxisUnit">-</IBK:Unit>
+						<Maximum>256</Maximum>
+						<DateTimeZero>978307200000</DateTimeZero>
+					</Axis>
+				</AxisProperties>
+				<ChartProperties>
+					<TitleText>Drehzahlgeregelt</TitleText>
+					<TitleFont>Roboto Condensed,9,-1,5,75,0,0,0,0,0</TitleFont>
+					<AxisScalesInside>true</AxisScalesInside>
+					<Legend>
+						<Position>Inside</Position>
+						<Alignment>1</Alignment>
+						<IconStyle>1</IconStyle>
+						<MaxColumns>1</MaxColumns>
+						<Font>Roboto Condensed,9,-1,5,50,0,0,0,0,0</Font>
+					</Legend>
+				</ChartProperties>
+			</ChartModel>
+		</Mapper>
 	</Mappers>
 
 	<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
 	<!--Split window state.-->
 	<Splitting>
-		<Widget id="1" parent="0" viewTable="0" mapperIndex="3" size1="1" size2="1" orientation="2" />
+		<Widget id="1" parent="0" viewTable="0" mapperIndex="6" size1="1" size2="1" orientation="2" />
 		<FocusedWidget>0</FocusedWidget>
 	</Splitting>
 
