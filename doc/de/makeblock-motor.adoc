@@ -174,6 +174,7 @@ void isr_process_encoder2(void) {
 
 
 int lastOutputMillis;
+int targetSpeedPWM;
 
 void setup() {
   // Festlegen der Interruptfunktionen für das Messen/Zählen der Bewegung
@@ -190,6 +191,7 @@ void setup() {
 
   // Variable für gelegentliche Ausgaben auf die serielle Schnittstelle
   lastOutputMillis = millis();
+  targetSpeedPWM = 0;
 }
 
 void loop() {
@@ -198,37 +200,16 @@ void loop() {
     // Zeichen 0...6 werden gelesen
     char a = Serial.read();
     switch(a) {
-      case '0':
-        Encoder_1.setTarPWM(0);
-        Encoder_2.setTarPWM(0);
-      break;
-      case '1':
-        Encoder_1.setTarPWM(100);
-        Encoder_2.setTarPWM(-100);
-      break;
-      case '2':
-        Encoder_1.setTarPWM(200);
-        Encoder_2.setTarPWM(-200);
-      break;
-      case '3':
-        Encoder_1.setTarPWM(255);
-        Encoder_2.setTarPWM(-255);
-      break;
-      case '4':
-        Encoder_1.setTarPWM(-100);
-        Encoder_2.setTarPWM(100);
-      break;
-      case '5':
-        Encoder_1.setTarPWM(-200);
-        Encoder_2.setTarPWM(200);
-      break;
-      case '6':
-        Encoder_1.setTarPWM(-255);
-        Encoder_2.setTarPWM(255);
-      break;
-      default:
-      break;
+      case '0': targetSpeedPWM =    0; break;  // stop
+      case '1': targetSpeedPWM =  100; break;  // slow forward
+      case '2': targetSpeedPWM =  200; break;  // fast forward
+      case '3': targetSpeedPWM =  255; break;  // fastest forward
+      case '4': targetSpeedPWM = -100; break;  // slow backward
+      case '5': targetSpeedPWM = -200; break;  // fast backward
+      case '6': targetSpeedPWM = -255; break;  // fastest backward
     }
+    Encoder_1.setTarPWM(-targetSpeedPWM);
+    Encoder_2.setTarPWM(targetSpeedPWM);
   }
 
   // In der loop() Funktion wird die Geschwindigkeit im Motor geregelt
@@ -238,9 +219,11 @@ void loop() {
   // alle 100 Millisekunden die Geschwindigkeit ausgeben
   if (millis() > lastOutputMillis + 100) {
     lastOutputMillis = millis();
+    Serial.print("Target speed [PWM]:");
+    Serial.print(targetSpeedPWM);
     // Erreichte Geschwindigkeit
-    Serial.print("Speed 1:");
-    Serial.print(Encoder_1.getCurrentSpeed());
+    Serial.print(",Speed 1:");
+    Serial.print(-Encoder_1.getCurrentSpeed());
     Serial.print(",Speed 2:");
     Serial.println(Encoder_2.getCurrentSpeed());
   }
@@ -329,7 +312,9 @@ Die Verhältnisse sind
 Damit kann man also die geforderte Drehzahl im Bereich -340...340 mit der Formel einstellen:
 
   pwm = rpm/1.33
-  
+
+
+
 Die Drehzahl eines unbelasteten Rades alleine sagt ja noch nichts über die Fahrgeschwindigkeit des Roboters aus. Dazu muss man erstmal Testmessungen machen. Und natürlich hängt die Geschwindigkeit dann auch noch vom Batterieladezustand ab und vom Anstieg und von der Reibung der Kette und und und... Deshalb ist es sinnvoller, die Leistung anhand der geforderten Geschwindigkeit einzuregeln. Doch dazu später mehr... 
 
 [TIP]
