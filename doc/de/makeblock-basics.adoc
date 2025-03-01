@@ -73,18 +73,25 @@ Pin 13 = Blaue LED (built-in LED)
 
 Die Motoren können zwar recht einfach durch die Bibliothek angesteuert werden, hier sind aber nochmal die Pins (falls man die Motoren klassisch über Arduino Pin PWM-write-Befehle ansteuern möchte, siehe Kapitel über die Motorensteuerung <<chap:motors>>):
 
-```
-ENA A  = pin 19
-ENA B  = pin 42
-PWMA   = pin 11
-DIR A2 = pin 49
-DIR A1 = pin 48
+```c
 
-ENB A  = pin 18
-ENB B  = pin 43
-PWMB   = pin 10
-DIR B1 = pin 47
-DIR B2 = pin 46
+// Motor 1 (links)
+
+ENA A  = pin 19 // Interrupt-Pin 1 für Encoder
+ENA B  = pin 42 // Pin 2 für Encoder
+
+PWMA   = pin 11 // Geschwindigkeit/PWM
+DIR A2 = pin 49 // Richtung
+DIR A1 = pin 48 // Richtung
+
+// Motor 2 (rechts)
+
+ENB A  = pin 18 // Interrupt-Pin 1 für Encoder
+ENB B  = pin 43 // Pin 2 für Encoder
+
+PWMB   = pin 10 // Geschwindigkeit/PWM
+DIR B1 = pin 47 // Richtung
+DIR B2 = pin 46 // Richtung
 ```
 
 
