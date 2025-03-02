@@ -1,1 +1,7 @@
-## Abschließende Bemerkungen
+## Über den Autor
+
+Vielleicht abschließend noch ein paar kurze Infos über mich. Meine Name ist Andreas Nicolai (ursprünglich aus Berlin, aber jetzt schon seit vielen Jahren in Dresden) und ich bin in einer Zeit groß geworden, als Computer noch recht primitiv waren (mein erster Rechner war ein Commodore PC-10 III  mit gerade mal 4.7...9.6 Mhz Taktfrequenz). Entsprechend einfach war die Software (und entsprechend simpel waren die Spiele). Aber so konnte ich die Entwicklung der Hardware und Software über inzwischen 4 Jahrezehnte mitverfolgen.
+
+Obwohl meine Leidenschaft eigentlich der numerischen Simulation gilt (ich liebe es, einen Rechner richtig mit knackigen Aufgaben schuften zu lassen :-) ), hab ich seit kurzem meine Begeisterung für Microcontroller und Mikroelektronik entdeckt (und verstehe jetzt endlich, wie das ganze Zeug unter der Haube funktioniert). Und da ich nun schon seit mehr als 35 Jahren C/C++ programmiere, finde ich es auch spannend, mich in die (glücklicherweise) als Open-Source vorliegende Bibliothekssoftware einzugraben und herauszufinden, wie die verschiedenen Hardwarekomponenten so angesteuert werden. Naja, und beruflich hab ich auch gerade viel mit Regelungstechnik und Automatisierung zu tun, und da passt das ja irgendwie zusammen.
+
+
