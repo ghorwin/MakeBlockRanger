@@ -12,7 +12,7 @@ link:../downloads/MakeBlock/MeAuriga_Schaltplan.pdf[Schaltplan] zu sehen, wie hi
 image::RJ25_schaltplan_auszug.png[pdfwidth=4cm]
 
 .RJ25 Stecker
-image::RJ25_pin_Belegung.png[pdfwidth=4cm]
+image::RJ25_pin_Belegung.png[width=250, pdfwidth=4cm]
 
 
 Jeder dieser Stecker ist mit VCC und GND verbunden, sowie alle parallel an SDA und SCL (für die Kommunikation über das I2C Protokoll).
@@ -83,7 +83,7 @@ void setup() {
 void loop() {
   if (millis() - lastSamlingMillis > 100) {
     Serial.print("Distance,");
-    Serial.println(min(50, ultraSensor.distanceCm() ) );
+    Serial.println(min(120, ultraSensor.distanceCm() ) );
     lastSamlingMillis = millis();
   }
 
@@ -92,22 +92,131 @@ void loop() {
 }
 ```
 
+[NOTE]
+====
+Intern verwendet die Makeblock-Bibliothek die Funktion `pulseIn()`, um die Zeit bis zum Eintreffen des Echos zu messen.
+====
+
 Zwischen Senden und Empfangen benötigt der Sensor eine minimale Wartezeit von 100 ms.
 Wenn man den Sensor also abfragt, und kein `delay()` verwenden möchte (bspw. um nebenbei noch andere
 Sensoren abzufragen), dann muss man das Timing manuell implementieren.
 
-TODO :
+[CAUTION]
+====
+Die Funktion `distanceCm(maxCm)` erlaubt eigentlich die Angabe einer Maximaldistanz, die zurückgeliefert wird, falls das Echo zu lange dauert oder die berechnete Distanz größer als dieser Maximalwert ist. In der aktuellen Implementierung der Bibliothek wird dieses Argument aber ignoriert und stattdessen immer 400 cm (4 m) verwendet, was aber **weit außerhalb** des Messbereichs des Sensors liegt.
+Deshalb ist in obigem Messprogramm die maximale Entfernung auf 120 cm begrenzt, was den Messbereich des Sensors bei vielen Hindernissen ganz gut abgrenzt.
+====
 
-- Async-Messung
-- Einfallswinkel für Schallpegel
-- Genauigkeit ???
+### Beispielprogramm - LED Ring zeigt gemessene Entfernung an
 
+Man kann auch den LED-Ring nutzen, um die gemessene Entfernung dynamisch zu visualisieren:
+
+```c++
+#include "MeAuriga.h"
+
+// Der Utrasonic-Sensor ist an Steckplatz 6 eingesteckt
+MeUltrasonicSensor ultraSensor(PORT_6);
+
+unsigned long lastSamplingMillis;
+
+// Der Auriga on-board LED Ring hat 12 LEDs. Zur Vereinfachung der Lesbarkeit
+// legen wir hier ein Define fest.
+#define LEDNUM  12
+
+// Beim Auriga-Board steuern wird den on-board LED Ring an.
+// Die Klasse MeRGBLed bietet die Schnittstellenfunktionen dafür.
+// Im Constructor übergeben wir den Port 0
+MeRGBLed led( PORT0, LEDNUM );
+
+
+void setup() {
+  lastSamplingMillis = millis();
+
+  // LED Ring Controller ist am PWM PIN D44 angeschlossen
+  led.setpin( 44 );
+  // Nach dem Setzen des Pin muss minimal kurz gewartet werden.
+  // Wenn man den delay()-Aufruf vergisst, dann wird nach dem 
+  // led.show() Befehl die erste LED in grün angezeigt.
+  delay(1);
+  // nun können wir die initalen LED-Werte (alle AUS/SCHWARZ) setzen
+  // (Die Klasse MeRGBLed setzt anfänglich alle LEDs auf schwarz/aus, man kann
+  //  aber auch led.setColor(0,0,0) vor dem led.show() nochmal aufrufen)
+  led.show();
+
+  Serial.begin(115200);
+}
+
+void loop() {
+  if (millis() - lastSamplingMillis > 100) {
+    Serial.print("Distance,");
+    long distanceCm = min(120, ultraSensor.distanceCm() );
+    Serial.println(distanceCm);
+    lastSamplingMillis = millis();
+
+    for (int i=0; i<12; ++i) {
+      if (i*10 < distanceCm) {
+        int brightness = distanceCm;
+        led.setColorAt( i, max(0, 255-i*25), min(255,i*10), 0);
+      }
+      else
+        led.setColorAt( i, 0, 0, 0);
+    }
+    led.show();
+  }
+
+  // ... anderes Zeugs ...
+
+}
+```
+
+Mit diesem Programm wird für den Entfernungsbereich 0...120cm der LED Ring beleuchtet. Damit kann man sich ein Bild davon machen, wie der Sensor Hindernisse erkennt. 
+
+[NOTE]
+====
+Wenn der Ultraschall-Sensor frontal auf eine Wand/Fläche gerichtet ist, so bekommt er ein ziemlich gutes Echo und kann Entfernungen bis über 120 cm sehr gut messen. Aber bereits bei leicht schrägem Einfall wird das Echo am Sensor vorbeireflektiert und dadurch fälschlicherweise ein sehr großer Abstand zurückgeliefert.
+====
 
 
 ## Linienverfolgungssensor
 
-<center>
-<img src="../../images/auriga/auriga_linefollower.png" alt="Linienverfolgungs-Sensor"/>
-</center>
+Ein weiterer Sensor, der mit dem _MakeBlock Ranger_ Bausatz mitgeliefert wird, ist der Linienverfolgungssensor. 
 
-Weiter zu [Teil 7](../auriga-park-assistent-DE.html).
+.Linienverfolgungs-Sensor
+image::auriga_linefollower.png[]
+
+Der besteht letztlich aus 2 Photodioden. Deren lichtempfindlicher Widerstand wird mit einem hardwarespezifischen Schwellwert in ein digitales Signal gewandelt, welches 4 Zustände ergibt:
+
+```
+S1_IN_S2_IN   : Beide Sensoren innerhalb der schwarzen Linie
+S1_IN_S2_OUT  : Sensor 2 ist außerhalb der schwarzen Linie
+S1_OUT_S2_IN  : Sensor 1 ist außerhalb der schwarzen Linie
+S1_OUT_S2_OUT : Beide Sensoren außerhalb der schwarzen Linie, also entweder links oder rechts davon
+```
+
+### Beispielprogramm - Linienfolgesensor zeigt einen der 4 Zustände an
+
+```c++
+#include "MeAuriga.h"
+
+// Verbunden mit Port 8
+MeLineFollower lineFinder(PORT_8);
+
+void setup() {
+  Serial.begin(115200);
+}
+
+void loop()
+{
+  int sensorState = lineFinder.readSensors();
+  switch(sensorState)
+  {
+    case S1_IN_S2_IN  : Serial.println("Beide Sensoren innerhalb der schwarzen Linie"); break;
+    case S1_IN_S2_OUT : Serial.println("Sensor 2 ist außerhalb der schwarzen Linie"); break;
+    case S1_OUT_S2_IN : Serial.println("Sensor 1 ist außerhalb der schwarzen Linie"); break;
+    case S1_OUT_S2_OUT: Serial.println("Beide Sensoren außerhalb der schwarzen Linie"); break;
+    default: break;
+  }
+  delay(200);
+}
+```
+
