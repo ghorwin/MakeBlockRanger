@@ -1,5 +1,6 @@
 :imagesdir: ../images
 
+[[chap:sensors]]
 # OnBoard Sensoren (Licht, Schall, Temperature, Gyroskop)
 
 Hier geht es um das Auslesen der verschiedenen OnBoard-Sensoren auf dem Auriga-Board. Auf dem Auriga Board sind 4 Sensortypen platziert:
