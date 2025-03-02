@@ -71,9 +71,10 @@ image::auriga_schaubild.jpg[width=500, pdfwidth=12cm]
 image::farbcodierung_auriga.jpg[width=150, pdfwidth=4cm]
 
 - PORT1 - PORT4 unterstützen einen kontinuierlichen 3,5A-Ausgang (max. 5A)
-- PORT5 - PORT10 haben einen Kurzschluss- und Überstromschutz für 3A
-- PORT5 - PORT10 unterstützen kontinuierlich 5V DC und 4A Ausgang (max. 3A)
 - PORT1 - PORT4 haben einen Kurzschluss- und Überstromschutz für 3,5A
+
+- PORT5 - PORT10 unterstützen kontinuierlich 5V DC und 4A Ausgang (max. 3A)
+- PORT5 - PORT10 haben einen Kurzschluss- und Überstromschutz für 3A
 
 - USB-Anschluss mit antistatischem Schutz (Akkus werden darüber nicht geladen)
 

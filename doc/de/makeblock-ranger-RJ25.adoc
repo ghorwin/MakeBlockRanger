@@ -1,55 +1,65 @@
-Title: MakeBlock Ranger : Teil 6 - RJ25 Ports und externe Zubehörkomponenten (Abstandssensor und Linienfolgesensor)
-Date: 2024-09-25 19:04
-Modified: 2024-09-25 19:04
-Category: Arduino
-Tags: Mikrocontroller, C/C++, Arduino, Makeblock Ranger, Auriga
-Slug: auriga-rj25
-lang: DE
-Author: Andreas Nicolai
-Summary: Ich beschreibe die 10 RJ25 Ports, deren Pin-Belegung und die Ansteuerung von Zubehörkomponenten wie dem Abstandssensor und dem Linienfolgesensor.
+:imagesdir: ../images
+
+[[chap:rj25]]
+# RJ25 Ports und externe Zubehörkomponenten (Abstandssensor und Linienfolgesensor)
 
 ## Allgemeines zu RJ25
 
-Die Steckerports am Auriga-Board sind RJ25 (6P6C) Stecker, siehe [Wikipedia RJ-Steckverbindung](https://de.wikipedia.org/wiki/RJ-Steckverbindung), wie sie auch für den Anschluss von Modems und Faxgeräten verwendet werden/wurden. Die Belegung der Pins ist im [Schaltplan](../downloads/MakeBlock/MeAuriga_Schaltplan.pdf) zu sehen, wie hier im Auszug für den Port 9:
+Die Steckerports am Auriga-Board sind RJ25 (6P6C) Stecker, siehe https://de.wikipedia.org/wiki/RJ-Steckverbindung[Wikipedia RJ-Steckverbindung], wie sie auch für den Anschluss von Modems und Faxgeräten verwendet werden/wurden. Die Belegung der Pins ist im   
+link:../downloads/MakeBlock/MeAuriga_Schaltplan.pdf[Schaltplan] zu sehen, wie hier im Auszug für den Port 9:
 
-<center>
-<img src="../../images/auriga/RJ25_schaltplan_auszug.png" alt="RJ25 Belegung an Port 9"/>
-<img src="../../images/auriga/RJ25_pin_Belegung.png" alt="RJ25 Stecker"/>
-</center>
+.RJ25 Belegung an Port 9
+image::RJ25_schaltplan_auszug.png[pdfwidth=4cm]
+
+.RJ25 Stecker
+image::RJ25_pin_Belegung.png[pdfwidth=4cm]
+
 
 Jeder dieser Stecker ist mit VCC und GND verbunden, sowie alle parallel an SDA und SCL (für die Kommunikation über das I2C Protokoll).
 Die mit S1 und S2 (Slot 1 und Slot 2) bezeichneten Leitungen sind je Port mit unterschiedlichen Pins am Arduino verbunden. Je nach Fähigkeiten dieser Pins sind die Ports unterschiedlich eingefärbt. Eine Gesamtübersicht über die Ports, deren Belegung und Stromversorgung ist im [Ersten Teil zum Auriga/mBot Ranger](auriga-first-steps-DE) gegeben.
+
+[NOTE]
+====
+Die Ports sind unterschiedlich abgesichert und bieten unterschiedliche Spannungen. Außerdem sind unterschiedliche Pins angeklemmt, was verschiedene Möglichkeiten zum Anschluss externer Hardware bietet:
+
+.Aurigaplatine mit unterschiedlichen RJ25 Ports
+image::auriga_schaubild.jpg[width=500, pdfwidth=12cm]
+
+.Farbkodierung der Anschlüsse (Details dazu im Kapitel zu den RJ25 Ports)
+image::farbcodierung_auriga.jpg[width=150, pdfwidth=4cm]
+
+- PORT1 - PORT4 unterstützen einen kontinuierlichen 3,5A-Ausgang (max. 5A)
+- PORT1 - PORT4 haben einen Kurzschluss- und Überstromschutz für 3,5A
+
+- PORT5 - PORT10 unterstützen kontinuierlich 5V DC und 4A Ausgang (max. 3A)
+- PORT5 - PORT10 haben einen Kurzschluss- und Überstromschutz für 3A
+====
 
 An diese Ports kann man nun diverse Zubehörbauteile anstecken (die aber häufig nicht ganz billig sind).
 
 Man kann auch einfach RJ25 Stecker kaufen und über die einzelnen Kabel beliebige elektronische Bauteile anklemmen/anlöten:
 
-<center>
-<img src="../../images/auriga/RJ25-adapter-Kabel.jpg" alt="RJ25 Adapter Kabel"/>
-</center>
+.RJ25 Adapter Kabel
+image::RJ25-adapter-Kabel.jpg[pdfwidth=4cm]
+
 
 ### Zubehör
 
 MakeBlock bietet selbst zahlreiches Zubehör mit dem RJ25 Stecker an:
 
-<center>
-<img src="../../images/auriga/auriga-rj25-addons.png" alt="RJ25 Zubehör"/>
-</center>
-
-- Joystick
-- ein Adapter (zum einfachen Anklemmen der 6 Leitungen)
-- 
-
-## Entfernungsmessung
-
-Zur Entfernungsmessung liegt im mBot Ranger Bausatz ein Ultraschallsensor dabei. Diesen kann man einfach an einen Port anstecken (Ports 6-10).
-
-<center>
-<img src="../../images/auriga/auriga_ultrasonicdistance.png" alt="Ultraschall Entfernungssensor"/>
-</center>
+.RJ25 Zubehör
+image::auriga-rj25-addons.png[pdfwidth=16cm]
 
 
-Wie der Sensor intern funktioniert, ist auf der [Fundino Ultraschallsensor](https://funduino.de/nr-10-entfernung-messen) Seite beschrieben.
+## Ultraschall-Entfernungsmessung
+
+Zur Entfernungsmessung liegt im mBot Ranger Bausatz ein Ultraschallsensor dabei. Diesen kann man einfach an einen I2C-Port anstecken (Ports 6-10).
+
+.Ultraschall Entfernungssensor
+image::auriga_ultrasonicdistance.png[pdfwidth=4cm]
+
+
+Wie der Sensor intern funktioniert, ist auf der Seite https://funduino.de/nr-10-entfernung-messen[Fundino Ultraschallsensor]  beschrieben.
 
 In Kürze: Der Sensor emittiert eine Ultraschallwelle (wie die Fledermaus) und wenn diese auf ein Objekt trifft, wird die Welle zurückgeworfen. Die Schallgeschwindigkeit in Luft ist ungefähr 340 m/s (oder 34 cm/ms bzw. 0.034 cm/µs). Der Sensor misst die Zeit zwischen Senden und Empfangen der Schallwelle und kann daraus die Entfernung berechnen.
 
@@ -58,37 +68,27 @@ Falls z.B. die Schallwelle durch ein Objekt zurückgeworfen wird, und seit dem S
 Der Sensor wird mittels der Klasse `MeUltrasonicSensor` angesteuert, welche folgende Funktionen bietet:
 
 ```c++
-
-// Konstruktor
-MeUltrasonicSensor ultraSensor(uint8_t port);
-// Sets the Signal-Pin - diese Funktion kann benutzt werden, um z.B. den Port zu bestimmen,
-// an dem der Sensor gerade angesteckt ist
-void setpin(uint8_t SignalPin);
-// Misst die Entfernung in cm
-double  distanceCm (uint16_t maxDistanceInCm=400)
-// Misst die Entfernung in inch
-double  distanceInch (uint16_t maxDistanceInInch=180)
-// Misst Entfernungszeit
-long    measure (unsigned long maxIntervalInMikrosekunden=30000)
-```
-
-### Beispielprogramm
-
-```c++
 #include "MeAuriga.h"
 
 // Der Utrasonic-Sensor ist an Steckplatz 6 eingesteckt
 MeUltrasonicSensor ultraSensor(PORT_6);
 
+unsigned long lastSamlingMillis;
+
 void setup() {
+  lastSamlingMillis = millis();
   Serial.begin(115200);
 }
 
 void loop() {
-  Serial.print("Distance : ");
-  Serial.print(ultraSensor.distanceCm() );
-  Serial.println(" cm");
-  delay(100); // Das minimale Messinterval ist 100 ms
+  if (millis() - lastSamlingMillis > 100) {
+    Serial.print("Distance,");
+    Serial.println(min(50, ultraSensor.distanceCm() ) );
+    lastSamlingMillis = millis();
+  }
+
+  // ... anderes Zeugs machen...
+
 }
 ```
 
