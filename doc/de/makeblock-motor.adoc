@@ -9,7 +9,7 @@ Zunächst aber mal ein konstruktiver Tipp:
 
 [TIP]
 ====
-Die Ketten sind am Anfang ewas steif und durch die Lagerung und Verpackung etwas oval verformt. Wenn man den _Land Raider_ wie in der Konstruktionszeichnung zusammen baut, dann sitzen die Ketten _sehr_ straff und jedes Mal, wenn der Motor braucht immer viel Kraft, um aus der gekrümmten Kettenform rauszudrehen. Bei der vorgegebenen Firmware führt das dann beim Steuern des _Land Raider_ häufig dazu, dass er mit einem Beepen stehen bleibt (warum die Firmware das macht, erklär ich unten).
+Die Ketten sind am Anfang ewas steif und durch die Lagerung und Verpackung etwas oval verformt. Wenn man den _Land Raider_ wie in der Konstruktionszeichnung zusammen baut, dann sitzen die Ketten _sehr_ straff und der Motor braucht jedes Mal viel Kraft, um aus der gekrümmten Kettenform rauszudrehen (was er bei etwas entleerten Batterien häufig nicht schafft). Bei der vorgegebenen Firmware führt das dann beim Steuern des _Land Raider_ häufig dazu, dass er mit einem Beepen stehen bleibt (warum die Firmware das macht und wie diese erkennt, dass der _Land Raider_ stecken bleibt, erklär ich unten).
 
 Es gibt zwei Dinge, die man tun kann, um dieses Problem mit dem _Land Raider_ zu beheben:
 
@@ -23,7 +23,7 @@ image::raider_motor_verschoben.jpg[]
 
 ## Allgemeines
 
-Am Auriga-Board gibt es zwei Motorports. Jeder der Motoren kann über einen PWM Pin (für die Geschwindigkeit) und zwei Richtungspins angesteuert werden. Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Verwendung der Makeblock Bibliothek.
+Am Auriga-Board gibt es zwei Motorports. Jeder der DC-Motoren kann über einen PWM Pin (analoge Spannung für die Geschwindigkeit) und zwei digitalen Pins für die Drehichtung angesteuert werden. Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Verwendung der Makeblock Bibliothek (in der die Details gekapselt sind).
 
 [NOTE]
 ====
@@ -38,7 +38,7 @@ image::auriga_motorports.png[]
 
 [TIP]
 ====
-Die Motoren des _Ranger_ Baukastens sind intern mit einem Getriebe versehen. Die eigentlichen Elektromotoren drehen bei Maximalleistung  (d.h. vollen Batterien und ohne Kette) mit ungefähr 14000 Umdrehungen pro Minute (oder engl. _revolutions per minute - rpm_). Durch das Getriebe mit der Übersetzung 39,6 laut Datenblatt drehen sich die angesteckten Räder eher so mit 350 rpm. Bei einem Radius von ca. 22 mm (einschließlich Kette) und damit einem Abrollumfang von Pi*2*22mm sind das dann ca. 138 mm pro Umdrehung und stolze 350*138 mm = *48 m pro Minute* (oder *0,8 m/s* oder ca. *2,9 km/h*). Das wäre dann also die theoretische Maximalgeschwindigkeit.
+Die DC-Motoren des _Ranger_ Baukastens sind intern mit einem Getriebe versehen. Die eigentlichen Elektromotoren drehen bei Maximalleistung  (d.h. vollen Batterien und ohne Kette) mit ungefähr 14000 Umdrehungen pro Minute (oder engl. _revolutions per minute - rpm_). Durch das Getriebe mit der Übersetzung 39,6 laut Datenblatt drehen sich die angesteckten Räder eher so mit 350 rpm. Bei einem Radius von ca. 22 mm (einschließlich Kette) und damit einem Abrollumfang von Pi*2*22mm sind das dann ca. 138 mm pro Umdrehung und stolze 350*138 mm = *48 m pro Minute* (oder *0,8 m/s* oder ca. *2,9 km/h*). Das wäre dann also die theoretische Maximalgeschwindigkeit.
 ====
 
 Zunächst beschreibe ich mal die Programmierung der Motoren ohne die MakeBlock-Bibliotheksklassen. Dadurch versteht man besser, wie das alles zusammen funktioniert. Danach beschreibe ich in <<sec:motor:makeblocklib>> die Funktionalität der MakeBlock-Bibliotheksklasse zur Encoder-Motor-Programmierung.
@@ -56,6 +56,15 @@ Die digitalen Pins werden nun wie folgt angesprochen:
 - PWMA und PWMB erhalten Drehgeschwindigkeiten (PWM, im Bereich 0..255)
 - DIRA1 und DIRA2 regeln die Richtung des Motors A (links) und müssen jeweils entgegengesetzt geschaltet sein
 - DIRB1 und DIRB2 regeln die Richtung des Motors B (rechts) und müssen jeweils entgegengesetzt geschaltet sein
+
+[NOTE]
+====
+DC-Motoren drehen sich in Abhängigkeit der anliegenden Gleichspannung schneller oder langsamer - je höher die Spannung, umso schneller. Der Arduino liefert die für die DC-Motoren benötigte Spannung aber nicht direkt, denn die Motoren brauchen eine Spannung zwischen 7..8.2 V. Die Motoren werden vom Batteriepack mit Spannung versorgt.
+
+Der Arduino generiert aber eine quasi-Analoge Spannung durch Verwendung von PWMs. Hierbei wird in einem bestimmten Takt (der z.B. 1ms dauert) die Spannung kurz angeschaltet und danach wieder kurz ausgeschaltet. Je nachdem wie lange die Spannung  im Verhältnis zur Gesamtzeit angeschaltet ist, umso höher ist die generierte Quasi-Gleichspannung. Das Verhältnis von "An-Zeit" zur gesamten Taktzeit nennt man _Duty-Cycle_. Bei 100% wird also die Nominalspannung des Arduino (5V) ausgegeben. 
+
+Diese am Pin anliegende Spannung wird im DC-Motor genutzt, um den Strom vom Batteriepack zum eigentlichen DC-Motor zu leiten (Internetsuche zum Thema "DC-Motoren und MOSFET"). Je höher die Taktfrequenz des PWM-Signals, umso gleichmäßiger baut sich das Magnetfeld auf/ab und der Motor läuft ruhiger. Dies ist insbesondere bei geringeren Duty-Cycles wichtig (siehe auch <<sec:motor_dutyCycle>>).
+====
 
 
 ### Beispielprogramm - Beschleunigen und Abbremsen
@@ -118,8 +127,10 @@ bool upward = true;
 void loop() {
 
   // Steuerungsprogramm: 
-  // - Vorwärtsfahren und Geschwindigkeit in jeder Schleife erhöhen bis Maximalgeschwindikeit erreicht ist
-  // - dann langsamer werden und schließlich Rückwärtsfahren bis maximale Rückwärtsgeschwindigkeit erreicht ist
+  // - Vorwärtsfahren und Geschwindigkeit in jeder Schleife 
+  //   erhöhen bis Maximalgeschwindikeit erreicht ist
+  // - dann langsamer werden und schließlich Rückwärtsfahren 
+  //   bis maximale Rückwärtsgeschwindigkeit erreicht ist
   // - dann wieder umschalten auf vorwärts fahren
   if (upward)
     speed += 5;
@@ -310,15 +321,6 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(ENCODER1_PIN1), isr_encoder1, RISING);
   attachInterrupt(digitalPinToInterrupt(ENCODER2_PIN1), isr_encoder2, RISING);
 
-  // Interne Timer für PWM auf 8KHz programmieren (Mode 5 - Fast PWM, 8-Bit, Prescaler 8)
-  // Timer 1
-  TCCR1A = _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(WGM12);
-
-  // Timer 2
-  TCCR2A = _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS21);
-
   // Variable für gelegentliche Ausgaben auf die serielle Schnittstelle
   lastOutputMillis = startMillis = pulseCountStartMillis = millis();
 
@@ -406,7 +408,7 @@ int interruptNr2 = digitalPinToInterrupt(18);  // -> interrupt 5
 Siehe auch Erklärung zu den Interrupt-Nummern in https://docs.arduino.cc/language-reference/funktionen/external-interrupts/attachInterrupt/
 
 
-Wie bei Encodern üblich, wird die Flanke des einen Pins überwacht und dann durch den (etwas versetzten) Pegel des 2. Pins die Drehrichtung bestimmt. Dies geschicht in der Interrupt-Funktion:
+Wie bei Encodern üblich, wird die Flanke des einen Pins überwacht und dann durch den (etwas versetzten) Pegel des zweiten Pins die Drehrichtung bestimmt. Dies geschicht in der Interrupt-Funktion:
 
 ```c
 // Interruptfunktion für Encoder 1
@@ -417,13 +419,14 @@ void isr_encoder1(void) {
     --encoder1Pulses;
 }
 ```
-In den Interrupt-Funktionen wird jetzt bei jedem Aufruf ein Puls hoch oder runter gezählt. Da der Motor 2 sich anders herum dreht, wird entsprechend invertiert gezählt (sodass positive Pulszahlen einer Vorwärtsfahrt entsprechen).
+
+In den Interrupt-Funktionen wird jetzt bei jedem Aufruf ein Puls hoch oder runter gezählt. Da sich der Motor 2 anders herum dreht, wird entsprechend invertiert gezählt (sodass positive Pulszahlen einer Vorwärtsfahrt entsprechen).
 
 Die Funktion `rpmFromPulses()` rechnet nun die bislang gezählten Pulse in eine Drehzahl um. Die seit Beginn der Zählung verstrichene Zeit wird berechnet und dann wird auf Pulse pro Minute hochgerechnet. Die Encoder geben bei einer Umdrehung 353.403 Pulse ab.
 
 [NOTE]
 ====
-Die Encodermotoren drehen sich eigentlich bei Maximalgeschwindigkeit mit ca. 14000 Umdrehungen pro Minute (rpm). Das eingebaute Getriebe hat laut Spezifikation ein Verhältnis von 39.6, sodass sich das angesteckte Rad selbst eher mit 350 rpm dreht. In der Makeblock-Bibliothek ist ein Getriebeverhältnis von 39.267 angegeben, also hab ich diesen Wert verwendet. 
+Die Encodermotoren drehen sich eigentlich bei Maximalgeschwindigkeit mit ca. 14000 Umdrehungen pro Minute (rpm). Das eingebaute Getriebe hat laut Spezifikation ein Verhältnis von 39.6, sodass sich das angesteckte Rad selbst eher mit 350 rpm dreht. In der Makeblock-Bibliothek ist jedoch ein Getriebeverhältnis von 39.267 angegeben, also hab ich diesen Wert verwendet. 
 
 Bei jeder Umdrehung des Motors werden 9 Pulse abgegeben. Damit ergeben sich bei einer Umdrehung des Rades die 9*39.267=353.403 Pulse.
 ====
@@ -437,14 +440,39 @@ encoder2Pulses = 0;
 pulseCountStartMillis = millis();
 ```
 
+## Steuerung der Geschwindigkeit mittels Serial Plotter/Serial Monitor
 
-## Erhöhung der Messgenauigkeit durch Erhöhung der Timer-Frequenz
+Damit man die Rotationsgeschwindigkeit in Abhängigkeit des gesetzten PWM-Duty-Cycles testen kann, wird im Programm von der seriellen Schnittstelle gelesen. Diese serielle Schnittstelle dient eigentlich dazu, Daten vom Roboter an die Arduino-IDE zu geben, z.B. den SerialPlotter zur Anzeige (wie das schon in <<chap:sensors>> mit den Sensoren gemacht wurde).
 
-Der MEGA 2560 Prozessor hat intern Timer, die letztlich die Abtastrate für die Überwachung der Interrupt-Pins definieren. Normalerweise haben diese eine recht niedrige Frequenz.
+Mann kann aber genauso gut auch Text zurück an den Roboter senden. Dazu tippt man einach im SerialMonitor oder SerialPlotter den Text ein und bestätigt mit Enter. In diesem Programmbeispiel werden die Zeichen 0 bis 6 akzeptiert und je nach Zeichen wird eine andere PWM-Leistung eingestellt. In einem späteren Beispiel wird diese Kommunikation nochmal etwas erweitert.
 
-Theoretisch müssten bei 14000 rpm und 9 Pulsen-pro-Umdrehung 14000*9/60 = 2100 Pulse/Sekunde erfasst werden. Damit man die Pulse erkennt, müsste jeweils LOW und HIGH gemessen werden, also 4200 Messwerte pro Sekunde. Dafür bräuchte man also eine Mindest-Abtastrate von 4.2 kHz.
+In diesem Testbeispiel kann man den Robotor begrenzt steuern:
 
-Die Timer-Frequenzen kann man umprogrammieren (siehe auch Erklärung in https://wolles-elektronikkiste.de/interrupts-teil-3-timer-interrupts#calculations[Interrupts – Teil 3: Timer Interrupts] und beispielsweise die konkret verwendete Bitmaske für Timer 1 auf 
+- Nach Start des Programms den SerialMonitor der Arduino-IDE aufrufen
+- in die Zeile "Nachricht" des SerialMonitor eine Zahl 0...6 eintippen und mit Enter abschicken
+- das Programm wertet diese Zahl aus und legt die Drehgeschwindigkeit der Motoren fest
+
+Alternativ kann man das auch im SerialPlotter machen.
+
+
+## Testlauf und Geschwindigkeitsmessung mit und ohne Kette
+
+Wenn man jetzt das Programm mal und die Geschwindigkeiten plottet erhält man ein interessantes Bild:
+
+.Ausgabe der Motorgeschwindigkeiten mit einem Motor mit Kette und dem anderen Motor freidrehend
+image::auriga_encoder_speed_original_PWM_timer_one_belt.png[]
+
+Da die Kette schwingt und auch nicht gleichmäßig steif ist, führt dies zu ungleichmäßigen Drehbewegungen des Motors. Um diesen Einfluss zu sehen, habe ich an einen Motor die Kette angebaut und am anderen Motor nicht. Klar erkennbar im Diagramm ist auch die Bremswirkung der Kette insgesamt - der Motor mit Kette dreht langsamer.
+
+Außerdem scheint die Drehzahl nicht proportional zum PWM-Duty-Cycle zu steigen (vor allem bei PWM 100). Dies liegt daran, dass der generierte PWM-Takt zu langsam ist. Um dies zu beheben, kann der PWM-Timer des Arduino umprogrammiert werden, sodass er mit 8kHz läuft. 
+
+[[sec:motor_dutyCycle]]
+## Höhere PWM-Taktfrequenz für einen ruhigeren Motorlauf bei geringen Duty-Cycles
+
+Der MEGA 2560 Prozessor hat intern Timer, die auch für die Generierung von PWM-Duty-Cycles verwendet werden. 
+Für die Pins 11 und 12 ist der Timer 1 zuständig (16 bit). Und für Pins 9 und 10 der Timer 2. Für diese Pins ist die Standardfrequenz 490 Hz.
+
+Diese Timer-Frequenzen kann man umprogrammieren (siehe auch Erklärung in https://wolles-elektronikkiste.de/interrupts-teil-3-timer-interrupts#calculations[Interrupts – Teil 3: Timer Interrupts] und beispielsweise die konkret verwendete Bitmaske für Timer 1 auf 
 https://dbuezas.github.io/arduino-web-timers/#mcu=ATMEGA328P&timer=1&timerMode=FPWM&clockPrescalerOrSource=8[Arduino Web Timers]).
 
 Der relevante Code-Block ist:
@@ -462,42 +490,6 @@ TCCR2B = _BV(CS21);
 
 `_BV(X)` steht für einen Bitshift `1 << X`.
  
-
-## Steuerung der Geschwindigkeit mittels Serial Plotter/Serial Monitor
-
-Damit man die Rotationsgeschwindigkeit in Abhängigkeit des gesetzten PWM-Signals testen kann, wird im Programm von der seriellen Schnittstelle gelesen. Diese serielle Schnittstelle dient eigentlich dazu, Daten vom Roboter an die Arduino-IDE zu geben, z.B. den SerialPlotter zur Anzeige (wie das schon in <<chap:sensors>> mit den Sensoren gemacht wurde).
-
-Mann kann aber genauso gut auch Text zurück an den Roboter senden. Dazu tippt man einach im SerialMonitor oder SerialPlotter den Text ein und bestätigt mit Enter. In diesem Programmbeispiel werden die Zeichen 0 bis 6 akzeptiert und je nach Zeichen wird eine andere PWM-Leistung eingestellt. In einem späteren Beispiel wird diese Kommunikation nochmal etwas erweitert.
-
-In diesem Testbeispiel kann man den Robotor begrenzt steuern:
-
-- Nach Start des Programms den SerialMonitor der Arduino-IDE aufrufen
-- in die Zeile "Nachricht" des SerialMonitor eine Zahl 0...6 eintippen und mit Enter abschicken
-- das Programm wertet diese Zahl aus und legt die Drehgeschwindigkeit der Motoren fest
-
-Alternativ kann man das auch im SerialPlotter machen.
-
-
-## Testlauf und Geschwindigkeitsmessung mit und ohne Kette
-
-Wenn man jetzt das Programm mal testet, zuerst noch ohne den Codeblock in der `setup()` Funktion mit den umprogrammierten PWM-Timern, und die Geschwindigkeiten plottet erhält man ein interessantes Bild:
-
-.Ausgabe der Motorgeschwindigkeiten mit originalen PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend
-image::auriga_encoder_speed_original_PWM_timer_one_belt.png[]
-
-Da die Kette schwingt und auch nicht gleichmäßig steif ist, führt dies zu ungleichmäßigen Drehbewegungen des Motors. Um diesen Einfluss zu sehen, habe ich an einen Motor die Kette angebaut und am anderen Motor nicht. Klar erkennbar im Diagramm ist auch die Bremswirkung dder Kette insgesamt - der Motor mit Kette dreht langsamer.
-
-Außerdem scheint die Drehzahl nicht proportional zur PWM-Geschwindigkeit zu steigen. Dies liegt daran, dass das generierte PWM-Signal zu langsam ist. Um dies zu beheben, kann der PWM-Timer des Arduino umprogrammiert werden, sodass er mit 8kHz läuft. Dies passiert in dem oben schon beschriebenen Codeblock:
-
-```c
-  // Interne Timer der PWM auf 8KHz programmieren
-  TCCR1A = _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(WGM12);
-
-  TCCR2A = _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS21);
-```
-
 Erneut getestet sieht die Geschwindigkeitsausgabe deutlich besser aus, d.h. auch die durch die Encoder erfasste Drehzahl ist auch bei kleineren Drehzahlen hinreichend proportional zur Sollgeschwindigkeit (in PWM), was man gut am freilaufenden Motor sehen kann.
 
 .Ausgabe der Motorgeschwindigkeiten (in Umdrehungen pro Minute) mit umprogrammierten PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend
@@ -505,8 +497,7 @@ image::auriga_encoder_speed_8kHz_PWM_timer_one_belt.png[]
 
 Beim freilaufenden Motor wird die festgelegte Soll-Geschwindigkeit offenbar gut erreicht. Beim Motor mit Kette bleibt die Sollgeschwindigkeit etwas hinter der festgelegten Geschwindigkeit, was ja an der Bremswirkung liegt.
 
-Im Beispiel oben wurde die Geschwindigkeit in PWM angegeben und die Drehzahl vom Encoder in Umdrehungen pro Minute (RPM) abgelesen.
-Die Verhältnisse sind
+Im Beispiel oben wurde die Geschwindigkeit in PWM angegeben und die Drehzahl vom Encoder in Umdrehungen pro Minute (RPM) abgelesen. Die Verhältnisse sind
 
   132/100 = 1.32
   266/200 = 1.33
@@ -518,7 +509,7 @@ Damit _könnte_ man also die geforderte Drehzahl im Bereich -340...340 mit der F
 
 und so hoffen, dass sich der Ranger genau mit der angegebenen Geschwindigkeit fortbewegt.
 
-Die Drehzahl eines unbelasteten Rades alleine sagt ja noch nichts über die Fahrgeschwindigkeit des Roboters aus. Denn diese hängt natürlich auch noch vom Batterieladezustand ab und vom Anstieg und von der Reibung der Kette und und und... Deshalb ist es sinnvoller, die Leistung anhand der geforderten Geschwindigkeit einzuregeln. Doch dazu später mehr... 
+*ABER:* Die Drehzahl eines unbelasteten Rades alleine sagt ja noch nichts über die Fahrgeschwindigkeit des Roboters aus. Denn diese hängt natürlich auch noch vom Batterieladezustand ab und vom Anstieg und von der Reibung der Kette und und und... Deshalb ist es sinnvoller, die Leistung anhand der geforderten Geschwindigkeit einzuregeln. Doch dazu später mehr.
 
 [TIP]
 ====
@@ -531,10 +522,13 @@ Als ich das Testprogramm gerade nochmal mit frisch aufgeladenen Akkus getestet h
 ====
 
 
+
+
 [[sec:motor:makeblocklib]]
 ## Ansteuerung über Encoder-Klasse der Bibliothek
 
 Die MakeBlock-Bibliothek bietet zahlreiche Klassen für die Programmierung von Encoder-Motoren. Für die mitgelieferten DC-Motoren wird die Klasse `MeEncoderOnBoard` verwendet. Diese übernimmt, wie der Name schon sagt, die Programmierung der auf dem Board befindlichen Motorsteuerung. Diese Klasse erlaubt sowohl die direkte Ansteuerung der Motoren durch Setzen der Leistung via PWM, als auch die geregelte Steuerung.
+
 
 [[sec:motor:encodertest]]
 ### Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion
@@ -635,6 +629,11 @@ attachInterrupt(Encoder_1.getIntNum(), isr_process_encoder1, RISING);
 ```
 
 Das Hoch-/Runterzählen der Pulse in den Interruptfunktionen ist wie beim bisherigen Beispiel. Die Encoder zählen jetzt also bei jedem Aufruf einen Puls höher oder runter. In der in jedem Durchlauf aufgerufenen Funktion `MeEncoderOnBoard::loop()` wird die Funktion `MeEncoderOnBoard::updateSpeed()` aufgerufen, welche letztlich die Anzahl der Pulse seit dem letzten Aufruf von `updateSpeed()` in die Drehgeschwindigkeit umrechnet.
+
+[NOTE]
+====
+Die originale Firmware für den Makeblock Bausatz prüft bei Motorfahrt die Geschwindigkeit. Wird trotz Ansteuerung des Motors eine Geschwindigkeit von 0 zurückgeliefert, werden die Motoren ausgeschaltet und ein Beep ertönt. Dies schont wirkungsvoll die Batterien.
+====
 
 Die Geschwindigkeit in den Motoren wird mit der Funktion `setTarPWM()` gesetzt. Hier muss man selbst aufpassen, welcher Motor _vorwärts_ und welcher _rückwärts_ eingebaut ist und entsprechend das Vorzeichen ändern. Indem man die Funktion `setTarPWM()` aufruft, wird die Klasse in den direkten Steuerungsmodus PWM gesetzt und stellt die Geschwindigkeit wie bei unserem vorherigen Beispiel via PWM-Duty-Cycle ein. Damit ergibt sich auch eine ähnliche Ausgabe wie bei unserem bisherigen Programm.
 

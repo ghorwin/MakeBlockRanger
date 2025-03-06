@@ -340,7 +340,7 @@ pre.rouge {
 <div class="details">
 <span id="author" class="author">Andreas Nicolai</span><br>
 <span id="email" class="email"><a href="mailto:andreas.nicolai@gmx.net">andreas.nicolai@gmx.net</a></span><br>
-<span id="revnumber">version 1.0 (02.03.2025)</span>
+<span id="revnumber">version 1.0 (06.03.2025)</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -463,9 +463,9 @@ pre.rouge {
 <li><a href="#_interruptfunktionen_für_encoder_pins_und_geschwindigkeitsberechnung">8.3.2. Interruptfunktionen für Encoder-Pins und Geschwindigkeitsberechnung</a></li>
 </ul>
 </li>
-<li><a href="#_erhöhung_der_messgenauigkeit_durch_erhöhung_der_timer_frequenz">8.4. Erhöhung der Messgenauigkeit durch Erhöhung der Timer-Frequenz</a></li>
-<li><a href="#_steuerung_der_geschwindigkeit_mittels_serial_plotterserial_monitor">8.5. Steuerung der Geschwindigkeit mittels Serial Plotter/Serial Monitor</a></li>
-<li><a href="#_testlauf_und_geschwindigkeitsmessung_mit_und_ohne_kette">8.6. Testlauf und Geschwindigkeitsmessung mit und ohne Kette</a></li>
+<li><a href="#_steuerung_der_geschwindigkeit_mittels_serial_plotterserial_monitor">8.4. Steuerung der Geschwindigkeit mittels Serial Plotter/Serial Monitor</a></li>
+<li><a href="#_testlauf_und_geschwindigkeitsmessung_mit_und_ohne_kette">8.5. Testlauf und Geschwindigkeitsmessung mit und ohne Kette</a></li>
+<li><a href="#sec:motor_dutyCycle">8.6. Höhere PWM-Taktfrequenz für einen ruhigeren Motorlauf bei geringen Duty-Cycles</a></li>
 <li><a href="#sec:motor:makeblocklib">8.7. Ansteuerung über Encoder-Klasse der Bibliothek</a>
 <ul class="sectlevel3">
 <li><a href="#sec:motor:encodertest">8.7.1. Beispielprogramm - Ansteuerung mittels Bibliotheksfunktion</a></li>
@@ -1876,7 +1876,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Die Ketten sind am Anfang ewas steif und durch die Lagerung und Verpackung etwas oval verformt. Wenn man den <em>Land Raider</em> wie in der Konstruktionszeichnung zusammen baut, dann sitzen die Ketten <em>sehr</em> straff und jedes Mal, wenn der Motor braucht immer viel Kraft, um aus der gekrümmten Kettenform rauszudrehen. Bei der vorgegebenen Firmware führt das dann beim Steuern des <em>Land Raider</em> häufig dazu, dass er mit einem Beepen stehen bleibt (warum die Firmware das macht, erklär ich unten).</p>
+<p>Die Ketten sind am Anfang ewas steif und durch die Lagerung und Verpackung etwas oval verformt. Wenn man den <em>Land Raider</em> wie in der Konstruktionszeichnung zusammen baut, dann sitzen die Ketten <em>sehr</em> straff und der Motor braucht jedes Mal viel Kraft, um aus der gekrümmten Kettenform rauszudrehen (was er bei etwas entleerten Batterien häufig nicht schafft). Bei der vorgegebenen Firmware führt das dann beim Steuern des <em>Land Raider</em> häufig dazu, dass er mit einem Beepen stehen bleibt (warum die Firmware das macht und wie diese erkennt, dass der <em>Land Raider</em> stecken bleibt, erklär ich unten).</p>
 </div>
 <div class="paragraph">
 <p>Es gibt zwei Dinge, die man tun kann, um dieses Problem mit dem <em>Land Raider</em> zu beheben:</p>
@@ -1904,7 +1904,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <div class="sect2">
 <h3 id="_allgemeines_3">8.1. Allgemeines</h3>
 <div class="paragraph">
-<p>Am Auriga-Board gibt es zwei Motorports. Jeder der Motoren kann über einen PWM Pin (für die Geschwindigkeit) und zwei Richtungspins angesteuert werden. Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Verwendung der Makeblock Bibliothek.</p>
+<p>Am Auriga-Board gibt es zwei Motorports. Jeder der DC-Motoren kann über einen PWM Pin (analoge Spannung für die Geschwindigkeit) und zwei digitalen Pins für die Drehichtung angesteuert werden. Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Verwendung der Makeblock Bibliothek (in der die Details gekapselt sind).</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1937,7 +1937,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Die Motoren des <em>Ranger</em> Baukastens sind intern mit einem Getriebe versehen. Die eigentlichen Elektromotoren drehen bei Maximalleistung  (d.h. vollen Batterien und ohne Kette) mit ungefähr 14000 Umdrehungen pro Minute (oder engl. <em>revolutions per minute - rpm</em>). Durch das Getriebe mit der Übersetzung 39,6 laut Datenblatt drehen sich die angesteckten Räder eher so mit 350 rpm. Bei einem Radius von ca. 22 mm (einschließlich Kette) und damit einem Abrollumfang von Pi*2*22mm sind das dann ca. 138 mm pro Umdrehung und stolze 350*138 mm = <strong>48 m pro Minute</strong> (oder <strong>0,8 m/s</strong> oder ca. <strong>2,9 km/h</strong>). Das wäre dann also die theoretische Maximalgeschwindigkeit.</p>
+<p>Die DC-Motoren des <em>Ranger</em> Baukastens sind intern mit einem Getriebe versehen. Die eigentlichen Elektromotoren drehen bei Maximalleistung  (d.h. vollen Batterien und ohne Kette) mit ungefähr 14000 Umdrehungen pro Minute (oder engl. <em>revolutions per minute - rpm</em>). Durch das Getriebe mit der Übersetzung 39,6 laut Datenblatt drehen sich die angesteckten Räder eher so mit 350 rpm. Bei einem Radius von ca. 22 mm (einschließlich Kette) und damit einem Abrollumfang von Pi*2*22mm sind das dann ca. 138 mm pro Umdrehung und stolze 350*138 mm = <strong>48 m pro Minute</strong> (oder <strong>0,8 m/s</strong> oder ca. <strong>2,9 km/h</strong>). Das wäre dann also die theoretische Maximalgeschwindigkeit.</p>
 </div>
 </td>
 </tr>
@@ -1973,6 +1973,26 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <p>DIRB1 und DIRB2 regeln die Richtung des Motors B (rechts) und müssen jeweils entgegengesetzt geschaltet sein</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>DC-Motoren drehen sich in Abhängigkeit der anliegenden Gleichspannung schneller oder langsamer - je höher die Spannung, umso schneller. Der Arduino liefert die für die DC-Motoren benötigte Spannung aber nicht direkt, denn die Motoren brauchen eine Spannung zwischen 7..8.2 V. Die Motoren werden vom Batteriepack mit Spannung versorgt.</p>
+</div>
+<div class="paragraph">
+<p>Der Arduino generiert aber eine quasi-Analoge Spannung durch Verwendung von PWMs. Hierbei wird in einem bestimmten Takt (der z.B. 1ms dauert) die Spannung kurz angeschaltet und danach wieder kurz ausgeschaltet. Je nachdem wie lange die Spannung  im Verhältnis zur Gesamtzeit angeschaltet ist, umso höher ist die generierte Quasi-Gleichspannung. Das Verhältnis von "An-Zeit" zur gesamten Taktzeit nennt man <em>Duty-Cycle</em>. Bei 100% wird also die Nominalspannung des Arduino (5V) ausgegeben.</p>
+</div>
+<div class="paragraph">
+<p>Diese am Pin anliegende Spannung wird im DC-Motor genutzt, um den Strom vom Batteriepack zum eigentlichen DC-Motor zu leiten (Internetsuche zum Thema "DC-Motoren und MOSFET"). Je höher die Taktfrequenz des PWM-Signals, umso gleichmäßiger baut sich das Magnetfeld auf/ab und der Motor läuft ruhiger. Dies ist insbesondere bei geringeren Duty-Cycles wichtig (siehe auch <a href="#sec:motor_dutyCycle">Abschnitt 8.6</a>).</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_beispielprogramm_beschleunigen_und_abbremsen">8.2.1. Beispielprogramm - Beschleunigen und Abbremsen</h4>
@@ -2035,8 +2055,10 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <span class="kt">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
 
   <span class="c1">// Steuerungsprogramm:</span>
-  <span class="c1">// - Vorwärtsfahren und Geschwindigkeit in jeder Schleife erhöhen bis Maximalgeschwindikeit erreicht ist</span>
-  <span class="c1">// - dann langsamer werden und schließlich Rückwärtsfahren bis maximale Rückwärtsgeschwindigkeit erreicht ist</span>
+  <span class="c1">// - Vorwärtsfahren und Geschwindigkeit in jeder Schleife</span>
+  <span class="c1">//   erhöhen bis Maximalgeschwindikeit erreicht ist</span>
+  <span class="c1">// - dann langsamer werden und schließlich Rückwärtsfahren</span>
+  <span class="c1">//   bis maximale Rückwärtsgeschwindigkeit erreicht ist</span>
   <span class="c1">// - dann wieder umschalten auf vorwärts fahren</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">upward</span><span class="p">)</span>
     <span class="n">speed</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
@@ -2236,15 +2258,6 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
   <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">ENCODER1_PIN1</span><span class="p">),</span> <span class="n">isr_encoder1</span><span class="p">,</span> <span class="n">RISING</span><span class="p">);</span>
   <span class="n">attachInterrupt</span><span class="p">(</span><span class="n">digitalPinToInterrupt</span><span class="p">(</span><span class="n">ENCODER2_PIN1</span><span class="p">),</span> <span class="n">isr_encoder2</span><span class="p">,</span> <span class="n">RISING</span><span class="p">);</span>
 
-  <span class="c1">// Interne Timer für PWM auf 8KHz programmieren (Mode 5 - Fast PWM, 8-Bit, Prescaler 8)</span>
-  <span class="c1">// Timer 1</span>
-  <span class="n">TCCR1A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM10</span><span class="p">);</span>
-  <span class="n">TCCR1B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS11</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM12</span><span class="p">);</span>
-
-  <span class="c1">// Timer 2</span>
-  <span class="n">TCCR2A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM21</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM20</span><span class="p">);</span>
-  <span class="n">TCCR2B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS21</span><span class="p">);</span>
-
   <span class="c1">// Variable für gelegentliche Ausgaben auf die serielle Schnittstelle</span>
   <span class="n">lastOutputMillis</span> <span class="o">=</span> <span class="n">startMillis</span> <span class="o">=</span> <span class="n">pulseCountStartMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
 
@@ -2350,7 +2363,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <p>Siehe auch Erklärung zu den Interrupt-Nummern in <a href="https://docs.arduino.cc/language-reference/funktionen/external-interrupts/attachInterrupt/" class="bare">https://docs.arduino.cc/language-reference/funktionen/external-interrupts/attachInterrupt/</a></p>
 </div>
 <div class="paragraph">
-<p>Wie bei Encodern üblich, wird die Flanke des einen Pins überwacht und dann durch den (etwas versetzten) Pegel des 2. Pins die Drehrichtung bestimmt. Dies geschicht in der Interrupt-Funktion:</p>
+<p>Wie bei Encodern üblich, wird die Flanke des einen Pins überwacht und dann durch den (etwas versetzten) Pegel des zweiten Pins die Drehrichtung bestimmt. Dies geschicht in der Interrupt-Funktion:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2364,7 +2377,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </div>
 </div>
 <div class="paragraph">
-<p>In den Interrupt-Funktionen wird jetzt bei jedem Aufruf ein Puls hoch oder runter gezählt. Da der Motor 2 sich anders herum dreht, wird entsprechend invertiert gezählt (sodass positive Pulszahlen einer Vorwärtsfahrt entsprechen).</p>
+<p>In den Interrupt-Funktionen wird jetzt bei jedem Aufruf ein Puls hoch oder runter gezählt. Da sich der Motor 2 anders herum dreht, wird entsprechend invertiert gezählt (sodass positive Pulszahlen einer Vorwärtsfahrt entsprechen).</p>
 </div>
 <div class="paragraph">
 <p>Die Funktion <code>rpmFromPulses()</code> rechnet nun die bislang gezählten Pulse in eine Drehzahl um. Die seit Beginn der Zählung verstrichene Zeit wird berechnet und dann wird auf Pulse pro Minute hochgerechnet. Die Encoder geben bei einer Umdrehung 353.403 Pulse ab.</p>
@@ -2377,7 +2390,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Die Encodermotoren drehen sich eigentlich bei Maximalgeschwindigkeit mit ca. 14000 Umdrehungen pro Minute (rpm). Das eingebaute Getriebe hat laut Spezifikation ein Verhältnis von 39.6, sodass sich das angesteckte Rad selbst eher mit 350 rpm dreht. In der Makeblock-Bibliothek ist ein Getriebeverhältnis von 39.267 angegeben, also hab ich diesen Wert verwendet.</p>
+<p>Die Encodermotoren drehen sich eigentlich bei Maximalgeschwindigkeit mit ca. 14000 Umdrehungen pro Minute (rpm). Das eingebaute Getriebe hat laut Spezifikation ein Verhältnis von 39.6, sodass sich das angesteckte Rad selbst eher mit 350 rpm dreht. In der Makeblock-Bibliothek ist jedoch ein Getriebeverhältnis von 39.267 angegeben, also hab ich diesen Wert verwendet.</p>
 </div>
 <div class="paragraph">
 <p>Bei jeder Umdrehung des Motors werden 9 Pulse abgegeben. Damit ergeben sich bei einer Umdrehung des Rades die 9*39.267=353.403 Pulse.</p>
@@ -2400,40 +2413,9 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_erhöhung_der_messgenauigkeit_durch_erhöhung_der_timer_frequenz">8.4. Erhöhung der Messgenauigkeit durch Erhöhung der Timer-Frequenz</h3>
+<h3 id="_steuerung_der_geschwindigkeit_mittels_serial_plotterserial_monitor">8.4. Steuerung der Geschwindigkeit mittels Serial Plotter/Serial Monitor</h3>
 <div class="paragraph">
-<p>Der MEGA 2560 Prozessor hat intern Timer, die letztlich die Abtastrate für die Überwachung der Interrupt-Pins definieren. Normalerweise haben diese eine recht niedrige Frequenz.</p>
-</div>
-<div class="paragraph">
-<p>Theoretisch müssten bei 14000 rpm und 9 Pulsen-pro-Umdrehung 14000*9/60 = 2100 Pulse/Sekunde erfasst werden. Damit man die Pulse erkennt, müsste jeweils LOW und HIGH gemessen werden, also 4200 Messwerte pro Sekunde. Dafür bräuchte man also eine Mindest-Abtastrate von 4.2 kHz.</p>
-</div>
-<div class="paragraph">
-<p>Die Timer-Frequenzen kann man umprogrammieren (siehe auch Erklärung in <a href="https://wolles-elektronikkiste.de/interrupts-teil-3-timer-interrupts#calculations">Interrupts – Teil 3: Timer Interrupts</a> und beispielsweise die konkret verwendete Bitmaske für Timer 1 auf
-<a href="https://dbuezas.github.io/arduino-web-timers/#mcu=ATMEGA328P&amp;timer=1&amp;timerMode=FPWM&amp;clockPrescalerOrSource=8">Arduino Web Timers</a>).</p>
-</div>
-<div class="paragraph">
-<p>Der relevante Code-Block ist:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="c"><span class="c1">// Interne Timer für PWM auf 8KHz programmieren (Mode 5 - Fast PWM, 8-Bit, Prescaler 8)</span>
-<span class="c1">// Timer 1</span>
-<span class="n">TCCR1A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM10</span><span class="p">);</span>
-<span class="n">TCCR1B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS11</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM12</span><span class="p">);</span>
-
-<span class="c1">// Timer 2</span>
-<span class="n">TCCR2A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM21</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM20</span><span class="p">);</span>
-<span class="n">TCCR2B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS21</span><span class="p">);</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><code>_BV(X)</code> steht für einen Bitshift <code>1 &lt;&lt; X</code>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_steuerung_der_geschwindigkeit_mittels_serial_plotterserial_monitor">8.5. Steuerung der Geschwindigkeit mittels Serial Plotter/Serial Monitor</h3>
-<div class="paragraph">
-<p>Damit man die Rotationsgeschwindigkeit in Abhängigkeit des gesetzten PWM-Signals testen kann, wird im Programm von der seriellen Schnittstelle gelesen. Diese serielle Schnittstelle dient eigentlich dazu, Daten vom Roboter an die Arduino-IDE zu geben, z.B. den SerialPlotter zur Anzeige (wie das schon in <a href="#chap:sensors">Abschnitt 6</a> mit den Sensoren gemacht wurde).</p>
+<p>Damit man die Rotationsgeschwindigkeit in Abhängigkeit des gesetzten PWM-Duty-Cycles testen kann, wird im Programm von der seriellen Schnittstelle gelesen. Diese serielle Schnittstelle dient eigentlich dazu, Daten vom Roboter an die Arduino-IDE zu geben, z.B. den SerialPlotter zur Anzeige (wie das schon in <a href="#chap:sensors">Abschnitt 6</a> mit den Sensoren gemacht wurde).</p>
 </div>
 <div class="paragraph">
 <p>Mann kann aber genauso gut auch Text zurück an den Roboter senden. Dazu tippt man einach im SerialMonitor oder SerialPlotter den Text ein und bestätigt mit Enter. In diesem Programmbeispiel werden die Zeichen 0 bis 6 akzeptiert und je nach Zeichen wird eine andere PWM-Leistung eingestellt. In einem späteren Beispiel wird diese Kommunikation nochmal etwas erweitert.</p>
@@ -2459,31 +2441,50 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_testlauf_und_geschwindigkeitsmessung_mit_und_ohne_kette">8.6. Testlauf und Geschwindigkeitsmessung mit und ohne Kette</h3>
+<h3 id="_testlauf_und_geschwindigkeitsmessung_mit_und_ohne_kette">8.5. Testlauf und Geschwindigkeitsmessung mit und ohne Kette</h3>
 <div class="paragraph">
-<p>Wenn man jetzt das Programm mal testet, zuerst noch ohne den Codeblock in der <code>setup()</code> Funktion mit den umprogrammierten PWM-Timern, und die Geschwindigkeiten plottet erhält man ein interessantes Bild:</p>
+<p>Wenn man jetzt das Programm mal und die Geschwindigkeiten plottet erhält man ein interessantes Bild:</p>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="../images/auriga_encoder_speed_original_PWM_timer_one_belt.png" alt="auriga encoder speed original PWM timer one belt">
 </div>
-<div class="title">Abbildung 19. Ausgabe der Motorgeschwindigkeiten mit originalen PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend</div>
+<div class="title">Abbildung 19. Ausgabe der Motorgeschwindigkeiten mit einem Motor mit Kette und dem anderen Motor freidrehend</div>
 </div>
 <div class="paragraph">
-<p>Da die Kette schwingt und auch nicht gleichmäßig steif ist, führt dies zu ungleichmäßigen Drehbewegungen des Motors. Um diesen Einfluss zu sehen, habe ich an einen Motor die Kette angebaut und am anderen Motor nicht. Klar erkennbar im Diagramm ist auch die Bremswirkung dder Kette insgesamt - der Motor mit Kette dreht langsamer.</p>
+<p>Da die Kette schwingt und auch nicht gleichmäßig steif ist, führt dies zu ungleichmäßigen Drehbewegungen des Motors. Um diesen Einfluss zu sehen, habe ich an einen Motor die Kette angebaut und am anderen Motor nicht. Klar erkennbar im Diagramm ist auch die Bremswirkung der Kette insgesamt - der Motor mit Kette dreht langsamer.</p>
 </div>
 <div class="paragraph">
-<p>Außerdem scheint die Drehzahl nicht proportional zur PWM-Geschwindigkeit zu steigen. Dies liegt daran, dass das generierte PWM-Signal zu langsam ist. Um dies zu beheben, kann der PWM-Timer des Arduino umprogrammiert werden, sodass er mit 8kHz läuft. Dies passiert in dem oben schon beschriebenen Codeblock:</p>
+<p>Außerdem scheint die Drehzahl nicht proportional zum PWM-Duty-Cycle zu steigen (vor allem bei PWM 100). Dies liegt daran, dass der generierte PWM-Takt zu langsam ist. Um dies zu beheben, kann der PWM-Timer des Arduino umprogrammiert werden, sodass er mit 8kHz läuft.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sec:motor_dutyCycle">8.6. Höhere PWM-Taktfrequenz für einen ruhigeren Motorlauf bei geringen Duty-Cycles</h3>
+<div class="paragraph">
+<p>Der MEGA 2560 Prozessor hat intern Timer, die auch für die Generierung von PWM-Duty-Cycles verwendet werden.
+Für die Pins 11 und 12 ist der Timer 1 zuständig (16 bit). Und für Pins 9 und 10 der Timer 2. Für diese Pins ist die Standardfrequenz 490 Hz.</p>
+</div>
+<div class="paragraph">
+<p>Diese Timer-Frequenzen kann man umprogrammieren (siehe auch Erklärung in <a href="https://wolles-elektronikkiste.de/interrupts-teil-3-timer-interrupts#calculations">Interrupts – Teil 3: Timer Interrupts</a> und beispielsweise die konkret verwendete Bitmaske für Timer 1 auf
+<a href="https://dbuezas.github.io/arduino-web-timers/#mcu=ATMEGA328P&amp;timer=1&amp;timerMode=FPWM&amp;clockPrescalerOrSource=8">Arduino Web Timers</a>).</p>
+</div>
+<div class="paragraph">
+<p>Der relevante Code-Block ist:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="c">  <span class="c1">// Interne Timer der PWM auf 8KHz programmieren</span>
-  <span class="n">TCCR1A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM10</span><span class="p">);</span>
-  <span class="n">TCCR1B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS11</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM12</span><span class="p">);</span>
+<pre class="rouge highlight"><code data-lang="c"><span class="c1">// Interne Timer für PWM auf 8KHz programmieren (Mode 5 - Fast PWM, 8-Bit, Prescaler 8)</span>
+<span class="c1">// Timer 1</span>
+<span class="n">TCCR1A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM10</span><span class="p">);</span>
+<span class="n">TCCR1B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS11</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM12</span><span class="p">);</span>
 
-  <span class="n">TCCR2A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM21</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM20</span><span class="p">);</span>
-  <span class="n">TCCR2B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS21</span><span class="p">);</span></code></pre>
+<span class="c1">// Timer 2</span>
+<span class="n">TCCR2A</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM21</span><span class="p">)</span> <span class="o">|</span> <span class="n">_BV</span><span class="p">(</span><span class="n">WGM20</span><span class="p">);</span>
+<span class="n">TCCR2B</span> <span class="o">=</span> <span class="n">_BV</span><span class="p">(</span><span class="n">CS21</span><span class="p">);</span></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p><code>_BV(X)</code> steht für einen Bitshift <code>1 &lt;&lt; X</code>.</p>
 </div>
 <div class="paragraph">
 <p>Erneut getestet sieht die Geschwindigkeitsausgabe deutlich besser aus, d.h. auch die durch die Encoder erfasste Drehzahl ist auch bei kleineren Drehzahlen hinreichend proportional zur Sollgeschwindigkeit (in PWM), was man gut am freilaufenden Motor sehen kann.</p>
@@ -2498,8 +2499,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <p>Beim freilaufenden Motor wird die festgelegte Soll-Geschwindigkeit offenbar gut erreicht. Beim Motor mit Kette bleibt die Sollgeschwindigkeit etwas hinter der festgelegten Geschwindigkeit, was ja an der Bremswirkung liegt.</p>
 </div>
 <div class="paragraph">
-<p>Im Beispiel oben wurde die Geschwindigkeit in PWM angegeben und die Drehzahl vom Encoder in Umdrehungen pro Minute (RPM) abgelesen.
-Die Verhältnisse sind</p>
+<p>Im Beispiel oben wurde die Geschwindigkeit in PWM angegeben und die Drehzahl vom Encoder in Umdrehungen pro Minute (RPM) abgelesen. Die Verhältnisse sind</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -2520,7 +2520,7 @@ Die Verhältnisse sind</p>
 <p>und so hoffen, dass sich der Ranger genau mit der angegebenen Geschwindigkeit fortbewegt.</p>
 </div>
 <div class="paragraph">
-<p>Die Drehzahl eines unbelasteten Rades alleine sagt ja noch nichts über die Fahrgeschwindigkeit des Roboters aus. Denn diese hängt natürlich auch noch vom Batterieladezustand ab und vom Anstieg und von der Reibung der Kette und und und&#8230;&#8203; Deshalb ist es sinnvoller, die Leistung anhand der geforderten Geschwindigkeit einzuregeln. Doch dazu später mehr&#8230;&#8203;</p>
+<p><strong>ABER:</strong> Die Drehzahl eines unbelasteten Rades alleine sagt ja noch nichts über die Fahrgeschwindigkeit des Roboters aus. Denn diese hängt natürlich auch noch vom Batterieladezustand ab und vom Anstieg und von der Reibung der Kette und und und&#8230;&#8203; Deshalb ist es sinnvoller, die Leistung anhand der geforderten Geschwindigkeit einzuregeln. Doch dazu später mehr.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -2660,6 +2660,20 @@ Die Verhältnisse sind</p>
 </div>
 <div class="paragraph">
 <p>Das Hoch-/Runterzählen der Pulse in den Interruptfunktionen ist wie beim bisherigen Beispiel. Die Encoder zählen jetzt also bei jedem Aufruf einen Puls höher oder runter. In der in jedem Durchlauf aufgerufenen Funktion <code>MeEncoderOnBoard::loop()</code> wird die Funktion <code>MeEncoderOnBoard::updateSpeed()</code> aufgerufen, welche letztlich die Anzahl der Pulse seit dem letzten Aufruf von <code>updateSpeed()</code> in die Drehgeschwindigkeit umrechnet.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Die originale Firmware für den Makeblock Bausatz prüft bei Motorfahrt die Geschwindigkeit. Wird trotz Ansteuerung des Motors eine Geschwindigkeit von 0 zurückgeliefert, werden die Motoren ausgeschaltet und ein Beep ertönt. Dies schont wirkungsvoll die Batterien.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Die Geschwindigkeit in den Motoren wird mit der Funktion <code>setTarPWM()</code> gesetzt. Hier muss man selbst aufpassen, welcher Motor <em>vorwärts</em> und welcher <em>rückwärts</em> eingebaut ist und entsprechend das Vorzeichen ändern. Indem man die Funktion <code>setTarPWM()</code> aufruft, wird die Klasse in den direkten Steuerungsmodus PWM gesetzt und stellt die Geschwindigkeit wie bei unserem vorherigen Beispiel via PWM-Duty-Cycle ein. Damit ergibt sich auch eine ähnliche Ausgabe wie bei unserem bisherigen Programm.</p>
@@ -2876,8 +2890,8 @@ Die Verhältnisse sind</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0 (02.03.2025)<br>
-Last updated 2025-03-02 23:47:32 +0100
+Version 1.0 (06.03.2025)<br>
+Last updated 2025-03-06 09:40:29 +0100
 </div>
 </div>
 </body>
