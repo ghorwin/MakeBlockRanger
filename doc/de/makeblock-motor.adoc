@@ -469,11 +469,20 @@ Außerdem scheint die Drehzahl nicht proportional zum PWM-Duty-Cycle zu steigen 
 [[sec:motor_dutyCycle]]
 ## Höhere PWM-Taktfrequenz für einen ruhigeren Motorlauf bei geringen Duty-Cycles
 
-Der MEGA 2560 Prozessor hat intern Timer, die auch für die Generierung von PWM-Duty-Cycles verwendet werden. 
-Für die Pins 11 und 12 ist der Timer 1 zuständig (16 bit). Und für Pins 9 und 10 der Timer 2. Für diese Pins ist die Standardfrequenz 490 Hz.
+Die Drehzahl von DC-Motoren ändert sich in Abhängigkeit der angelegten Gleichstromspannung. Da der Arduino selbst keine analoge Spannung ausgeben kann, wird diese über Pulsweitenmodulation (PWM) erzeugt. Dafür wird an einem digitalen Ausgang der Spannungspegel für eine bestimmte Zeit hoch gezogen und dann wieder für eine bestimmte Zeit abgeschaltet. Die Summe aus der An- und Auszeit ist der PWM-Takt. 
+Je nachdem, wie lange die Spannung anliegt im Verhältnis zur Taktlänge, umso höher ist die wirksame (simulierte) Analogspannung am Ausgangspin. Wenn man hier noch einen Kondensator anbaut, der die Spannungsstufen dämpft, erhält man tatsächlich eine hinreichend gleichmäßige analoge Gleichspannung.
+
+[NOTE]
+====
+Das Verhältnis von An-Zeit zu Taktlänge nennt man _Duty Cycle_. Die Anzahl von PWM-Takten pro Sekunde ist der _PWM-Takt_.
+====
+
+Wenn man eine solche PWM-generierte Gleichspannung an einen Motor anschließt, so wird dadurch das Magnetfeld im Motor sehr häufig auf und abgebaut, und zwar proportional zum gewählten PWM-Takt.  Und gerade bei niedrigen Duty Cycles führt dies mitunter zu einem etwas unrunden Motorlauf. Wenn man jedoch den PWM-Takt erhöht, d.h. die PWM-Taktlänge reduziert, so führt dies zu einem viel häufigeren Auf- und Abbau des Magnetfelds im Motor und damit zu einem gleichmäßigerem Motorlauf. Interessanterweise kann man den PWM-Takt  umprogrammieren.
+
+Der MEGA 2560 Prozessor hat intern Timer, die auch für die Generierung von PWM-Duty-Cycles verwendet werden. Für die Pins 11 und 12 ist der Timer 1 zuständig (16 bit). Und für Pins 9 und 10 der Timer 2. Für diese Pins ist die Standardfrequenz 490 Hz.
 
 Diese Timer-Frequenzen kann man umprogrammieren (siehe auch Erklärung in https://wolles-elektronikkiste.de/interrupts-teil-3-timer-interrupts#calculations[Interrupts – Teil 3: Timer Interrupts] und beispielsweise die konkret verwendete Bitmaske für Timer 1 auf 
-https://dbuezas.github.io/arduino-web-timers/#mcu=ATMEGA328P&timer=1&timerMode=FPWM&clockPrescalerOrSource=8[Arduino Web Timers]).
+https://dbuezas.github.io/arduino-web-timers/#mcu=ATMEGA328P&timer=1&timerMode=FPWM&clockPrescalerOrSource=8[Arduino Web Timers]). 
 
 Der relevante Code-Block ist:
 
@@ -489,7 +498,9 @@ TCCR2B = _BV(CS21);
 ```
 
 `_BV(X)` steht für einen Bitshift `1 << X`.
- 
+
+Dadurch erhöht sich die PWM-Taktfrequenz und der Motor läuft gleichmäßiger und bei niedrigen Duty-Cycles auch schneller.
+
 Erneut getestet sieht die Geschwindigkeitsausgabe deutlich besser aus, d.h. auch die durch die Encoder erfasste Drehzahl ist auch bei kleineren Drehzahlen hinreichend proportional zur Sollgeschwindigkeit (in PWM), was man gut am freilaufenden Motor sehen kann.
 
 .Ausgabe der Motorgeschwindigkeiten (in Umdrehungen pro Minute) mit umprogrammierten PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend
@@ -518,7 +529,7 @@ Wenn man den Land Raider mit aufgeladenen Batterien und Maximalgeschwindigkeit f
 
 [NOTE]
 ====
-Als ich das Testprogramm gerade nochmal mit frisch aufgeladenen Akkus getestet habe, sind bei PWM 255 durchaus Drehzahlen bis 388 angezeigt wurden. Die Akkuspannung hat also einen erheblichen Einfluss darauf, was an Drehzahlen und Geschwindigkeiten so möglich ist.
+Als ich das Testprogramm gerade nochmal mit frisch aufgeladenen Akkus getestet habe, sind bei PWM 255 durchaus Drehzahlen bis 388 RPM angezeigt wurden. Die Akkuspannung hat also einen erheblichen Einfluss darauf, was an Drehzahlen und Geschwindigkeiten so möglich ist.
 ====
 
 

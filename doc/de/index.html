@@ -340,7 +340,7 @@ pre.rouge {
 <div class="details">
 <span id="author" class="author">Andreas Nicolai</span><br>
 <span id="email" class="email"><a href="mailto:andreas.nicolai@gmx.net">andreas.nicolai@gmx.net</a></span><br>
-<span id="revnumber">version 1.0 (06.03.2025)</span>
+<span id="revnumber">version 1.0 (22.03.2025)</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -2461,8 +2461,28 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <div class="sect2">
 <h3 id="sec:motor_dutyCycle">8.6. Höhere PWM-Taktfrequenz für einen ruhigeren Motorlauf bei geringen Duty-Cycles</h3>
 <div class="paragraph">
-<p>Der MEGA 2560 Prozessor hat intern Timer, die auch für die Generierung von PWM-Duty-Cycles verwendet werden.
-Für die Pins 11 und 12 ist der Timer 1 zuständig (16 bit). Und für Pins 9 und 10 der Timer 2. Für diese Pins ist die Standardfrequenz 490 Hz.</p>
+<p>Die Drehzahl von DC-Motoren ändert sich in Abhängigkeit der angelegten Gleichstromspannung. Da der Arduino selbst keine analoge Spannung ausgeben kann, wird diese über Pulsweitenmodulation (PWM) erzeugt. Dafür wird an einem digitalen Ausgang der Spannungspegel für eine bestimmte Zeit hoch gezogen und dann wieder für eine bestimmte Zeit abgeschaltet. Die Summe aus der An- und Auszeit ist der PWM-Takt.
+Je nachdem, wie lange die Spannung anliegt im Verhältnis zur Taktlänge, umso höher ist die wirksame (simulierte) Analogspannung am Ausgangspin. Wenn man hier noch einen Kondensator anbaut, der die Spannungsstufen dämpft, erhält man tatsächlich eine hinreichend gleichmäßige analoge Gleichspannung.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Das Verhältnis von An-Zeit zu Taktlänge nennt man <em>Duty Cycle</em>. Die Anzahl von PWM-Takten pro Sekunde ist der <em>PWM-Takt</em>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Wenn man eine solche PWM-generierte Gleichspannung an einen Motor anschließt, so wird dadurch das Magnetfeld im Motor sehr häufig auf und abgebaut, und zwar proportional zum gewählten PWM-Takt.  Und gerade bei niedrigen Duty Cycles führt dies mitunter zu einem etwas unrunden Motorlauf. Wenn man jedoch den PWM-Takt erhöht, d.h. die PWM-Taktlänge reduziert, so führt dies zu einem viel häufigeren Auf- und Abbau des Magnetfelds im Motor und damit zu einem gleichmäßigerem Motorlauf. Interessanterweise kann man den PWM-Takt  umprogrammieren.</p>
+</div>
+<div class="paragraph">
+<p>Der MEGA 2560 Prozessor hat intern Timer, die auch für die Generierung von PWM-Duty-Cycles verwendet werden. Für die Pins 11 und 12 ist der Timer 1 zuständig (16 bit). Und für Pins 9 und 10 der Timer 2. Für diese Pins ist die Standardfrequenz 490 Hz.</p>
 </div>
 <div class="paragraph">
 <p>Diese Timer-Frequenzen kann man umprogrammieren (siehe auch Erklärung in <a href="https://wolles-elektronikkiste.de/interrupts-teil-3-timer-interrupts#calculations">Interrupts – Teil 3: Timer Interrupts</a> und beispielsweise die konkret verwendete Bitmaske für Timer 1 auf
@@ -2485,6 +2505,9 @@ Für die Pins 11 und 12 ist der Timer 1 zuständig (16 bit). Und für Pins 9 und
 </div>
 <div class="paragraph">
 <p><code>_BV(X)</code> steht für einen Bitshift <code>1 &lt;&lt; X</code>.</p>
+</div>
+<div class="paragraph">
+<p>Dadurch erhöht sich die PWM-Taktfrequenz und der Motor läuft gleichmäßiger und bei niedrigen Duty-Cycles auch schneller.</p>
 </div>
 <div class="paragraph">
 <p>Erneut getestet sieht die Geschwindigkeitsausgabe deutlich besser aus, d.h. auch die durch die Encoder erfasste Drehzahl ist auch bei kleineren Drehzahlen hinreichend proportional zur Sollgeschwindigkeit (in PWM), was man gut am freilaufenden Motor sehen kann.</p>
@@ -2544,7 +2567,7 @@ Für die Pins 11 und 12 ist der Timer 1 zuständig (16 bit). Und für Pins 9 und
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Als ich das Testprogramm gerade nochmal mit frisch aufgeladenen Akkus getestet habe, sind bei PWM 255 durchaus Drehzahlen bis 388 angezeigt wurden. Die Akkuspannung hat also einen erheblichen Einfluss darauf, was an Drehzahlen und Geschwindigkeiten so möglich ist.</p>
+<p>Als ich das Testprogramm gerade nochmal mit frisch aufgeladenen Akkus getestet habe, sind bei PWM 255 durchaus Drehzahlen bis 388 RPM angezeigt wurden. Die Akkuspannung hat also einen erheblichen Einfluss darauf, was an Drehzahlen und Geschwindigkeiten so möglich ist.</p>
 </div>
 </td>
 </tr>
@@ -2890,8 +2913,8 @@ Für die Pins 11 und 12 ist der Timer 1 zuständig (16 bit). Und für Pins 9 und
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0 (06.03.2025)<br>
-Last updated 2025-03-06 09:40:29 +0100
+Version 1.0 (22.03.2025)<br>
+Last updated 2025-03-22 12:03:41 +0100
 </div>
 </div>
 </body>
