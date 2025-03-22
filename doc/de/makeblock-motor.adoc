@@ -459,7 +459,7 @@ Alternativ kann man das auch im SerialPlotter machen.
 
 Wenn man jetzt das Programm mal und die Geschwindigkeiten plottet erhält man ein interessantes Bild:
 
-.Ausgabe der Motorgeschwindigkeiten mit einem Motor mit Kette und dem anderen Motor freidrehend
+.Ausgabe der Motorgeschwindigkeiten (in Umdrehungen pro Minute) mit einem Motor mit Kette und einem freidrehenden Motor
 image::auriga_encoder_speed_original_PWM_timer_one_belt.png[]
 
 Da die Kette schwingt und auch nicht gleichmäßig steif ist, führt dies zu ungleichmäßigen Drehbewegungen des Motors. Um diesen Einfluss zu sehen, habe ich an einen Motor die Kette angebaut und am anderen Motor nicht. Klar erkennbar im Diagramm ist auch die Bremswirkung der Kette insgesamt - der Motor mit Kette dreht langsamer.
@@ -503,7 +503,7 @@ Dadurch erhöht sich die PWM-Taktfrequenz und der Motor läuft gleichmäßiger u
 
 Erneut getestet sieht die Geschwindigkeitsausgabe deutlich besser aus, d.h. auch die durch die Encoder erfasste Drehzahl ist auch bei kleineren Drehzahlen hinreichend proportional zur Sollgeschwindigkeit (in PWM), was man gut am freilaufenden Motor sehen kann.
 
-.Ausgabe der Motorgeschwindigkeiten (in Umdrehungen pro Minute) mit umprogrammierten PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend
+.Ausgabe der Motorgeschwindigkeiten (in Umdrehungen pro Minute) mit umprogrammierten PWM-Timern und jeweils einem Motor mit Kette und einem freidrehenden Motor
 image::auriga_encoder_speed_8kHz_PWM_timer_one_belt.png[]
 
 Beim freilaufenden Motor wird die festgelegte Soll-Geschwindigkeit offenbar gut erreicht. Beim Motor mit Kette bleibt die Sollgeschwindigkeit etwas hinter der festgelegten Geschwindigkeit, was ja an der Bremswirkung liegt.
