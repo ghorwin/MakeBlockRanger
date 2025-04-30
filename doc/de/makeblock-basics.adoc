@@ -3,7 +3,7 @@
 [[chap:basics]]
 # Auriga-Pin/Ports Referenz
 
-Auf dem _Auriga_-Board ist ein ATmega2560 Prozessor verbaut wie auf dem Arduino Mega 2560 Board (link:../Atmel-2549-8-bit-AVR-Microcontroller-ATmega640-1280-1281-2560-2561_datasheet.pdf[Datenblatt] ). Dieser hat insgesamt 54 digitale Ein- und Ausgangspins, wovon 15 mittels PWM angesteuert werden können. Außerdem hat er noch 16 analoge Inputs und 4 UARTs. Das sollte doch für einen kleinen Roboter reichen. Für die Programmierung dieses Mikroprozessors muss man natürlich wissen, welche Pins davon wofür genutzt werden.
+Auf dem _Auriga_-Board ist ein ATmega2560 Prozessor verbaut wie auf dem Arduino Mega 2560 Board (link:../downloads/Atmel-2549-8-bit-AVR-Microcontroller-ATmega640-1280-1281-2560-2561_datasheet.pdf[Datenblatt] ). Dieser hat insgesamt 54 digitale Ein- und Ausgangspins, wovon 15 mittels PWM angesteuert werden können. Außerdem hat er noch 16 analoge Inputs und 4 UARTs. Das sollte doch für einen kleinen Roboter reichen. Für die Programmierung dieses Mikroprozessors muss man natürlich wissen, welche Pins davon wofür genutzt werden.
 
 [NOTE]
 ====

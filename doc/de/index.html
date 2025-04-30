@@ -340,7 +340,7 @@ pre.rouge {
 <div class="details">
 <span id="author" class="author">Andreas Nicolai</span><br>
 <span id="email" class="email"><a href="mailto:andreas.nicolai@gmx.net">andreas.nicolai@gmx.net</a></span><br>
-<span id="revnumber">version 1.0 (22.03.2025)</span>
+<span id="revnumber">version 1.0 (30.04.2025)</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -476,7 +476,23 @@ pre.rouge {
 <li><a href="#_zusammenfassung">8.10. Zusammenfassung</a></li>
 </ul>
 </li>
-<li><a href="#_über_den_autor">9. Über den Autor</a></li>
+<li><a href="#chap:rj25">9. RJ25 Ports und externe Zubehörkomponenten (Abstandssensor und Linienfolgesensor)</a>
+<ul class="sectlevel2">
+<li><a href="#_allgemeines_zu_rj25">9.1. Allgemeines zu RJ25</a>
+<ul class="sectlevel3">
+<li><a href="#_ports_1_4_motorports">9.1.1. Ports 1-4 : Motorports</a></li>
+<li><a href="#_port_5">9.1.2. Port 5</a></li>
+<li><a href="#_ports_6_10_allgemeine_anschlüsse_für_externe_hardware">9.1.3. Ports 6-10 : Allgemeine Anschlüsse für externe Hardware</a></li>
+<li><a href="#_zubehör">9.1.4. Zubehör</a></li>
+<li><a href="#_ultraschall_entfernungsmessung">9.1.5. Ultraschall-Entfernungsmessung</a></li>
+<li><a href="#_beispielprogramm_led_ring_zeigt_gemessene_entfernung_an">9.1.6. Beispielprogramm - LED Ring zeigt gemessene Entfernung an</a></li>
+<li><a href="#_linienverfolgungssensor">9.1.7. Linienverfolgungssensor</a></li>
+<li><a href="#_beispielprogramm_linienfolgesensor_zeigt_einen_der_4_zustände_an">9.1.8. Beispielprogramm - Linienfolgesensor zeigt einen der 4 Zustände an</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_über_den_autor">10. Über den Autor</a></li>
 </ul>
 </div>
 </div>
@@ -557,6 +573,12 @@ pre.rouge {
 <li>
 <p>WS1282 RGB LED ring</p>
 </li>
+<li>
+<p>USB-Anschluss mit antistatischem Schutz (Akkus werden darüber nicht geladen)</p>
+</li>
+<li>
+<p>RJ25-Ports/Anschlüsse für externe Hardware</p>
+</li>
 </ul>
 </div>
 <div class="imageblock">
@@ -571,24 +593,8 @@ pre.rouge {
 </div>
 <div class="title">Abbildung 5. Farbkodierung der Anschlüsse (Details dazu im Kapitel zu den RJ25 Ports)</div>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>PORT1 - PORT4 unterstützen einen kontinuierlichen 3,5A-Ausgang (max. 5A)</p>
-</li>
-<li>
-<p>PORT1 - PORT4 haben einen Kurzschluss- und Überstromschutz für 3,5A</p>
-</li>
-<li>
-<p>PORT5 - PORT10 unterstützen kontinuierlich 5V DC und 4A Ausgang (max. 3A)</p>
-</li>
-<li>
-<p>PORT5 - PORT10 haben einen Kurzschluss- und Überstromschutz für 3A</p>
-</li>
-<li>
-<p>USB-Anschluss mit antistatischem Schutz (Akkus werden darüber nicht geladen)</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>Details zu den RJ25 Ports gibt es im <a href="#chap:rj25">Abschnitt 9</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -730,25 +736,22 @@ sudo udevadm control --reload-rules</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_windows">2.2. Windows</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>TODO: ch341 Treiber&#8230;&#8203;</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>Unter Windows muss man erst den Treiber für den CH341 Chipsatz installieren. Den kann man im Internet herunterladen (z.B. bei <a href="https://github.com/storef/ch341.driver" class="bare">https://github.com/storef/ch341.driver</a>), oder
+gleich hier auf meiner Seite:  <a href="../downloads/CH341SER.ZIP">Windows CH341 Serieller Treiber</a></p>
+</div>
+<div class="paragraph">
+<p>Das Archiv entpacken, dann auf die Datei <code>CH341SER.INF</code> rechts klicken und "Installieren" auswählen.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_macos">2.3. MacOS</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>TODO: Intel CPUs ch341 Treiber</p>
-</li>
-<li>
-<p>TODO: M CPUs</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>Unter MacOS muss man ebenfalls erst die Treiber für den CH341 Chipsatz installieren. Informationen und den Treiber selbst
+gibt es auf folgender Seite: <a href="https://github.com/storef/ch341.driver" class="bare">https://github.com/storef/ch341.driver</a> oder auch wieder direkt bei mir:   <a href="../downloads/CH341SER_MAC.ZIP">MacOS CH341 Serieller Treiber</a></p>
+</div>
+<div class="paragraph">
+<p>Ein paar Tipps zur Vorgehensweise bei der Treiberinstallation/Signatur gibt es hier: <a href="https://github.com/Makeblock-official/Makeblock-USB-Driver" class="bare">https://github.com/Makeblock-official/Makeblock-USB-Driver</a></p>
 </div>
 </div>
 </div>
@@ -957,7 +960,7 @@ Außerdem kann man so eigene Anpassungen in der Bibliothek (so man das braucht) 
 <h2 id="chap:basics">4. Auriga-Pin/Ports Referenz</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Auf dem <em>Auriga</em>-Board ist ein ATmega2560 Prozessor verbaut wie auf dem Arduino Mega 2560 Board (<a href="../Atmel-2549-8-bit-AVR-Microcontroller-ATmega640-1280-1281-2560-2561_datasheet.pdf">Datenblatt</a> ). Dieser hat insgesamt 54 digitale Ein- und Ausgangspins, wovon 15 mittels PWM angesteuert werden können. Außerdem hat er noch 16 analoge Inputs und 4 UARTs. Das sollte doch für einen kleinen Roboter reichen. Für die Programmierung dieses Mikroprozessors muss man natürlich wissen, welche Pins davon wofür genutzt werden.</p>
+<p>Auf dem <em>Auriga</em>-Board ist ein ATmega2560 Prozessor verbaut wie auf dem Arduino Mega 2560 Board (<a href="../downloads/Atmel-2549-8-bit-AVR-Microcontroller-ATmega640-1280-1281-2560-2561_datasheet.pdf">Datenblatt</a> ). Dieser hat insgesamt 54 digitale Ein- und Ausgangspins, wovon 15 mittels PWM angesteuert werden können. Außerdem hat er noch 16 analoge Inputs und 4 UARTs. Das sollte doch für einen kleinen Roboter reichen. Für die Programmierung dieses Mikroprozessors muss man natürlich wissen, welche Pins davon wofür genutzt werden.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1028,7 +1031,7 @@ Außerdem kann man so eigene Anpassungen in der Bibliothek (so man das braucht) 
 </div>
 </div>
 <div class="paragraph">
-<p>Jeder Makeblock-Port ist an 2 Pins angeschlossen. Diese Pins werden als <em>Slot1</em> und <em>Slot2</em> bezeichnet. <em>NC</em> steht für <em>Not Connected</em>. Ports 1 bis 10 sind RJ25 Ports (dazu mehr im Kapitel zu den RJ25 Anschlüssen <a href="#chap:rj25">[chap:rj25]</a>).</p>
+<p>Jeder Makeblock-Port ist an 2 Pins angeschlossen. Diese Pins werden als <em>Slot1</em> und <em>Slot2</em> bezeichnet. <em>NC</em> steht für <em>Not Connected</em>. Ports 1 bis 10 sind RJ25 Ports (dazu mehr im Kapitel zu den RJ25 Anschlüssen <a href="#chap:rj25">Abschnitt 9</a>).</p>
 </div>
 <div class="paragraph">
 <p>Als Beispiel: der Port 6 ist an den analogen Pin 10 und analogen Pin 15 des Mikrocontrollers angeschlossen.</p>
@@ -2449,7 +2452,7 @@ an den Ports 11 und 12 angeschlossen (siehe Variable <code>mePort</code> in der 
 <div class="content">
 <img src="../images/auriga_encoder_speed_original_PWM_timer_one_belt.png" alt="auriga encoder speed original PWM timer one belt">
 </div>
-<div class="title">Abbildung 19. Ausgabe der Motorgeschwindigkeiten mit einem Motor mit Kette und dem anderen Motor freidrehend</div>
+<div class="title">Abbildung 19. Ausgabe der Motorgeschwindigkeiten (in Umdrehungen pro Minute) mit einem Motor mit Kette und einem freidrehenden Motor</div>
 </div>
 <div class="paragraph">
 <p>Da die Kette schwingt und auch nicht gleichmäßig steif ist, führt dies zu ungleichmäßigen Drehbewegungen des Motors. Um diesen Einfluss zu sehen, habe ich an einen Motor die Kette angebaut und am anderen Motor nicht. Klar erkennbar im Diagramm ist auch die Bremswirkung der Kette insgesamt - der Motor mit Kette dreht langsamer.</p>
@@ -2516,7 +2519,7 @@ Je nachdem, wie lange die Spannung anliegt im Verhältnis zur Taktlänge, umso h
 <div class="content">
 <img src="../images/auriga_encoder_speed_8kHz_PWM_timer_one_belt.png" alt="auriga encoder speed 8kHz PWM timer one belt">
 </div>
-<div class="title">Abbildung 20. Ausgabe der Motorgeschwindigkeiten (in Umdrehungen pro Minute) mit umprogrammierten PWM-Timern und jeweils einen Motor mit Kette und den anderen Motor freidrehend</div>
+<div class="title">Abbildung 20. Ausgabe der Motorgeschwindigkeiten (in Umdrehungen pro Minute) mit umprogrammierten PWM-Timern und jeweils einem Motor mit Kette und einem freidrehenden Motor</div>
 </div>
 <div class="paragraph">
 <p>Beim freilaufenden Motor wird die festgelegte Soll-Geschwindigkeit offenbar gut erreicht. Beim Motor mit Kette bleibt die Sollgeschwindigkeit etwas hinter der festgelegten Geschwindigkeit, was ja an der Bremswirkung liegt.</p>
@@ -2900,7 +2903,333 @@ Je nachdem, wie lange die Spannung anliegt im Verhältnis zur Taktlänge, umso h
 </div>
 </div>
 <div class="sect1">
-<h2 id="_über_den_autor">9. Über den Autor</h2>
+<h2 id="chap:rj25">9. RJ25 Ports und externe Zubehörkomponenten (Abstandssensor und Linienfolgesensor)</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_allgemeines_zu_rj25">9.1. Allgemeines zu RJ25</h3>
+<div class="paragraph">
+<p>Die Steckerports am Auriga-Board sind RJ25 (6P6C) Stecker (siehe <a href="https://de.wikipedia.org/wiki/RJ-Steckverbindung">Wikipedia RJ-Steckverbindung</a>) wie sie auch für den Anschluss von Modems und Faxgeräten verwendet werden/wurden. Die Belegung der Pins ist im
+<a href="../downloads/MakeBlock/MeAuriga_Schaltplan.pdf">Schaltplan</a> zu sehen, wie hier im Auszug für den Port 9:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/RJ25_schaltplan_auszug.png" alt="RJ25 schaltplan auszug">
+</div>
+<div class="title">Abbildung 22. RJ25 Belegung an Port 9</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/RJ25_pin_Belegung.png" alt="RJ25 pin Belegung" width="250">
+</div>
+<div class="title">Abbildung 23. RJ25 Stecker</div>
+</div>
+<div class="paragraph">
+<p>Jeder dieser Stecker ist mit VCC (entweder +5V oder Motorspannung) und GND verbunden, sowie mit SDA und SCL (für die Kommunikation über das I2C Protokoll, mit Ausnahme Slot 5). Die mit S1 und S2 (Slot 1 und Slot 2) bezeichneten Leitungen sind je Port mit unterschiedlichen Pins am Arduino verbunden. Je nach Fähigkeiten dieser Pins sind die Ports unterschiedlich eingefärbt.</p>
+</div>
+<div class="paragraph">
+<p>Das Pinout-Diagramm zeigt nocheinmal die Belegung der Ports.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/auriga_pinout.png" alt="auriga pinout">
+</div>
+<div class="title">Abbildung 24. Pinout-Diagramm (hier auch als <a href="../downloads/MeAuriga_Pinout.pdf">Auriga Pinout PDF</a>)</div>
+</div>
+<div class="paragraph">
+<p>Die Ports sind unterschiedlich abgesichert und bieten unterschiedliche Spannungen. Außerdem sind unterschiedliche Pins angeklemmt, was verschiedene Möglichkeiten zum Anschluss externer Hardware bietet:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/auriga_schaubild.jpg" alt="auriga schaubild" width="500">
+</div>
+<div class="title">Abbildung 25. Aurigaplatine mit unterschiedlichen RJ25 Ports</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/farbcodierung_auriga.jpg" alt="farbcodierung auriga" width="150">
+</div>
+<div class="title">Abbildung 26. Farbkodierung der Anschlüsse (Details dazu im Kapitel zu den RJ25 Ports)</div>
+</div>
+<div class="sect3">
+<h4 id="_ports_1_4_motorports">9.1.1. Ports 1-4 : Motorports</h4>
+<div class="paragraph">
+<p>Die Ports 1 bis 4 werden auch Motorports genannt, da an ihnen eine erhöhte Spannung (des Batteriekastens) anliegt. Diese Ports unterstützen einen kontinuierlichen 3,5A-Ausgang (max. 5A) und haben einen Kurzschluss- und Überstromschutz für 3,5A.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Achtung"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Die Motorports 1 bis 4 sind nicht umsonst rot markiert - hier liegt eine erhöhte Spannung an, welche typische Arduino Zubehörbauelemente mit 5V Versorgung beschädigen könnte.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_port_5">9.1.2. Port 5</h4>
+<div class="paragraph">
+<p>Dieser Port hat eine Spannungsversorgung von +5V und nur 2 belegte Pins, welche an RX2/TX2 angeschlossen sind. Darüber ist eine serielle Kommunikation möglich.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ports_6_10_allgemeine_anschlüsse_für_externe_hardware">9.1.3. Ports 6-10 : Allgemeine Anschlüsse für externe Hardware</h4>
+<div class="paragraph">
+<p>Die anderen Ports 5 bis 10 sind an +5V angeschlossen (mit Kurzschluss- und Überstromschutz für 3A)-
+Wie man oben im Pinout-Diagramm sieht, sind die Ports 6-10 jeweils mit 2 digitalen Input-/Output-Pins verbunden. Außerdem sind diese Ports mit den SDA/SCL Pins verbunden, wodurch man externe Hardware via I2C-Protokoll ansteuern kann.</p>
+</div>
+<div class="paragraph">
+<p>An diese Ports kann man nun diverse Zubehörbauteile anstecken (die aber häufig nicht ganz billig sind).</p>
+</div>
+<div class="paragraph">
+<p>Man kann auch einfach RJ25 Stecker kaufen und über die einzelnen Kabel beliebige elektronische Bauteile anklemmen/anlöten:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/RJ25-adapter-Kabel.jpg" alt="RJ25 adapter Kabel">
+</div>
+<div class="title">Abbildung 27. RJ25 Adapter Kabel</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_zubehör">9.1.4. Zubehör</h4>
+<div class="paragraph">
+<p>MakeBlock bietet selbst zahlreiches Zubehör mit dem RJ25 Stecker an:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/auriga-rj25-addons.png" alt="auriga rj25 addons">
+</div>
+<div class="title">Abbildung 28. RJ25 Zubehör</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ultraschall_entfernungsmessung">9.1.5. Ultraschall-Entfernungsmessung</h4>
+<div class="paragraph">
+<p>Zur Entfernungsmessung liegt im mBot Ranger Bausatz ein Ultraschallsensor dabei. Diesen kann man einfach an einen I2C-Port anstecken (Ports 6-10).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/auriga_ultrasonicdistance.png" alt="auriga ultrasonicdistance">
+</div>
+<div class="title">Abbildung 29. Ultraschall Entfernungssensor</div>
+</div>
+<div class="paragraph">
+<p>Wie der Sensor intern funktioniert, ist auf der Seite <a href="https://funduino.de/nr-10-entfernung-messen">Fundino Ultraschallsensor</a>  beschrieben.</p>
+</div>
+<div class="paragraph">
+<p>In Kürze: Der Sensor emittiert eine Ultraschallwelle (wie die Fledermaus) und wenn diese auf ein Objekt trifft, wird die Welle zurückgeworfen. Die Schallgeschwindigkeit in Luft ist ungefähr 340 m/s (oder 34 cm/ms bzw. 0.034 cm/µs). Der Sensor misst die Zeit zwischen Senden und Empfangen der Schallwelle und kann daraus die Entfernung berechnen.</p>
+</div>
+<div class="paragraph">
+<p>Falls z.B. die Schallwelle durch ein Objekt zurückgeworfen wird, und seit dem Senden 1000 µs vergangen sind, dann hat die Schallwelle ZUM OBJEKT nur 500 µs benötigt. Das ergibt dann die Entfernung von 500 µs * 0.034 cm/µs = 17 cm.</p>
+</div>
+<div class="paragraph">
+<p>Der Sensor wird mittels der Klasse <code>MeUltrasonicSensor</code> angesteuert, welche folgende Funktionen bietet:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">"MeAuriga.h"</span><span class="cp">
+</span>
+<span class="c1">// Der Utrasonic-Sensor ist an Steckplatz 6 eingesteckt</span>
+<span class="n">MeUltrasonicSensor</span> <span class="nf">ultraSensor</span><span class="p">(</span><span class="n">PORT_6</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">lastSamlingMillis</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">lastSamlingMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">-</span> <span class="n">lastSamlingMillis</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Distance,"</span><span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">min</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="n">ultraSensor</span><span class="p">.</span><span class="n">distanceCm</span><span class="p">()</span> <span class="p">)</span> <span class="p">);</span>
+    <span class="n">lastSamlingMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="c1">// ... anderes Zeugs machen...</span>
+
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Intern verwendet die Makeblock-Bibliothek die Funktion <code>pulseIn()</code>, um die Zeit bis zum Eintreffen des Echos zu messen.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Zwischen Senden und Empfangen benötigt der Sensor eine minimale Wartezeit von 100 ms.
+Wenn man den Sensor also abfragt, und kein <code>delay()</code> verwenden möchte (bspw. um nebenbei noch andere
+Sensoren abzufragen), dann muss man das Timing manuell implementieren.</p>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Achtung"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Die Funktion <code>distanceCm(maxCm)</code> erlaubt eigentlich die Angabe einer Maximaldistanz, die zurückgeliefert wird, falls das Echo zu lange dauert oder die berechnete Distanz größer als dieser Maximalwert ist. In der aktuellen Implementierung der Bibliothek wird dieses Argument aber ignoriert und stattdessen immer 400 cm (4 m) verwendet, was aber <strong>weit außerhalb</strong> des Messbereichs des Sensors liegt.
+Deshalb ist in obigem Messprogramm die maximale Entfernung auf 120 cm begrenzt, was den Messbereich des Sensors bei vielen Hindernissen ganz gut abgrenzt.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_beispielprogramm_led_ring_zeigt_gemessene_entfernung_an">9.1.6. Beispielprogramm - LED Ring zeigt gemessene Entfernung an</h4>
+<div class="paragraph">
+<p>Man kann auch den LED-Ring nutzen, um die gemessene Entfernung dynamisch zu visualisieren:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">"MeAuriga.h"</span><span class="cp">
+</span>
+<span class="c1">// Der Utrasonic-Sensor ist an Steckplatz 6 eingesteckt</span>
+<span class="n">MeUltrasonicSensor</span> <span class="nf">ultraSensor</span><span class="p">(</span><span class="n">PORT_6</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">lastSamplingMillis</span><span class="p">;</span>
+
+<span class="c1">// Der Auriga on-board LED Ring hat 12 LEDs. Zur Vereinfachung der Lesbarkeit</span>
+<span class="c1">// legen wir hier ein Define fest.</span>
+<span class="cp">#define LEDNUM  12
+</span>
+<span class="c1">// Beim Auriga-Board steuern wird den on-board LED Ring an.</span>
+<span class="c1">// Die Klasse MeRGBLed bietet die Schnittstellenfunktionen dafür.</span>
+<span class="c1">// Im Constructor übergeben wir den Port 0</span>
+<span class="n">MeRGBLed</span> <span class="nf">led</span><span class="p">(</span> <span class="n">PORT0</span><span class="p">,</span> <span class="n">LEDNUM</span> <span class="p">);</span>
+
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">lastSamplingMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+
+  <span class="c1">// LED Ring Controller ist am PWM PIN D44 angeschlossen</span>
+  <span class="n">led</span><span class="p">.</span><span class="n">setpin</span><span class="p">(</span> <span class="mi">44</span> <span class="p">);</span>
+  <span class="c1">// Nach dem Setzen des Pin muss minimal kurz gewartet werden.</span>
+  <span class="c1">// Wenn man den delay()-Aufruf vergisst, dann wird nach dem</span>
+  <span class="c1">// led.show() Befehl die erste LED in grün angezeigt.</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+  <span class="c1">// nun können wir die initalen LED-Werte (alle AUS/SCHWARZ) setzen</span>
+  <span class="c1">// (Die Klasse MeRGBLed setzt anfänglich alle LEDs auf schwarz/aus, man kann</span>
+  <span class="c1">//  aber auch led.setColor(0,0,0) vor dem led.show() nochmal aufrufen)</span>
+  <span class="n">led</span><span class="p">.</span><span class="n">show</span><span class="p">();</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">-</span> <span class="n">lastSamplingMillis</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Distance,"</span><span class="p">);</span>
+    <span class="kt">long</span> <span class="n">distanceCm</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="mi">120</span><span class="p">,</span> <span class="n">ultraSensor</span><span class="p">.</span><span class="n">distanceCm</span><span class="p">()</span> <span class="p">);</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">distanceCm</span><span class="p">);</span>
+    <span class="n">lastSamplingMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">12</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="mi">10</span> <span class="o">&lt;</span> <span class="n">distanceCm</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">brightness</span> <span class="o">=</span> <span class="n">distanceCm</span><span class="p">;</span>
+        <span class="n">led</span><span class="p">.</span><span class="n">setColorAt</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="o">-</span><span class="n">i</span><span class="o">*</span><span class="mi">25</span><span class="p">),</span> <span class="n">min</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="n">i</span><span class="o">*</span><span class="mi">10</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span>
+        <span class="n">led</span><span class="p">.</span><span class="n">setColorAt</span><span class="p">(</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">led</span><span class="p">.</span><span class="n">show</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="c1">// ... anderes Zeugs ...</span>
+
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Mit diesem Programm wird für den Entfernungsbereich 0&#8230;&#8203;120cm der LED Ring beleuchtet. Damit kann man sich ein Bild davon machen, wie der Sensor Hindernisse erkennt.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Wenn der Ultraschall-Sensor frontal auf eine Wand/Fläche gerichtet ist, so bekommt er ein ziemlich gutes Echo und kann Entfernungen bis über 120 cm sehr gut messen. Aber bereits bei leicht schrägem Einfall wird das Echo am Sensor vorbeireflektiert und dadurch fälschlicherweise ein sehr großer Abstand zurückgeliefert.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_linienverfolgungssensor">9.1.7. Linienverfolgungssensor</h4>
+<div class="paragraph">
+<p>Ein weiterer Sensor, der mit dem <em>MakeBlock Ranger</em> Bausatz mitgeliefert wird, ist der Linienverfolgungssensor.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/auriga_linefollower.png" alt="auriga linefollower">
+</div>
+<div class="title">Abbildung 30. Linienverfolgungs-Sensor</div>
+</div>
+<div class="paragraph">
+<p>Der besteht letztlich aus 2 Photodioden. Deren lichtempfindlicher Widerstand wird mit einem hardwarespezifischen Schwellwert in ein digitales Signal gewandelt, welches 4 Zustände ergibt:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>S1_IN_S2_IN   : Beide Sensoren innerhalb der schwarzen Linie
+S1_IN_S2_OUT  : Sensor 2 ist außerhalb der schwarzen Linie
+S1_OUT_S2_IN  : Sensor 1 ist außerhalb der schwarzen Linie
+S1_OUT_S2_OUT : Beide Sensoren außerhalb der schwarzen Linie, also entweder links oder rechts davon</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_beispielprogramm_linienfolgesensor_zeigt_einen_der_4_zustände_an">9.1.8. Beispielprogramm - Linienfolgesensor zeigt einen der 4 Zustände an</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="c++"><span class="cp">#include</span> <span class="cpf">"MeAuriga.h"</span><span class="cp">
+</span>
+<span class="c1">// Verbunden mit Port 8</span>
+<span class="n">MeLineFollower</span> <span class="nf">lineFinder</span><span class="p">(</span><span class="n">PORT_8</span><span class="p">);</span>
+
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="n">loop</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">sensorState</span> <span class="o">=</span> <span class="n">lineFinder</span><span class="p">.</span><span class="n">readSensors</span><span class="p">();</span>
+  <span class="k">switch</span><span class="p">(</span><span class="n">sensorState</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">case</span> <span class="n">S1_IN_S2_IN</span>  <span class="p">:</span> <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Beide Sensoren innerhalb der schwarzen Linie"</span><span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">S1_IN_S2_OUT</span> <span class="p">:</span> <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Sensor 2 ist außerhalb der schwarzen Linie"</span><span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">S1_OUT_S2_IN</span> <span class="p">:</span> <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Sensor 1 ist außerhalb der schwarzen Linie"</span><span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="n">S1_OUT_S2_OUT</span><span class="p">:</span> <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Beide Sensoren außerhalb der schwarzen Linie"</span><span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+    <span class="nl">default:</span> <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="n">delay</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_über_den_autor">10. Über den Autor</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Vielleicht abschließend noch ein paar kurze Infos über mich. Meine Name ist Andreas Nicolai (ursprünglich aus Berlin, aber jetzt schon seit vielen Jahren in Dresden) und ich bin in einer Zeit groß geworden, als Computer noch recht primitiv waren (mein erster Rechner war ein Commodore PC-10 III  mit gerade mal 4.7&#8230;&#8203;9.6 Mhz Taktfrequenz). Entsprechend einfach war die Software (und entsprechend simpel waren die Spiele). Aber so konnte ich die Entwicklung der Hardware und Software über inzwischen 4 Jahrezehnte mitverfolgen.</p>
@@ -2913,8 +3242,8 @@ Je nachdem, wie lange die Spannung anliegt im Verhältnis zur Taktlänge, umso h
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0 (22.03.2025)<br>
-Last updated 2025-03-22 12:03:41 +0100
+Version 1.0 (30.04.2025)<br>
+Last updated 2025-04-30 19:44:15 +0200
 </div>
 </div>
 </body>

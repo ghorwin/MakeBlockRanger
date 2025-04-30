@@ -74,13 +74,18 @@ Nun kann man das Board verbinden und sollte die Ausgabe wie oben in <<sec:connec
 
 ## Windows
 
-- TODO: ch341 Treiber...
+Unter Windows muss man erst den Treiber für den CH341 Chipsatz installieren. Den kann man im Internet herunterladen (z.B. bei https://github.com/storef/ch341.driver), oder 
+gleich hier auf meiner Seite:  link:../downloads/CH341SER.ZIP[Windows CH341 Serieller Treiber]
+
+Das Archiv entpacken, dann auf die Datei `CH341SER.INF` rechts klicken und "Installieren" auswählen.
+
 
 ## MacOS
 
-- TODO: Intel CPUs ch341 Treiber
-- TODO: M CPUs
+Unter MacOS muss man ebenfalls erst die Treiber für den CH341 Chipsatz installieren. Informationen und den Treiber selbst
+gibt es auf folgender Seite: https://github.com/storef/ch341.driver oder auch wieder direkt bei mir:   link:../downloads/CH341SER_MAC.ZIP[MacOS CH341 Serieller Treiber]
 
+Ein paar Tipps zur Vorgehensweise bei der Treiberinstallation/Signatur gibt es hier: https://github.com/Makeblock-official/Makeblock-USB-Driver
 
 
 # Aufspielen/Aktualisieren der Firmware und ein erstes Testprogramm

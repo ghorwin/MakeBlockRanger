@@ -5,7 +5,7 @@
 
 ## Allgemeines zu RJ25
 
-Die Steckerports am Auriga-Board sind RJ25 (6P6C) Stecker, siehe https://de.wikipedia.org/wiki/RJ-Steckverbindung[Wikipedia RJ-Steckverbindung], wie sie auch für den Anschluss von Modems und Faxgeräten verwendet werden/wurden. Die Belegung der Pins ist im   
+Die Steckerports am Auriga-Board sind RJ25 (6P6C) Stecker (siehe https://de.wikipedia.org/wiki/RJ-Steckverbindung[Wikipedia RJ-Steckverbindung]) wie sie auch für den Anschluss von Modems und Faxgeräten verwendet werden/wurden. Die Belegung der Pins ist im   
 link:../downloads/MakeBlock/MeAuriga_Schaltplan.pdf[Schaltplan] zu sehen, wie hier im Auszug für den Port 9:
 
 .RJ25 Belegung an Port 9
@@ -14,12 +14,13 @@ image::RJ25_schaltplan_auszug.png[pdfwidth=4cm]
 .RJ25 Stecker
 image::RJ25_pin_Belegung.png[width=250, pdfwidth=4cm]
 
+Jeder dieser Stecker ist mit VCC (entweder +5V oder Motorspannung) und GND verbunden, sowie mit SDA und SCL (für die Kommunikation über das I2C Protokoll, mit Ausnahme Slot 5). Die mit S1 und S2 (Slot 1 und Slot 2) bezeichneten Leitungen sind je Port mit unterschiedlichen Pins am Arduino verbunden. Je nach Fähigkeiten dieser Pins sind die Ports unterschiedlich eingefärbt. 
 
-Jeder dieser Stecker ist mit VCC und GND verbunden, sowie alle parallel an SDA und SCL (für die Kommunikation über das I2C Protokoll).
-Die mit S1 und S2 (Slot 1 und Slot 2) bezeichneten Leitungen sind je Port mit unterschiedlichen Pins am Arduino verbunden. Je nach Fähigkeiten dieser Pins sind die Ports unterschiedlich eingefärbt. Eine Gesamtübersicht über die Ports, deren Belegung und Stromversorgung ist im [Ersten Teil zum Auriga/mBot Ranger](auriga-first-steps-DE) gegeben.
+Das Pinout-Diagramm zeigt nocheinmal die Belegung der Ports.
 
-[NOTE]
-====
+.Pinout-Diagramm (hier auch als link:../downloads/MeAuriga_Pinout.pdf[Auriga Pinout PDF])
+image::auriga_pinout.png[]
+
 Die Ports sind unterschiedlich abgesichert und bieten unterschiedliche Spannungen. Außerdem sind unterschiedliche Pins angeklemmt, was verschiedene Möglichkeiten zum Anschluss externer Hardware bietet:
 
 .Aurigaplatine mit unterschiedlichen RJ25 Ports
@@ -28,12 +29,23 @@ image::auriga_schaubild.jpg[width=500, pdfwidth=12cm]
 .Farbkodierung der Anschlüsse (Details dazu im Kapitel zu den RJ25 Ports)
 image::farbcodierung_auriga.jpg[width=150, pdfwidth=4cm]
 
-- PORT1 - PORT4 unterstützen einen kontinuierlichen 3,5A-Ausgang (max. 5A)
-- PORT1 - PORT4 haben einen Kurzschluss- und Überstromschutz für 3,5A
+### Ports 1-4 : Motorports
 
-- PORT5 - PORT10 unterstützen kontinuierlich 5V DC und 4A Ausgang (max. 3A)
-- PORT5 - PORT10 haben einen Kurzschluss- und Überstromschutz für 3A
+Die Ports 1 bis 4 werden auch Motorports genannt, da an ihnen eine erhöhte Spannung (des Batteriekastens) anliegt. Diese Ports unterstützen einen kontinuierlichen 3,5A-Ausgang (max. 5A) und haben einen Kurzschluss- und Überstromschutz für 3,5A.
+
+[CAUTION]
 ====
+Die Motorports 1 bis 4 sind nicht umsonst rot markiert - hier liegt eine erhöhte Spannung an, welche typische Arduino Zubehörbauelemente mit 5V Versorgung beschädigen könnte.
+====
+
+### Port 5
+
+Dieser Port hat eine Spannungsversorgung von +5V und nur 2 belegte Pins, welche an RX2/TX2 angeschlossen sind. Darüber ist eine serielle Kommunikation möglich.
+
+### Ports 6-10 : Allgemeine Anschlüsse für externe Hardware
+
+Die anderen Ports 5 bis 10 sind an +5V angeschlossen (mit Kurzschluss- und Überstromschutz für 3A)-
+Wie man oben im Pinout-Diagramm sieht, sind die Ports 6-10 jeweils mit 2 digitalen Input-/Output-Pins verbunden. Außerdem sind diese Ports mit den SDA/SCL Pins verbunden, wodurch man externe Hardware via I2C-Protokoll ansteuern kann. 
 
 An diese Ports kann man nun diverse Zubehörbauteile anstecken (die aber häufig nicht ganz billig sind).
 
@@ -41,7 +53,6 @@ Man kann auch einfach RJ25 Stecker kaufen und über die einzelnen Kabel beliebig
 
 .RJ25 Adapter Kabel
 image::RJ25-adapter-Kabel.jpg[pdfwidth=4cm]
-
 
 ### Zubehör
 
@@ -51,13 +62,12 @@ MakeBlock bietet selbst zahlreiches Zubehör mit dem RJ25 Stecker an:
 image::auriga-rj25-addons.png[pdfwidth=16cm]
 
 
-## Ultraschall-Entfernungsmessung
+### Ultraschall-Entfernungsmessung
 
 Zur Entfernungsmessung liegt im mBot Ranger Bausatz ein Ultraschallsensor dabei. Diesen kann man einfach an einen I2C-Port anstecken (Ports 6-10).
 
 .Ultraschall Entfernungssensor
 image::auriga_ultrasonicdistance.png[pdfwidth=4cm]
-
 
 Wie der Sensor intern funktioniert, ist auf der Seite https://funduino.de/nr-10-entfernung-messen[Fundino Ultraschallsensor]  beschrieben.
 
@@ -177,7 +187,7 @@ Wenn der Ultraschall-Sensor frontal auf eine Wand/Fläche gerichtet ist, so beko
 ====
 
 
-## Linienverfolgungssensor
+### Linienverfolgungssensor
 
 Ein weiterer Sensor, der mit dem _MakeBlock Ranger_ Bausatz mitgeliefert wird, ist der Linienverfolgungssensor. 
 
