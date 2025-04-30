@@ -123,8 +123,8 @@ In der aktuellen mBlock Webversion scheint der Download der Firmware allerdings 
 
 Für das Compilieren der Firmware sind aber noch die Makeblock-Bibliotheken notwendig. Dafür gibt es zwei Methoden:
 
-1. Installation mittels Arduino-IDE Bibliotheksverwaltung (empfohlen!)
-2. Manuelle Installation der Bibliothek, oder
+1. Installation mittels Arduino-IDE Bibliotheksverwaltung (empfohlen!), oder
+2. Manuelle Installation der Bibliothek
 
 ### Installation via Bibliotheksmanager (empfohlen)
 
