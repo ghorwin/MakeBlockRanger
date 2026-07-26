@@ -36,21 +36,21 @@ MePort_Sig mePort[17] =
 
 // etwas umformatiert und kommentiert
 MePort_Sig mePort[17] = {
-	Port 0  {  NC,  NC }   Nicht verbunden
-	Port 1  {   5,   4 }   red
-	Port 2  {   3,   2 }   red
-	Port 3  {   7,   6 }   red
-	Port 4  {   9,   8 }   red
-	Port 5  {  16,  17 }   grey
-	Port 6  { A10, A15 }   universal
-	Port 7  {  A9, A14 }   universal 
-	Port 8  {  A8, A13 }   universal
-	Port 9  {  A7, A12 }   universal
-	Port 10 {  A6, A11 }   universal 
-	Port 11 {  NC,  A2 }   Lichtsensor (befindet sich neben Port 2)
-	Port 12 {  NC,  A3 }   Lichtsensor (befindet neben Port 9)
-	Port 13 {  NC,  A0 }   Temperatursensor
-	Port 14 {  NC,  A1 }   Mikrofon/Lautstärkesensor
+	Port 0  {  NC,  NC }   // Nicht verbunden
+	Port 1  {   5,   4 }   // red
+	Port 2  {   3,   2 }   // red
+	Port 3  {   7,   6 }   // red
+	Port 4  {   9,   8 }   // red
+	Port 5  {  16,  17 }   // grey
+	Port 6  { A10, A15 }   // universal
+	Port 7  {  A9, A14 }   // universal 
+	Port 8  {  A8, A13 }   // universal
+	Port 9  {  A7, A12 }   // universal
+	Port 10 {  A6, A11 }   // universal 
+	Port 11 {  NC,  A2 }   // Lichtsensor (befindet sich neben Port 2)
+	Port 12 {  NC,  A3 }   // Lichtsensor (befindet neben Port 9)
+	Port 13 {  NC,  A0 }   // Temperatursensor
+	Port 14 {  NC,  A1 }   // Mikrofon/Lautstärkesensor
 	Port 15 {  NC,  NC }   
 	Port 16 {  NC,  NC }   
 }
