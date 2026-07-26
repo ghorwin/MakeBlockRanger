@@ -11,16 +11,16 @@ Bevor man den Roboter bzw. die Auriga-Platine programmieren kann, muss man erstm
 Nachfolgende Schritte sind für ein hinreichend aktuelles Linux beschrieben, konkret Ubuntu 22.04 oder neuer. Eigentlich müsste das Board aber auch mit älteren Systemen wie Ubuntu 18.04 oder so noch problemlos funktionieren.
 
 [[sec:connecting_auriga]]
-### Verbindung des Auriga-Boards mit den Linux-PC
+### Verbindung des Auriga-Boards mit dem Linux-PC
 
 Der erste Schritt zur Programmierung des Auriga Boards ist es, eine serielle Verbindung mit dem Board aufzubauen. Dazu verbindet man das Board via USB-Kabel mit dem PC. 
 
 [IMPORTANT]
 ====
-Wie üblich unter Linux muss der Nutzer zum Zugriff auf COM Ports der Gruppe _dialout_ zugehören.
+Wie üblich unter Linux muss der Nutzer zum Zugriff auf die seriellen Schnittstellen der Gruppe _dialout_ angehören.
 ====
 
-`sudo dmesg` sollte dann ausgeben, mit welchem COM-Port das Bord verbunden ist.
+`sudo dmesg` sollte dann ausgeben, als welches Gerät (z.B. `/dev/ttyUSB0`) das Board eingebunden wurde.
 
 .Ausgabe von dmesg beim Anstecken des Auriga Boards
 [source,bash]
@@ -34,9 +34,9 @@ Wie üblich unter Linux muss der Nutzer zum Zugriff auf COM Ports der Gruppe _di
 [ 1588.701256] usb 3-2: ch341-uart converter now attached to ttyUSB0
 ----
 
-### Behebung von brttly Problemen
+### Behebung von brltty-Problemen
 
-Bei Ubuntu 22.04 und einigen neueren Ubuntu Versionen wird beim Anschließen des Boards an den USB-Port die Verbindung mit `/dev/ttyUSB0` kurz hergestellt und gleich wieder unterbrochen 
+Bei Ubuntu 22.04 und einigen neueren Ubuntu Versionen wird beim Anschließen des Boards an den USB-Port die Verbindung mit `/dev/ttyUSB0` kurz hergestellt und gleich wieder unterbrochen.
 
 [NOTE]
 ====
@@ -92,7 +92,7 @@ Ein paar Tipps zur Vorgehensweise bei der Treiberinstallation/Signatur gibt es h
 
 ## Firmware-Update / Neu-Installieren
 
-Der _Makeblock Ranger_ bzw. das Board und der Prozessor werden mit einer vorinstallierten _Firmware_ geliefert. Diese Firmware ist nichts anderes als ein (recht komplexes) Arduino-Programm. Dieses Programm enthält die Basisfunktionalität (wie im Handbuch beschrieben), einschließlich der Bluetooth-Kommunikation mit der SmartPhone-App.
+Der _Makeblock Ranger_ bzw. das Board und der Prozessor werden mit einer vorinstallierten _Firmware_ geliefert. Diese Firmware ist nichts anderes als ein (recht komplexes) Arduino-Programm. Dieses Programm enthält die Basisfunktionalität (wie im Handbuch beschrieben), einschließlich der Bluetooth-Kommunikation mit der Smartphone-App.
 
 Dieses Programm (also die _Firmware_) ist im Quelltext verfügbar. Den kann man sich herunterladen (siehe unten) und nach Belieben anpassen und verändern. Das ist auch einer der Gründe, warum ich die MakeBlock Roboterbausätze ziemlich cool finde.  Außerdem kann man in der Firmware jede Menge abgucken.
 
@@ -115,7 +115,7 @@ Die Firmware kann auch mit der mBlock Entwicklungsumgebung installiert werden.
 
 [WARNING]
 ====
-In der aktuellen mBlock Webversion scheint der Download der Firmware allerdings nicht mehr robust zu funktionieren. Auch funktionieren die Treiber für Linux nicht mehr und auch sonst scheint die Software nicht (mehr) richtig zu funktionieren. Außerdem ist die original-Firmware seit 2020 nicht mehr weiterentwickelt worden. Daher sollte die Firmware besser wie nachfolgend beschrieben mit der Arduino-IDE aktualisiert werden. 
+In der aktuellen mBlock Webversion scheint der Download der Firmware allerdings nicht mehr robust zu funktionieren. Auch funktionieren die Treiber für Linux nicht mehr und auch sonst scheint die Software nicht (mehr) richtig zu funktionieren. Außerdem ist die Original-Firmware seit 2020 nicht mehr weiterentwickelt worden. Daher sollte die Firmware besser wie nachfolgend beschrieben mit der Arduino-IDE aktualisiert werden. 
 ====
 
 
@@ -132,7 +132,7 @@ Die Installation der makeblock-Bibliothek erfolgt analog zu anderen Arduino-Bibl
 
 Abgesehen von der Original-Bibliothek gibt es inzwischen verschiedene Forks mit aktualisierten Quelltexten, die einige Fehler beheben. In der aktuellen Version der Arduino-IDE ist eine solche aktualisierte Version auch direkt über den Bibliotheksmanager verfügbar (Bibliotheksverwaltung öffnen und im Filter _makeblock_ eingeben):
 
-.Bibliotheksmanager in der Arduino-IDE und ausgewählte MakeBlock Dive Updated Bibliothek
+.Bibliotheksmanager in der Arduino-IDE und ausgewählte Bibliothek _MakeBlock Drive Updated_
 image::arduino-ide-makeblock-library-install.png[]
 
 
@@ -152,13 +152,18 @@ Dazu lädt man den Quelltext herunter, z.B. den  https://github.com/nbourre/Make
 ====
 Die offiziellen MakeBlock-Bibliotheken werden seit 2020 nicht mehr aktiv weiterentwickelt. 
 
-Falls man doch mal die Originalversionen braucht: Das offizielle https://github.com/Makeblock-official/Makeblock-Libraries.git[Makeblock-Libraries GitHub Repository] enthält die originalen Quelltexte. Man kann die Bibliothek auch über den Link über folgenden Link herunterladen: https://codeload.github.com/Makeblock-official/Makeblock-Libraries/zip/master[Makeblock-Libraries - ZIP].
+Falls man doch mal die Originalversionen braucht: Das offizielle https://github.com/Makeblock-official/Makeblock-Libraries.git[Makeblock-Libraries GitHub Repository] enthält die originalen Quelltexte. Man kann die Bibliothek auch über folgenden Link herunterladen: https://codeload.github.com/Makeblock-official/Makeblock-Libraries/zip/master[Makeblock-Libraries - ZIP].
 ====
 
 
 ## Software erstellen und Hochladen
 
-Wie üblich in der Arduino IDE wählt man zuerst 
+Wie üblich in der Arduino IDE wählt man zuerst das Board und den Port aus:
+
+- unter _Werkzeuge->Board_ den Eintrag _Arduino Mega or Mega 2560_ (Prozessor: _ATmega2560_)
+- unter _Werkzeuge->Port_ den seriellen Port, an dem das Board angemeldet ist (unter Linux z.B. `/dev/ttyUSB0`, unter Windows z.B. `COM3`)
+
+Danach kann man den Sketch wie gewohnt mit _Sketch->Überprüfen/Kompilieren_ übersetzen und mit _Sketch->Hochladen_ auf das Board übertragen.
 
 ## Firmware Update installieren / zurücksetzen
 

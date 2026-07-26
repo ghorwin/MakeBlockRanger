@@ -9,11 +9,11 @@ Zunächst aber mal ein konstruktiver Tipp:
 
 [TIP]
 ====
-Die Ketten sind am Anfang ewas steif und durch die Lagerung und Verpackung etwas oval verformt. Wenn man den _Land Raider_ wie in der Konstruktionszeichnung zusammen baut, dann sitzen die Ketten _sehr_ straff und der Motor braucht jedes Mal viel Kraft, um aus der gekrümmten Kettenform rauszudrehen (was er bei etwas entleerten Batterien häufig nicht schafft). Bei der vorgegebenen Firmware führt das dann beim Steuern des _Land Raider_ häufig dazu, dass er mit einem Beepen stehen bleibt (warum die Firmware das macht und wie diese erkennt, dass der _Land Raider_ stecken bleibt, erklär ich unten).
+Die Ketten sind am Anfang etwas steif und durch die Lagerung und Verpackung etwas oval verformt. Wenn man den _Land Raider_ wie in der Konstruktionszeichnung zusammen baut, dann sitzen die Ketten _sehr_ straff und der Motor braucht jedes Mal viel Kraft, um aus der gekrümmten Kettenform rauszudrehen (was er bei etwas entleerten Batterien häufig nicht schafft). Bei der vorgegebenen Firmware führt das dann beim Steuern des _Land Raider_ häufig dazu, dass er mit einem Beepen stehen bleibt (warum die Firmware das macht und wie diese erkennt, dass der _Land Raider_ stecken bleibt, erklär ich unten).
 
 Es gibt zwei Dinge, die man tun kann, um dieses Problem mit dem _Land Raider_ zu beheben:
 
-- die Ketten "rund" dehnen, z.B. auf eine ausreichend dicke Blumevase schieben, bis sie leicht gespannt sind, und dann eine Weile in die Sonne stellen und ggfs. gelegentlich nachspannen
+- die Ketten "rund" dehnen, z.B. auf eine ausreichend dicke Blumenvase schieben, bis sie leicht gespannt sind, und dann eine Weile in die Sonne stellen und ggfs. gelegentlich nachspannen
 - die Motoren um eine Bohrung nach Innen befestigen, wie auf dem nachfolgenden Bild zu sehen ist
 
 .Um ein Loch verschobene Motormontage zur Reduktion der Spannung in den Ketten
@@ -23,11 +23,11 @@ image::raider_motor_verschoben.jpg[]
 
 ## Allgemeines
 
-Am Auriga-Board gibt es zwei Motorports. Jeder der DC-Motoren kann über einen PWM Pin (analoge Spannung für die Geschwindigkeit) und zwei digitalen Pins für die Drehichtung angesteuert werden. Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Verwendung der Makeblock Bibliothek (in der die Details gekapselt sind).
+Am Auriga-Board gibt es zwei Motorports. Jeder der DC-Motoren kann über einen PWM-Pin (analoge Spannung für die Geschwindigkeit) und zwei digitale Pins für die Drehrichtung angesteuert werden. Die Ansteuerung kann einmal direkt über die Arduino-Pins erfolgen oder unter Verwendung der Makeblock Bibliothek (in der die Details gekapselt sind).
 
 [NOTE]
 ====
-Grundsätzlich bewegen sich die Motoren nur, wenn die Spannungsversorgung über die Batterien erfolgt (die Motoren brauchen eine Spannung > 7V, was der USB-Port ja nicht liefern kann). Das ist auch ganz praktisch, da man so den Robotor angesteckt an den Computer programmieren kann, ohne Angst zu haben, dass er vom Tisch rollt.
+Grundsätzlich bewegen sich die Motoren nur, wenn die Spannungsversorgung über die Batterien erfolgt (die Motoren brauchen eine Spannung > 7V, was der USB-Port ja nicht liefern kann). Das ist auch ganz praktisch, da man so den Roboter angesteckt an den Computer programmieren kann, ohne Angst zu haben, dass er vom Tisch rollt.
 ====
 
 Die Motoren werden an die beiden Motorports angesteckt:
@@ -75,7 +75,7 @@ Diese am Pin anliegende Spannung wird im DC-Motor genutzt, um den Strom vom Batt
 #define PWMA  11 // Motor A/Links
 #define DIRA1 49
 #define DIRA2 48
-#define PWMB  10 // Motor B/Rights
+#define PWMB  10 // Motor B/Rechts
 #define DIRB1 47
 #define DIRB2 46
 
@@ -86,7 +86,7 @@ void setup() {
   pinMode(DIRA2, OUTPUT);
   pinMode(PWMB,  OUTPUT);  
   pinMode(DIRB1, OUTPUT); 
-  pinMode(DIRB1, OUTPUT);
+  pinMode(DIRB2, OUTPUT);
 
   // kurze Wartephase zur Initialisierung
   delay(20);
@@ -166,7 +166,7 @@ Man kann das Programm auch vereinfachen und den Roboter einfach mit konstanter G
 #define PWMA  11 // Motor A/Links
 #define DIRA1 49
 #define DIRA2 48
-#define PWMB  10 // Motor B/Rights
+#define PWMB  10 // Motor B/Rechts
 #define DIRB1 47
 #define DIRB2 46
 
@@ -177,7 +177,7 @@ void setup() {
   pinMode(DIRA2, OUTPUT);
   pinMode(PWMB,  OUTPUT);  
   pinMode(DIRB1, OUTPUT); 
-  pinMode(DIRB1, OUTPUT);
+  pinMode(DIRB2, OUTPUT);
 
   // kurze Wartephase zur Initialisierung
   delay (20);
@@ -204,7 +204,7 @@ Nun _sollte_ der Raider schön geradeaus fahren... macht er aber gelegentlich ni
 
 Der Encoder im Motor ist ein Drehimpulsgeber/Tacho und liefert elektrische Impulse, die man zählen kann. Damit kann man die Geschwindigkeit und zurückgelegte Entfernung bestimmen. Zum Einstieg in das Thema _Encoder_ kann ich das https://www.youtube.com/watch?v=-SFIOm5mt4U[Encoder Tutorial Arduino (deutsch, für Anfänger)] empfehlen.
 
-Der Encoder eines Motors ist am Arduino an jeweils zwei digitalen Pins angeklemmt. Um einen Drehimpuls zu erfassen, muss man den einen Pin überwachen und feststellen, wann dieser von 0 auf 1 wechselt. Damit man das präzise machen kann, ohne dass anderen Aufgaben im Mikroprozessor die Messung beeinträchtigen, verwendet man Interruptfunktionen. Dazu registriert man für jeden Motor eine Interruptfunktion, die immer dann aufgerufen wird, wenn am entsprechenden Pin ein RISING Signal anliegt (also der Eingangspin von LOW auf HIGH wechselt). In der Interruptfuktion wird dann ein Zähler hochgezählt, der dann für die Berechnung der Momentangeschwindigkeit und Bewegung verwendet wird. 
+Der Encoder eines Motors ist am Arduino an jeweils zwei digitalen Pins angeklemmt. Um einen Drehimpuls zu erfassen, muss man den einen Pin überwachen und feststellen, wann dieser von 0 auf 1 wechselt. Damit man das präzise machen kann, ohne dass andere Aufgaben im Mikroprozessor die Messung beeinträchtigen, verwendet man Interruptfunktionen. Dazu registriert man für jeden Motor eine Interruptfunktion, die immer dann aufgerufen wird, wenn am entsprechenden Pin ein RISING Signal anliegt (also der Eingangspin von LOW auf HIGH wechselt). In der Interruptfunktion wird dann ein Zähler hochgezählt, der dann für die Berechnung der Momentangeschwindigkeit und Bewegung verwendet wird. 
 
 
 ### Beispielprogramm - Variable Motordrehzahl und Geschwindigkeit via Encoder auslesen
@@ -306,7 +306,7 @@ void setup() {
   pinMode(DIRA2, OUTPUT);
   pinMode(PWMB,  OUTPUT);  
   pinMode(DIRB1, OUTPUT); 
-  pinMode(DIRB1, OUTPUT);
+  pinMode(DIRB2, OUTPUT);
 
   // WICHTIG: INPUTs mit PullUp Widerständen!
   pinMode(ENCODER1_PIN1, INPUT_PULLUP);   
@@ -352,7 +352,7 @@ void loop() {
     setRightMotorSpeed(targetSpeedPWM);
   }
 
-  // alle 100 Millisekunden die Geschwindigkeit ausgeben
+  // alle 500 Millisekunden die Geschwindigkeit ausgeben
   if (millis() > lastOutputMillis + 500) {
     lastOutputMillis = millis();
     // Ausgabe: Zeit [s]  \t Ziel-PWM \t Speed 1 [rpm] \t Speed 2 [rpm]
@@ -371,7 +371,7 @@ void loop() {
 }
 ```
 
-Dieses Programm hat viele Bestandeile, die man aber am Besten nach und nach erklärt.
+Dieses Programm hat viele Bestandteile, die man aber am Besten nach und nach erklärt.
 
 ### Interruptfunktionen für Encoder-Pins und Geschwindigkeitsberechnung
 
@@ -407,8 +407,13 @@ int interruptNr2 = digitalPinToInterrupt(18);  // -> interrupt 5
 
 Siehe auch Erklärung zu den Interrupt-Nummern in https://docs.arduino.cc/language-reference/funktionen/external-interrupts/attachInterrupt/
 
+[NOTE]
+====
+Nicht verwirren lassen: Im Pinout-Diagramm ist Pin 19 mit `INT1` beschriftet. Laut ATmega2560-Datenblatt ist Pin 19 aber `INT2` (Pin 18 ist tatsächlich `INT3`). Diese Hardware-Bezeichnungen haben ohnehin nichts mit den Interrupt-Nummern zu tun, die `attachInterrupt()` erwartet - deshalb sollte man die Nummer nie selbst hinschreiben, sondern immer `digitalPinToInterrupt()` verwenden.
+====
 
-Wie bei Encodern üblich, wird die Flanke des einen Pins überwacht und dann durch den (etwas versetzten) Pegel des zweiten Pins die Drehrichtung bestimmt. Dies geschicht in der Interrupt-Funktion:
+
+Wie bei Encodern üblich, wird die Flanke des einen Pins überwacht und dann durch den (etwas versetzten) Pegel des zweiten Pins die Drehrichtung bestimmt. Dies geschieht in der Interrupt-Funktion:
 
 ```c
 // Interruptfunktion für Encoder 1
@@ -444,9 +449,9 @@ pulseCountStartMillis = millis();
 
 Damit man die Rotationsgeschwindigkeit in Abhängigkeit des gesetzten PWM-Duty-Cycles testen kann, wird im Programm von der seriellen Schnittstelle gelesen. Diese serielle Schnittstelle dient eigentlich dazu, Daten vom Roboter an die Arduino-IDE zu geben, z.B. den SerialPlotter zur Anzeige (wie das schon in <<chap:sensors>> mit den Sensoren gemacht wurde).
 
-Mann kann aber genauso gut auch Text zurück an den Roboter senden. Dazu tippt man einach im SerialMonitor oder SerialPlotter den Text ein und bestätigt mit Enter. In diesem Programmbeispiel werden die Zeichen 0 bis 6 akzeptiert und je nach Zeichen wird eine andere PWM-Leistung eingestellt. In einem späteren Beispiel wird diese Kommunikation nochmal etwas erweitert.
+Man kann aber genauso gut auch Text zurück an den Roboter senden. Dazu tippt man einfach im SerialMonitor oder SerialPlotter den Text ein und bestätigt mit Enter. In diesem Programmbeispiel werden die Zeichen 0 bis 6 akzeptiert und je nach Zeichen wird eine andere PWM-Leistung eingestellt. In einem späteren Beispiel wird diese Kommunikation nochmal etwas erweitert.
 
-In diesem Testbeispiel kann man den Robotor begrenzt steuern:
+In diesem Testbeispiel kann man den Roboter begrenzt steuern:
 
 - Nach Start des Programms den SerialMonitor der Arduino-IDE aufrufen
 - in die Zeile "Nachricht" des SerialMonitor eine Zahl 0...6 eintippen und mit Enter abschicken
@@ -457,7 +462,7 @@ Alternativ kann man das auch im SerialPlotter machen.
 
 ## Testlauf und Geschwindigkeitsmessung mit und ohne Kette
 
-Wenn man jetzt das Programm mal und die Geschwindigkeiten plottet erhält man ein interessantes Bild:
+Wenn man jetzt das Programm mal laufen lässt und die Geschwindigkeiten plottet, erhält man ein interessantes Bild:
 
 .Ausgabe der Motorgeschwindigkeiten (in Umdrehungen pro Minute) mit einem Motor mit Kette und einem freidrehenden Motor
 image::auriga_encoder_speed_original_PWM_timer_one_belt.png[]
@@ -501,12 +506,12 @@ TCCR2B = _BV(CS21);
 
 Dadurch erhöht sich die PWM-Taktfrequenz und der Motor läuft gleichmäßiger und bei niedrigen Duty-Cycles auch schneller.
 
-Erneut getestet sieht die Geschwindigkeitsausgabe deutlich besser aus, d.h. auch die durch die Encoder erfasste Drehzahl ist auch bei kleineren Drehzahlen hinreichend proportional zur Sollgeschwindigkeit (in PWM), was man gut am freilaufenden Motor sehen kann.
+Erneut getestet sieht die Geschwindigkeitsausgabe deutlich besser aus, d.h. die durch die Encoder erfasste Drehzahl ist auch bei kleineren Drehzahlen hinreichend proportional zur Sollgeschwindigkeit (in PWM), was man gut am freilaufenden Motor sehen kann.
 
 .Ausgabe der Motorgeschwindigkeiten (in Umdrehungen pro Minute) mit umprogrammierten PWM-Timern und jeweils einem Motor mit Kette und einem freidrehenden Motor
 image::auriga_encoder_speed_8kHz_PWM_timer_one_belt.png[]
 
-Beim freilaufenden Motor wird die festgelegte Soll-Geschwindigkeit offenbar gut erreicht. Beim Motor mit Kette bleibt die Sollgeschwindigkeit etwas hinter der festgelegten Geschwindigkeit, was ja an der Bremswirkung liegt.
+Beim freilaufenden Motor wird die festgelegte Soll-Geschwindigkeit offenbar gut erreicht. Beim Motor mit Kette bleibt die tatsächlich erreichte Geschwindigkeit etwas hinter der Sollgeschwindigkeit zurück, was ja an der Bremswirkung liegt.
 
 Im Beispiel oben wurde die Geschwindigkeit in PWM angegeben und die Drehzahl vom Encoder in Umdrehungen pro Minute (RPM) abgelesen. Die Verhältnisse sind
 
@@ -524,12 +529,12 @@ und so hoffen, dass sich der Ranger genau mit der angegebenen Geschwindigkeit fo
 
 [TIP]
 ====
-Wenn man den Land Raider mit aufgeladenen Batterien und Maximalgeschwindigkeit fahren lässt, so schafft er bei vollen Batterien auf gerader Fläche immerhin **0,56 m/s** bzw. **2 km/h**. Das ist zwar langsamer als die oben ausgerechnete Maximalgeschwindigkeit, reicht locker, um durch eine Legostadt zu düsen und spektakuläre Videos aus der Legomännelperspektive zu filmen.
+Wenn man den Land Raider mit aufgeladenen Batterien und Maximalgeschwindigkeit fahren lässt, so schafft er bei vollen Batterien auf gerader Fläche immerhin **0,56 m/s** bzw. **2 km/h**. Das ist zwar langsamer als die oben ausgerechnete Maximalgeschwindigkeit, reicht aber locker, um durch eine Legostadt zu düsen und spektakuläre Videos aus der Legomännelperspektive zu filmen.
 ====
 
 [NOTE]
 ====
-Als ich das Testprogramm gerade nochmal mit frisch aufgeladenen Akkus getestet habe, sind bei PWM 255 durchaus Drehzahlen bis 388 RPM angezeigt wurden. Die Akkuspannung hat also einen erheblichen Einfluss darauf, was an Drehzahlen und Geschwindigkeiten so möglich ist.
+Als ich das Testprogramm gerade nochmal mit frisch aufgeladenen Akkus getestet habe, sind bei PWM 255 durchaus Drehzahlen bis 388 RPM angezeigt worden. Die Akkuspannung hat also einen erheblichen Einfluss darauf, was an Drehzahlen und Geschwindigkeiten so möglich ist.
 ====
 
 
@@ -573,7 +578,7 @@ void isr_process_encoder2(void) {
 }
 
 
-int lastOutputMillis;
+unsigned long lastOutputMillis;
 int targetSpeedPWM;
 
 void setup() {
@@ -616,7 +621,7 @@ void loop() {
   Encoder_1.loop();
   Encoder_2.loop();
 
-  // alle 100 Millisekunden die Geschwindigkeit ausgeben
+  // alle 500 Millisekunden die Geschwindigkeit ausgeben
   if (millis() > lastOutputMillis + 500) {
     lastOutputMillis = millis();
     Serial.print("Target speed [PWM]:");
@@ -649,9 +654,9 @@ Die originale Firmware für den Makeblock Bausatz prüft bei Motorfahrt die Gesc
 Die Geschwindigkeit in den Motoren wird mit der Funktion `setTarPWM()` gesetzt. Hier muss man selbst aufpassen, welcher Motor _vorwärts_ und welcher _rückwärts_ eingebaut ist und entsprechend das Vorzeichen ändern. Indem man die Funktion `setTarPWM()` aufruft, wird die Klasse in den direkten Steuerungsmodus PWM gesetzt und stellt die Geschwindigkeit wie bei unserem vorherigen Beispiel via PWM-Duty-Cycle ein. Damit ergibt sich auch eine ähnliche Ausgabe wie bei unserem bisherigen Programm.
 
 
-## Motorleistung adaptiv regeln mittels in der Encoder-Klasse
+## Motorleistung adaptiv regeln mittels der Encoder-Klasse
 
-Die Ansteuerung via setzen der Ziel-PWM ist die einfachste und direkteste Möglichkeit, den Roboter zu steuern. Aber wie oben erwähnt kann man so kaum eine geforderte Fahrgeschwindigkeit bestimmen. Die Klasse `MeEncoderOnBoard` bietet aber noch eine zweite Variante, wie man die Geschwindigkeit bzw. Motorleistung definieren kann: einen klassischen P-Regler-Ansatz.
+Die Ansteuerung via Setzen der Ziel-PWM ist die einfachste und direkteste Möglichkeit, den Roboter zu steuern. Aber wie oben erwähnt kann man so kaum eine geforderte Fahrgeschwindigkeit bestimmen. Die Klasse `MeEncoderOnBoard` bietet aber noch eine zweite Variante, wie man die Geschwindigkeit bzw. Motorleistung definieren kann: einen klassischen P-Regler-Ansatz.
 
 Hierbei wird die aktuelle Geschwindigkeit andauernd mit der Sollgeschwindigkeit verglichen. Die Abweichung (der Regelfehler) wird dazu benutzt, um die Leistung/PWM der Motoren solange anzupassen, bis die Ist-Geschwindigkeit der Soll-Geschwindigkeit entspricht und der Regelfehler (nahezu) 0 wird.
 
@@ -675,7 +680,7 @@ void isr_process_encoder2(void) {
   else                                            Encoder_2.pulsePosPlus();
 }
 
-int lastOutputMillis;
+unsigned long lastOutputMillis;
 int targetSpeedRPM;
 char buf[4];
 int buffIndex;
@@ -693,7 +698,7 @@ void setup() {
   TCCR2A = _BV(WGM21) | _BV(WGM20);
   TCCR2B = _BV(CS21);
 
-  // Die PID Reglerparameter einstellen, eigentlich nur den P-Teil des Reglers, denn der Integral und Differentialteil
+  // Die PID Reglerparameter einstellen, eigentlich nur den P-Teil des Reglers, denn der Integral- und Differentialteil
   // werden bei der Geschwindigkeitsregelung nicht benutzt.
   Encoder_1.setSpeedPid(0.18, 0, 0);
   Encoder_2.setSpeedPid(0.18, 0, 0);
@@ -749,7 +754,7 @@ void loop() {
 }
 ```
 
-In diesem Programm wird die geforderte Geschwindigkeit über die serielle Schnittstelle gelesen. Im SerialPlotter oder SerialMonitor kann man dazu eine 3-stellige Zahl eingeben. In jedem Schleifendurchlauf wird ein neues Zeichen von der seriellen Schnittstelle in einen Pufferspeicher gelesen, bis entweder ein Zeilenendzeichen (`\n`) folgt, oder das 4. Zeichen gelesen wurde. Dann wird der Text im  Pufferspeicher mit einem `\0` beendet und in eine Zahl gewandelt. Diese wird dann als Soll-Drehzahl übergeben (in der etwas unzutreffenden Funktion `runSpeed()`. Der Controller berechnet in der stets aufgerufenen `MeEncoderOnBoard::loop()`-Funktion den Regelfehler und passt den Duty Cycle (PWM) entsprechend an.
+In diesem Programm wird die geforderte Geschwindigkeit über die serielle Schnittstelle gelesen. Im SerialPlotter oder SerialMonitor kann man dazu eine 3-stellige Zahl eingeben. In jedem Schleifendurchlauf wird ein neues Zeichen von der seriellen Schnittstelle in einen Pufferspeicher gelesen, bis entweder ein Zeilenendzeichen (`\n`) folgt, oder das 4. Zeichen gelesen wurde. Dann wird der Text im  Pufferspeicher mit einem `\0` beendet und in eine Zahl gewandelt. Diese wird dann als Soll-Drehzahl übergeben (in der etwas unzutreffend benannten Funktion `runSpeed()`). Der Controller berechnet in der stets aufgerufenen `MeEncoderOnBoard::loop()`-Funktion den Regelfehler und passt den Duty Cycle (PWM) entsprechend an.
 
 Im Quelltext besteht der wesentliche Unterschied zur ungeregelten Ansteuerung des Motors in der Festlegung der Zielgeschwindigkeit mit der Funktion `runSpeed()`:
 
@@ -762,7 +767,7 @@ Encoder_2.runSpeed(targetSpeedRPM);
 Hier wird die Geschwindigkeit in RPM vorgegeben. Für die Berechnung der Korrektur des PWM-Duty-Cycle wird noch der P-Regler-Faktor benötigt. Den setzt man in der `setup()` Funktion mit `setSpeedPid()`:
 
 ```c++
-// Die PID Reglerparameter einstellen, eigentlich nur den P-Teil des Reglers, denn der Integral und Differentialteil
+// Die PID Reglerparameter einstellen, eigentlich nur den P-Teil des Reglers, denn der Integral- und Differentialteil
 // werden bei der Geschwindigkeitsregelung nicht benutzt.
 Encoder_1.setSpeedPid(0.18, 0, 0);
 Encoder_2.setSpeedPid(0.18, 0, 0);
@@ -780,7 +785,7 @@ Man sieht sehr schön, dass der Regler es eigentlich ganz gut schafft, bei beide
 
 ## Andere Steuerungsfunktionen in der Makeblock-Bibliothek
 
-Statt nur die Motorgeschwindigkeiten zu kontrollieren, kann man mit der Klasse `MeEncoderOnBoard` den _Land Raider_ eine bestimmte Strecke fahren lassen. Das Beispiel in der Makeblock-Bibliothek `Me_Auriga_encoder_pid_pos.ino` zeigt die Verwendung der Klasse `moveTo()`. Ein weiteres Beispiel `Me_Auriga_encoder_callback.ino` zeigt eine Variante dieses Aufrufs, bei der bei Erreichen des Endpunktes eine callback-Funktion aufgerufen wird.
+Statt nur die Motorgeschwindigkeiten zu kontrollieren, kann man mit der Klasse `MeEncoderOnBoard` den _Land Raider_ eine bestimmte Strecke fahren lassen. Das Beispiel in der Makeblock-Bibliothek `Me_Auriga_encoder_pid_pos.ino` zeigt die Verwendung der Funktion `moveTo()`. Ein weiteres Beispiel `Me_Auriga_encoder_callback.ino` zeigt eine Variante dieses Aufrufs, bei der bei Erreichen des Endpunktes eine callback-Funktion aufgerufen wird.
 
 Die Idee der `moveTo()` Funktion ist folgende:
 
@@ -800,7 +805,7 @@ In meinen Tests funktionierte die `moveTo()` Funktion nicht so wirklich gut. Auc
 
 ## Zusammenfassung
 
-Die Ansteuerung der Motoren selbst ist direkt über das Setzen des PWM-Duty-Cycles und der Richtungsbits sehr einfach möglich. Um aber eine wirklich kontrollierte Fahrt zu programmieren, muss man die Drehgeschwindigkeit mittels Encodern bestimmen. Dazu werden Interruptfunktionen bentuzt, welche Pulse zählen. Diese können dann in Geschwindigkeiten oder zurückgelegte Entfernungen umgerechnet werden.
+Die Ansteuerung der Motoren selbst ist direkt über das Setzen des PWM-Duty-Cycles und der Richtungsbits sehr einfach möglich. Um aber eine wirklich kontrollierte Fahrt zu programmieren, muss man die Drehgeschwindigkeit mittels Encodern bestimmen. Dazu werden Interruptfunktionen benutzt, welche Pulse zählen. Diese können dann in Geschwindigkeiten oder zurückgelegte Entfernungen umgerechnet werden.
 
 Die Klasse `MeEncoderOnBoard` der Makeblock-Bibliothek bietet mit der Funktion `runSpeed()` eine P-Regler-kontrollierte Steuerung für die Motorgeschwindigkeit entsprechend einer geforderten Drehzahl. Das ist schon recht bequem. Die Funktion `moveTo()` der Klasse ist aber nicht so toll und sollte besser durch eine eigene Funktion ersetzt werden.
 

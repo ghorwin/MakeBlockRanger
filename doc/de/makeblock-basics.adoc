@@ -7,10 +7,10 @@ Auf dem _Auriga_-Board ist ein ATmega2560 Prozessor verbaut wie auf dem Arduino 
 
 [NOTE]
 ====
-In diesem Kapitel wird ein Überblick über diese Pins und deren Verwendung gegeben. Die Informationen in diesem Kapitel sind als Referenz zu verstehen, da die einzelnen Ports und Pins in den nachfolgenden Kapiteln für alle Komponenten nochmal einzeln eingeführt und erklärt werden. Wer möchte, kann also gerne zum ersten echten Programmierkapitel (<<chap:LEDs>>zum Thema _OnBoard LEDs und RGB Ring_ ) vorspringen und einfach bei Bedarf hierher zurück kommen.
+In diesem Kapitel wird ein Überblick über diese Pins und deren Verwendung gegeben. Die Informationen in diesem Kapitel sind als Referenz zu verstehen, da die einzelnen Ports und Pins in den nachfolgenden Kapiteln für alle Komponenten nochmal einzeln eingeführt und erklärt werden. Wer möchte, kann also gerne zum ersten echten Programmierkapitel (<<chap:LEDs>> zum Thema _OnBoard LEDs und RGB Ring_) vorspringen und einfach bei Bedarf hierher zurück kommen.
 ====
 
-Einige der Ein- und Ausgänge sind direkt mit Komponenten auf dem Auriga-Board verbunden. Andere sind mit externen Ports und Anschlüssen verbunden. Die Details dazu findet man auf dem link:../downloads/MeAuriga_Schaltplan.pdf[Auriga Schaltplan]. Der ist allerdings nicht leicht zulesen und enthält auch viele Informationen, welche man bei Verwendung der MakeBlock-Programmierbibliothek gar nicht benötigt.
+Einige der Ein- und Ausgänge sind direkt mit Komponenten auf dem Auriga-Board verbunden. Andere sind mit externen Ports und Anschlüssen verbunden. Die Details dazu findet man auf dem link:../downloads/MeAuriga_Schaltplan.pdf[Auriga Schaltplan]. Der ist allerdings nicht leicht zu lesen und enthält auch viele Informationen, welche man bei Verwendung der MakeBlock-Programmierbibliothek gar nicht benötigt.
 
 Daher ist es sinnvoller, sich das sogenannte Pinout-Diagramm anzuschauen.
 
@@ -21,7 +21,7 @@ Das Pinout-Diagramm gibt es auch als link:../downloads/MeAuriga_Pinout.pdf[Aurig
 
 ## Ports und zugeordnete Arduino-Pins
 
-Innerhalb der Makeblock-Bibliothek werden Sensoren und Aktoren über Ports angesprochen, statt direkt Pins zu bezeichnen. Dies liegt daran, dass die Makeblock-Bibliothek auch für andere mBot Modelle ähnlich verwendet wird. Die Zuordnung von Ports zu Pins ist in Quelltext-Header-Dateien hinterlegt, welche für die unterschiedlichen mBot-Bausätze anders heißen. Die für _Auriga_-Board verwendete Diese sind in der Makeblock-Bibliothek in der Datei `MeAuriga.h` definiert: 
+Innerhalb der Makeblock-Bibliothek werden Sensoren und Aktoren über Ports angesprochen, statt direkt Pins zu bezeichnen. Dies liegt daran, dass die Makeblock-Bibliothek auch für andere mBot Modelle ähnlich verwendet wird. Die Zuordnung von Ports zu Pins ist in Quelltext-Header-Dateien hinterlegt, welche für die unterschiedlichen mBot-Bausätze anders heißen. Die Zuordnung für das _Auriga_-Board ist in der Makeblock-Bibliothek in der Datei `MeAuriga.h` definiert:
 
 .Auszug aus der Header-Datei 'MeAuriga.h'
 ```c++
@@ -36,7 +36,7 @@ MePort_Sig mePort[17] =
 
 // etwas umformatiert und kommentiert
 MePort_Sig mePort[17] = {
-	Port 0  {  NC,  NC }   Not connected
+	Port 0  {  NC,  NC }   Nicht verbunden
 	Port 1  {   5,   4 }   red
 	Port 2  {   3,   2 }   red
 	Port 3  {   7,   6 }   red
@@ -47,10 +47,10 @@ MePort_Sig mePort[17] = {
 	Port 8  {  A8, A13 }   universal
 	Port 9  {  A7, A12 }   universal
 	Port 10 {  A6, A11 }   universal 
-	Port 11 {  NC,  A2 }   light sensor 1
-	Port 12 {  NC,  A3 }   light sensor 2
-	Port 13 {  NC,  A0 }   temperature sensor
-	Port 14 {  NC,  A1 }   sound sensor
+	Port 11 {  NC,  A2 }   Lichtsensor (befindet sich neben Port 2)
+	Port 12 {  NC,  A3 }   Lichtsensor (befindet neben Port 9)
+	Port 13 {  NC,  A0 }   Temperatursensor
+	Port 14 {  NC,  A1 }   Mikrofon/Lautstärkesensor
 	Port 15 {  NC,  NC }   
 	Port 16 {  NC,  NC }   
 }
@@ -58,7 +58,13 @@ MePort_Sig mePort[17] = {
 
 Jeder Makeblock-Port ist an 2 Pins angeschlossen. Diese Pins werden als _Slot1_ und _Slot2_ bezeichnet. _NC_ steht für _Not Connected_. Ports 1 bis 10 sind RJ25 Ports (dazu mehr im Kapitel zu den RJ25 Anschlüssen <<chap:rj25>>).
 
-Als Beispiel: der Port 6 ist an den analogen Pin 10 und analogen Pin 15 des Mikrocontrollers angeschlossen. 
+Als Beispiel: der Port 6 ist an die analogen Pins A10 und A15 des Mikrocontrollers angeschlossen.
+
+[NOTE]
+====
+Der Kommentar in der Original-Header-Datei bezeichnet Port 11 als `LIGHT2` und Port 12 als `LIGHT1`. Die Nummerierung der beiden Lichtsensoren ist also nicht eindeutig. Im Kapitel <<chap:sensors>> werden sie deshalb über ihre Einbaulage unterschieden (der eine sitzt neben Port 2, der andere neben Port 9).
+====
+
 
 
 ## Weitere verwendete Pins des Mega 2560 Prozessors
@@ -66,7 +72,7 @@ Als Beispiel: der Port 6 ist an den analogen Pin 10 und analogen Pin 15 des Mikr
 Einige Komponenten sind direkt über IO Pins anzusteuern:
 
 ```
-Pin 44 = 12 RGB LED Ring
+Pin 44 = RGB-LED-Ring (12 LEDs)
 Pin 45 = Buzzer
 Pin 13 = Blaue LED (built-in LED)
 ```

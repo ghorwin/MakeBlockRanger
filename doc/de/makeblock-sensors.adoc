@@ -1,7 +1,7 @@
 :imagesdir: ../images
 
 [[chap:sensors]]
-# OnBoard Sensoren (Licht, Schall, Temperature, Gyroskop)
+# OnBoard Sensoren (Licht, Schall, Temperatur, Gyroskop)
 
 Hier geht es um das Auslesen der verschiedenen OnBoard-Sensoren auf dem Auriga-Board. Auf dem Auriga Board sind 4 Sensortypen platziert:
 
@@ -19,14 +19,14 @@ ausgelesen.
 
 [IMPORTANT]
 ====
-Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) ist der Sound-Sensor auf dem Auriga-Board an Port 14 angeschlossen (siehe Variable `mePort` in der Datei `MeAuriga.h` und Erklärung dazu in <<chap:basics>>.
+Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) ist der Sound-Sensor auf dem Auriga-Board an Port 14 angeschlossen (siehe Variable `mePort` in der Datei `MeAuriga.h` und Erklärung dazu in <<chap:basics>>).
 ====
 
-Die Klasse hat nur eine sinnvolle Memberfunction: `strength()`, was die Lautstärke im Bereich 140 bis ~600 ausgibt.
+Die Klasse hat nur eine sinnvolle Memberfunktion: `strength()`, was die Lautstärke im Bereich 140 bis ~600 ausgibt.
 
 ### Beispielprogramm
 
-Liest kontinuierlich die Lautstärke aus und übergibt diese via serieller Verbindung an den PC und kann dort bspw. mit dem Serial Plotter der Arduino-IDE angezeigt werden.
+Liest kontinuierlich die Lautstärke aus und überträgt sie via serieller Verbindung an den PC. Dort kann man den Verlauf bspw. mit dem Serial Plotter der Arduino-IDE anzeigen lassen.
 
 ```c++
 // Testprogramm für den Sound-Sensor am Auriga-Board.
@@ -62,7 +62,7 @@ Es gibt zwei Helligkeitssensoren auf dem Auriga Board:
 [IMPORTANT]
 ====
 Im Gegensatz zu anderen MakeBlock Bausätzen (mBot etc.) sind die Lichtsensoren auf dem Auriga-Board
-an den Ports 11 und 12 angeschlossen (siehe Variable `mePort` in der Datei `MeAuriga.h` und Erklärung dazu in <<chap:basics>>.
+an den Ports 11 und 12 angeschlossen (siehe Variable `mePort` in der Datei `MeAuriga.h` und Erklärung dazu in <<chap:basics>>).
 ====
 
 
@@ -94,23 +94,23 @@ void loop() {
   Serial.print(left);
   Serial.print(",right:");
   Serial.println(right);
-  // alle 50 ms
+  // alle 100 ms
   delay(100);
 }
 ```
 
-.Bei direkten Anleuchten mit einer Fahrradlampe wurde der Wert 1000 ausgegeben. In sehr dunklen Räumen (nur der Monitor in 30 cm Entfernung ist an), zeigt der Sensor Werte zwischen 1-3. Im Beispiel oben habe ich wechselseitig den einen und dann den anderen Sensor mit der Hand abgedeckt.
+.Beim direkten Anleuchten mit einer Fahrradlampe wurde der Wert 1000 ausgegeben. In sehr dunklen Räumen (nur der Monitor in 30 cm Entfernung ist an), zeigt der Sensor Werte zwischen 1-3. Im Beispiel oben habe ich wechselseitig den einen und dann den anderen Sensor mit der Hand abgedeckt.
 image::auriga_lightsensors.png[]
 
 _Interessant:_ bei moderatem Licht von Energiesparlampen zeigt der Sensor (wellenförmige schwankende) Werte zwischen 55 und 140 an.
 
-_Auch interessant:_ Wenn man den Ranger seitlich ans Fenster stellt, so werden leicht unterschiedliche Helligkeitswerte angezeigt. Eine Drehung um 180° führt jedoch wieder Erwarten _nicht_ zum Vertauschen der Helligkeitswerte beider Sensoren, wie man das vielleicht erwarten würde. Ein Regeln der Ausrichtung des Ranges basierend auf seitlich einfallendem Licht scheint eher schwierig zu sein (selber ausprobieren!).
+_Auch interessant:_ Wenn man den Ranger seitlich ans Fenster stellt, so werden leicht unterschiedliche Helligkeitswerte angezeigt. Eine Drehung um 180° führt jedoch wider Erwarten _nicht_ zum Vertauschen der Helligkeitswerte beider Sensoren. Ein Regeln der Ausrichtung des Rangers basierend auf seitlich einfallendem Licht scheint eher schwierig zu sein (selber ausprobieren!).
 
 
 
 ## Temperatur
 
-Auf dem Board ist ein DS18B20 Temperatursensor verbunden. Dieser wird über das Wire-Protokoll am Port 13 abgefragt. Die entsprechende Implementierung steckt in der Klasse `MeOnBoardTemp` mit der Member-Funktion `readValue()` (bzw. `readAnalog()` für den Rohwert).
+Auf dem Board ist als Temperatursensor ein NTC-Thermistor verbaut (10 kOhm Nennwiderstand bei 25 °C, B-Wert 3380). Dieser hängt schlicht am analogen Pin A0, also an Port 13, und wird mit `analogRead()` ausgelesen. Die entsprechende Implementierung steckt in der Klasse `MeOnBoardTemp` mit der Member-Funktion `readValue()` (bzw. `readAnalog()` für den analogen Rohwert). Die Umrechnung vom Rohwert in eine Temperatur erfolgt in `readValue()` über die B-Parameter-Gleichung.
 
 ### Beispielprogramm
 
@@ -155,7 +155,7 @@ Die Achsenzuordnung ist dabei wie folgt:
 - Z-Achse :  N, O, S, W Ausrichtung; 0° = der USB-Port am Auriga zeigt dann nach Norden; -180°/180° = der USB-Port zeigt nach Süden; -90° = der USB-Port zeigt nach Westen
 
 
-Entsprechend ist die X-Beschleunigung die Beschleunigung vorwärts und Y-Beschleunigung die Drehbeschleunigung. Interessant ist die Z-Beschleunigung (Querbeschleunigung) beim schnellen Kurvenfahren.
+Achtung bei den Funktionen `getGyroX()`, `getGyroY()` und `getGyroZ()`: die liefern keine Beschleunigungen, sondern _Drehraten_, d.h. Winkelgeschwindigkeiten in Grad pro Sekunde um die jeweilige Achse. Interessant ist z.B. die Drehrate um die Z-Achse beim schnellen Kurvenfahren.
 
 Zum Auslesen des Neigungssensors/Gyroskops verwendet man die Klasse `MeGyro` wie im nachfolgendem Beispiel gezeigt.
 
@@ -165,7 +165,7 @@ Zum Auslesen des Neigungssensors/Gyroskops verwendet man die Klasse `MeGyro` wie
 // Testprogramm für den Neigungssensor
 #include <MeAuriga.h>
 
-MeGyro gyro(0, GYRO_DEFAULT_ADDRESS);
+MeGyro gyro(0, GYRO_DEFAULT_ADDRESS);  // I2C-Adresse 0x68
 
 void setup() {
   Serial.begin(115200);
@@ -198,12 +198,17 @@ void loop() {
 }
 ```
 
+[NOTE]
+====
+`GYRO_DEFAULT_ADDRESS` ist die I2C-Adresse `0x68`. Die Original-Firmware für das Auriga-Board legt den OnBoard-Sensor allerdings mit `MeGyro gyro(1, 0x69)` an und benutzt `0x68` für einen _extern_ angesteckten Gyro-Sensor. Falls das obige Beispiel keine plausiblen Werte liefert, sollte man also `0x69` ausprobieren.
+====
+
 
 ## Programmierideen
 
 - Der Roboter soll im Dunkeln das LED-Licht anschalten (aber beeinflusst das nicht die Helligkeitsmessung?)
 - Der Roboter soll sich zur Lärmquelle hinbewegen (dazu braucht man noch den Antrieb aus <<chap:motors>>)
-- Der Roboter fährt ein Rampe hoch und hält dann auf der waagerechten Fläche wieder an
+- Der Roboter fährt eine Rampe hoch und hält dann auf der waagerechten Fläche wieder an
 
-Für den Nervous Bird (das umgedrehte Pendel) ist der Neigungssensor essentiell, damit man hier das Gleichgewicht hält. Die Programmierung eines solchen Robotermodells, der beim anschubsen selbständig vor-/zurück fährt und das Gleichgewicht behält, ist aber ein anspruchsvolleres Projekt.
+Für den Nervous Bird (das umgedrehte Pendel) ist der Neigungssensor essentiell, damit man hier das Gleichgewicht hält. Die Programmierung eines solchen Robotermodells, das beim Anschubsen selbständig vor-/zurückfährt und das Gleichgewicht behält, ist aber ein anspruchsvolleres Projekt.
 

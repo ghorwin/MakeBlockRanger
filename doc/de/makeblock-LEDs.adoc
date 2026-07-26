@@ -3,13 +3,13 @@
 [[chap:LEDs]]
 # OnBoard LEDs und RGB Ring
 
-Nun beginnen wir mit der Programmierung. Auf dem Auriga-Board sind zahlreiche LEDs verbaut. In diesem Kapitel geht es darum, diese LEDs zum Leuchte zu bringen.
+Nun beginnen wir mit der Programmierung. Auf dem Auriga-Board sind zahlreiche LEDs verbaut. In diesem Kapitel geht es darum, diese LEDs zum Leuchten zu bringen.
 
 ## Allgemeines
 
 Auf dem Board gibt es eine ganze Reihe von LEDs, die man programmieren kann. Da ist zunächst eine blaue Standard Arduino LED, die wie bei anderen Arduino Boards auf dem Pin 13 anzusprechen ist. Dann sind da noch 2 LEDs beim Kommunikationsmodul vorhanden, die primär Kommunikation über die serielle Schnittstelle (Bluetooth/USB) anzeigen. Dazu gibt es noch den 12er RGB LED Ring, bei dem man alle 12 LED unterschiedlich bunt einfärben kann und damit ein vielseitiges Anzeigegerät für Roboterzustände hat.
 
-Dann gibt es noch eine grüne "On"-Status-LED (nicht programmierbar, hart verdrahtet), 2 rote LEDs direkt unter dem RGB-Ring (auch nicht programmierbar) und die blaue, ryhtmisch blinkende LED oberhalb des Reset-Tasters (auch nicht programmierbar).
+Dann gibt es noch eine grüne "On"-Status-LED (nicht programmierbar, hart verdrahtet), 2 rote LEDs direkt unter dem RGB-Ring (auch nicht programmierbar) und die blaue, rhythmisch blinkende LED oberhalb des Reset-Tasters (auch nicht programmierbar).
 
 
 ## Standard built-in LED
@@ -75,7 +75,7 @@ image::comm-red-blue-LEDs.gif[align="left"]
 
 Es gibt zwei weitere LEDs auf dem Auriga Board und zwar die zwei kleinen roten und blauen LEDs in der Nähe des USB Anschlusses. Diese werden in der Makeblock Bibliothek nicht verwendet, auch nicht in der Firmware. Man kann diese aber mit den Arduino-Standardpins ansprechen, wenn man denn erstmal weiß, an welchen Pins diese LEDs angeklemmt sind.
 
-Daher schaut man zuerst mal in den Schaltplan link:downloads/MeAuriga_Schaltplan.pdf[MeAuriga_Schaltplan.pdf]. 
+Daher schaut man zuerst mal in den Schaltplan link:../downloads/MeAuriga_Schaltplan.pdf[MeAuriga_Schaltplan.pdf]. 
 Die zwei LEDs sind im Abschnitt _程序更新&无线遥控 (dt. Programmaktualisierung und drahtlose Fernbedienung)_ aufgeführt:
 
 .Auszug Schaltplan OnBoard LEDs
@@ -115,9 +115,9 @@ void loop() {
 
 ## 12er RGB LED Ring
 
-Als Zusatzmodul für das Auriga-Board gibt es einen RGB Ring (Typ: ws12812).
+Als Zusatzmodul für das Auriga-Board gibt es einen RGB-Ring (Typ: WS2812).
 
-.Rings aus 12 RGBS
+.Ring aus 12 RGB-LEDs
 image::RGBRing.gif[]
 
 Der LED Ring wird über einen Controller angesteuert, der am PWM PIN 44 am ATmega 2560 angeschlossen ist.
@@ -129,6 +129,8 @@ Wer genauer wissen will, wie das Protokoll auf dem an PIN 44 angeschlossenen LED
 
 https://www.arrow.com/en/research-and-events/articles/protocol-for-the-ws2812b-programmable-led
 
+Alternativ (sehr detailliert, inkl. Messungen der tatsächlich akzeptierten Timings): https://cpldcpu.wordpress.com/2014/01/14/light_ws2812-library-v2-0-part-i-understanding-the-ws2812/[Understanding the WS2812]
+
 Wenn man dann mal in den Code der Klasse MeRGBLed innerhalb der MakeBlock Bibliothek schaut, dann findet man die im Text erwähnten Timings und den Assembler code zum Übertragen der Daten.
 
 ```c
@@ -138,9 +140,9 @@ Wenn man dann mal in den Code der Klasse MeRGBLed innerhalb der MakeBlock Biblio
 ```
 ====
 
-Grundsätzlich hält die Klasse eine Datenstruktur für die RGB-Informationen jeder einzelnen RGB. Die Konfiguration der RGB kann nun durch Zugriffsfunktionen wie `setColorAt()` geändert werden. Dabei wird zunächst nur der interne Zustand des Klassenobjekts geändert. Die Ansteuerung des Controllers selbst und damit das Umschalten der LEDs erfolgt erst beim Aufruf von `show()`.
+Grundsätzlich hält die Klasse eine Datenstruktur für die RGB-Informationen jeder einzelnen LED. Die Konfiguration der LEDs kann nun durch Zugriffsfunktionen wie `setColorAt()` geändert werden. Dabei wird zunächst nur der interne Zustand des Klassenobjekts geändert. Die Ansteuerung des Controllers selbst und damit das Umschalten der LEDs erfolgt erst beim Aufruf von `show()`.
 
-Die LED 0 (bzw. 1. LED) ist übrigends die LED auf "1 Uhr", wenn man sich das Bild oben anschaut. Die oberste LED ("12 Uhr") ist die LED 11 und LED 2 (bzw. 3. LED) zeigt in Richtung "Vorwärts" des Land Raider Modells.
+Die LED 0 (bzw. 1. LED) ist übrigens die LED auf "1 Uhr", wenn man sich das Bild oben anschaut. Die oberste LED ("12 Uhr") ist die LED 11 und LED 2 (bzw. 3. LED) zeigt in Richtung "Vorwärts" des Land Raider Modells.
 
 
 ### Beispielprogramm
@@ -158,7 +160,7 @@ Die LED 0 (bzw. 1. LED) ist übrigends die LED auf "1 Uhr", wenn man sich das Bi
 // Beim Auriga-Board steuern wird den on-board LED Ring an.
 // Die Klasse MeRGBLed bietet die Schnittstellenfunktionen dafür.
 // Im Constructor übergeben wir den Port 0
-MeRGBLed led( PORT0, LEDNUM );
+MeRGBLed led( PORT0, LEDNUM );   // Port 0 = on-board LED-Ring
 
 void setup() {
   // LED Ring Controller ist am PWM PIN D44 angeschlossen

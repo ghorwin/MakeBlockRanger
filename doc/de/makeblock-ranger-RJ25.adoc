@@ -6,7 +6,7 @@
 ## Allgemeines zu RJ25
 
 Die Steckerports am Auriga-Board sind RJ25 (6P6C) Stecker (siehe https://de.wikipedia.org/wiki/RJ-Steckverbindung[Wikipedia RJ-Steckverbindung]) wie sie auch für den Anschluss von Modems und Faxgeräten verwendet werden/wurden. Die Belegung der Pins ist im   
-link:../downloads/MakeBlock/MeAuriga_Schaltplan.pdf[Schaltplan] zu sehen, wie hier im Auszug für den Port 9:
+link:../downloads/MeAuriga_Schaltplan.pdf[Schaltplan] zu sehen, wie hier im Auszug für den Port 9:
 
 .RJ25 Belegung an Port 9
 image::RJ25_schaltplan_auszug.png[pdfwidth=4cm]
@@ -14,9 +14,9 @@ image::RJ25_schaltplan_auszug.png[pdfwidth=4cm]
 .RJ25 Stecker
 image::RJ25_pin_Belegung.png[width=250, pdfwidth=4cm]
 
-Jeder dieser Stecker ist mit VCC (entweder +5V oder Motorspannung) und GND verbunden, sowie mit SDA und SCL (für die Kommunikation über das I2C Protokoll, mit Ausnahme Slot 5). Die mit S1 und S2 (Slot 1 und Slot 2) bezeichneten Leitungen sind je Port mit unterschiedlichen Pins am Arduino verbunden. Je nach Fähigkeiten dieser Pins sind die Ports unterschiedlich eingefärbt. 
+Jeder dieser Stecker ist mit VCC (entweder +5V oder Motorspannung) und GND verbunden, sowie mit SDA und SCL (für die Kommunikation über das I2C Protokoll, mit Ausnahme von Port 5). Die mit S1 und S2 (Slot 1 und Slot 2) bezeichneten Leitungen sind je Port mit unterschiedlichen Pins am Arduino verbunden. Je nach Fähigkeiten dieser Pins sind die Ports unterschiedlich eingefärbt. 
 
-Das Pinout-Diagramm zeigt nocheinmal die Belegung der Ports.
+Das Pinout-Diagramm zeigt noch einmal die Belegung der Ports.
 
 .Pinout-Diagramm (hier auch als link:../downloads/MeAuriga_Pinout.pdf[Auriga Pinout PDF])
 image::auriga_pinout.png[]
@@ -44,7 +44,7 @@ Dieser Port hat eine Spannungsversorgung von +5V und nur 2 belegte Pins, welche 
 
 ### Ports 6-10 : Allgemeine Anschlüsse für externe Hardware
 
-Die anderen Ports 5 bis 10 sind an +5V angeschlossen (mit Kurzschluss- und Überstromschutz für 3A)-
+Die Ports 6 bis 10 sind an +5V angeschlossen (mit Kurzschluss- und Überstromschutz für 3A).
 Wie man oben im Pinout-Diagramm sieht, sind die Ports 6-10 jeweils mit 2 digitalen Input-/Output-Pins verbunden. Außerdem sind diese Ports mit den SDA/SCL Pins verbunden, wodurch man externe Hardware via I2C-Protokoll ansteuern kann. 
 
 An diese Ports kann man nun diverse Zubehörbauteile anstecken (die aber häufig nicht ganz billig sind).
@@ -64,12 +64,12 @@ image::auriga-rj25-addons.png[pdfwidth=16cm]
 
 ### Ultraschall-Entfernungsmessung
 
-Zur Entfernungsmessung liegt im mBot Ranger Bausatz ein Ultraschallsensor dabei. Diesen kann man einfach an einen I2C-Port anstecken (Ports 6-10).
+Zur Entfernungsmessung liegt im mBot Ranger Bausatz ein Ultraschallsensor dabei. Diesen kann man einfach an einen der universellen Ports 6-10 anstecken. (Der Sensor nutzt übrigens kein I2C, sondern nur eine einzige digitale Leitung - siehe Hinweis zu `pulseIn()` weiter unten.)
 
 .Ultraschall Entfernungssensor
 image::auriga_ultrasonicdistance.png[pdfwidth=4cm]
 
-Wie der Sensor intern funktioniert, ist auf der Seite https://funduino.de/nr-10-entfernung-messen[Fundino Ultraschallsensor]  beschrieben.
+Wie der Sensor intern funktioniert, ist auf der Seite https://funduino.de/nr-10-entfernung-messen[Funduino Ultraschallsensor]  beschrieben.
 
 In Kürze: Der Sensor emittiert eine Ultraschallwelle (wie die Fledermaus) und wenn diese auf ein Objekt trifft, wird die Welle zurückgeworfen. Die Schallgeschwindigkeit in Luft ist ungefähr 340 m/s (oder 34 cm/ms bzw. 0.034 cm/µs). Der Sensor misst die Zeit zwischen Senden und Empfangen der Schallwelle und kann daraus die Entfernung berechnen.
 
@@ -80,21 +80,21 @@ Der Sensor wird mittels der Klasse `MeUltrasonicSensor` angesteuert, welche folg
 ```c++
 #include "MeAuriga.h"
 
-// Der Utrasonic-Sensor ist an Steckplatz 6 eingesteckt
+// Der Ultraschall-Sensor ist an Steckplatz 6 eingesteckt
 MeUltrasonicSensor ultraSensor(PORT_6);
 
-unsigned long lastSamlingMillis;
+unsigned long lastSamplingMillis;
 
 void setup() {
-  lastSamlingMillis = millis();
+  lastSamplingMillis = millis();
   Serial.begin(115200);
 }
 
 void loop() {
-  if (millis() - lastSamlingMillis > 100) {
+  if (millis() - lastSamplingMillis > 100) {
     Serial.print("Distance,");
     Serial.println(min(120, ultraSensor.distanceCm() ) );
-    lastSamlingMillis = millis();
+    lastSamplingMillis = millis();
   }
 
   // ... anderes Zeugs machen...
@@ -107,9 +107,9 @@ void loop() {
 Intern verwendet die Makeblock-Bibliothek die Funktion `pulseIn()`, um die Zeit bis zum Eintreffen des Echos zu messen.
 ====
 
-Zwischen Senden und Empfangen benötigt der Sensor eine minimale Wartezeit von 100 ms.
-Wenn man den Sensor also abfragt, und kein `delay()` verwenden möchte (bspw. um nebenbei noch andere
-Sensoren abzufragen), dann muss man das Timing manuell implementieren.
+Die Bibliothek führt intern höchstens etwa alle 23 ms eine echte Messung durch. Ruft man `distanceCm()` häufiger auf, bekommt man einfach den zuletzt gemessenen Wert zurückgeliefert.
+Wenn man den Sensor abfragt und dabei kein `delay()` verwenden möchte (bspw. um nebenbei noch andere
+Sensoren abzufragen), dann muss man das Timing manuell implementieren - im Beispiel oben mit einem Abfrageintervall von 100 ms.
 
 [CAUTION]
 ====
@@ -124,7 +124,7 @@ Man kann auch den LED-Ring nutzen, um die gemessene Entfernung dynamisch zu visu
 ```c++
 #include "MeAuriga.h"
 
-// Der Utrasonic-Sensor ist an Steckplatz 6 eingesteckt
+// Der Ultraschall-Sensor ist an Steckplatz 6 eingesteckt
 MeUltrasonicSensor ultraSensor(PORT_6);
 
 unsigned long lastSamplingMillis;
@@ -136,7 +136,7 @@ unsigned long lastSamplingMillis;
 // Beim Auriga-Board steuern wird den on-board LED Ring an.
 // Die Klasse MeRGBLed bietet die Schnittstellenfunktionen dafür.
 // Im Constructor übergeben wir den Port 0
-MeRGBLed led( PORT0, LEDNUM );
+MeRGBLed led( PORT0, LEDNUM );   // Port 0 = on-board LED-Ring
 
 
 void setup() {
@@ -165,7 +165,6 @@ void loop() {
 
     for (int i=0; i<12; ++i) {
       if (i*10 < distanceCm) {
-        int brightness = distanceCm;
         led.setColorAt( i, max(0, 255-i*25), min(255,i*10), 0);
       }
       else
@@ -194,7 +193,7 @@ Ein weiterer Sensor, der mit dem _MakeBlock Ranger_ Bausatz mitgeliefert wird, i
 .Linienverfolgungs-Sensor
 image::auriga_linefollower.png[]
 
-Der besteht letztlich aus 2 Photodioden. Deren lichtempfindlicher Widerstand wird mit einem hardwarespezifischen Schwellwert in ein digitales Signal gewandelt, welches 4 Zustände ergibt:
+Der besteht letztlich aus zwei Sensorpaaren aus je einer Infrarot-LED und einem Fototransistor. Wieviel Infrarotlicht zurückreflektiert wird, hängt davon ab, ob der jeweilige Sensor über der (dunklen, wenig reflektierenden) Linie steht oder daneben. Das Sensorsignal wird bereits auf der Sensorplatine mit einem Schwellwert in ein digitales Signal gewandelt. Bei zwei Sensoren ergeben sich damit 4 Zustände:
 
 ```
 S1_IN_S2_IN   : Beide Sensoren innerhalb der schwarzen Linie

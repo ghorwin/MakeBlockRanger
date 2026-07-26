@@ -11,10 +11,10 @@ Summary: Dieser Artikel beschreibt mal ein konkretes Projekt und die einzelnen E
 ## Konzept
 
 - der Entfernungssensor wird seitlich am Raider montiert
-- der Raider fährt erstmal an den parkenden Autos/Hinternissen vorbei und misst den Abstand ->  der sollte eigentlich immer gleich bleiben, sonst steht der Raider schief
+- der Raider fährt erstmal an den parkenden Autos/Hindernissen vorbei und misst den Abstand ->  der sollte eigentlich immer gleich bleiben, sonst steht der Raider schief
 - zunächst wird also der Raider an den Autos ausgerichtet, damit er parallel fährt
 - nun fährt er vorwärts, bis eine Lücke erkannt wird (bei Erkennung wird der RGB LED Ring entsprechend eingefärbt) und ein Signal ertönt
-- und sobald die Lücke zuende ist, wird geprüft, ob sie lang genug ist (wieder mit Licht + Sound Feedback)
+- und sobald die Lücke zu Ende ist, wird geprüft, ob sie lang genug ist (wieder mit Licht + Sound Feedback)
 - falls die Lücke groß genug ist, parkt der Raider ein
 
 

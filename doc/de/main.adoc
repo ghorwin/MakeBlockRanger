@@ -25,11 +25,11 @@ v1.0 (30.04.2025)
 
 ## Einleitung
 
-Der _MakeBlock Ranger_ Bausatz ist ziemlich cool und bietet einiges. Leider ist eigentlich nur die Block-basierte Programmierung wirklich gut dokumentiert, aber diese hat Grenzen. Dokumentation für die Programmierung mittels C in der Arduino IDE gibt es kaum, zumindest keine offizielle, daher habe ich dieses Tutorial und Anleitung zusammengestellt. Außerdem soll diese Dokumentation als Leitfaden für einen Programmier-/Robotikkurs an der Schule dienen.
+Der _MakeBlock Ranger_ Bausatz ist ziemlich cool und bietet einiges. Leider ist eigentlich nur die Block-basierte Programmierung wirklich gut dokumentiert, aber diese hat Grenzen. Dokumentation für die Programmierung mittels C in der Arduino IDE gibt es kaum, zumindest keine offizielle, daher habe ich dieses Tutorial bzw. diese Anleitung zusammengestellt. Außerdem soll diese Dokumentation als Leitfaden für einen Programmier-/Robotikkurs an der Schule dienen.
 
 Diese _Makeblock Ranger_ Anleitung baut auf vorhandenen Grundlagen zur Arduino-Programmierung auf. Man sollte also schon die Arduino IDE kennen und natürlich auch Grundlagen der C-Programmiersprache beherrschen. In diesem Tutorial bzw. Robotik-Kurs wird gezeigt, wie man den mBot Ranger Bausatz mittels der Arduino-IDE und der C bzw. C++ Programmiersprache programmiert (wenn man also die Stufe der Block-Programmierung überwunden hat).
 
-Es geht also um folgenden Robotor
+Es geht also um folgenden Roboter
 
 image::makeblock-mbot-ranger.jpg[width=400]
 
@@ -55,14 +55,14 @@ Der _MakeBlock Ranger_ Bausatz verwendet ein _Auriga Board_ mit einem _ATmega256
 Hier ist eine Funktions-/Ausstattungsbeschreibung (basierend auf der Produktbeschreibung aus
 https://shop.technik-lpe.de/steuerboards/872-auriga-steuerboard-6928819504967.html[shop.technik-lpe.de]:
 
-Der *Auriga* ist eine gut ausgestattete Hauptsteuerplatine, die speziell für den MINT-Unterricht entwickelt wurde. Basierend auf dem ATmega 2560 sind auf dem Auriga bereits eine Reihe von Sensoren und Aktoren vebaut, und es können externe Sensoren oder Motoren angesteckt werden. Hier ist ein kleiner Überblick:
+Der *Auriga* ist eine gut ausgestattete Hauptsteuerplatine, die speziell für den MINT-Unterricht entwickelt wurde. Basierend auf dem ATmega 2560 sind auf dem Auriga bereits eine Reihe von Sensoren und Aktoren verbaut, und es können externe Sensoren oder Motoren angesteckt werden. Hier ist ein kleiner Überblick:
  
 - Onboard-Gyroskop, Tonsensor, passiver Summer und Temperatursensor, 2 Lichtsensoren
 - Unterstützt DC-Motoren, Schrittmotoren, Servoregler, Smart Servos, Encoder-Motoren, etc.
 - Kann zwei Encoder-Motoren ansteuern und unterstützt Überstromschutz für 4A (sofort).
-- Unterstützt Bluetooth und drahtlose Bluetooth-Upgrade-Firmware Bluetooth-Dongle
+- Unterstützt Bluetooth-Steuerung sowie drahtlose Firmware-Updates über Bluetooth
 - Blaue LED
-- WS1282 RGB LED ring
+- WS2812 RGB-LED-Ring (12 LEDs)
 - USB-Anschluss mit antistatischem Schutz (Akkus werden darüber nicht geladen)
 - RJ25-Ports/Anschlüsse für externe Hardware
 
@@ -77,9 +77,9 @@ Details zu den RJ25 Ports gibt es im <<chap:rj25>>.
 
 ### Informationsquellen
 
-Die offizielle Dokumentation des Roboterbausatzes schweigt sich über die Internas und Programmierung der Platine ziemlich aus. Daher basiert diese Anleitung auf Reverse-Engineering, Literaturrecherche im Internet und Sichtung vieler Forenbeiträge.
+Die offizielle Dokumentation des Roboterbausatzes schweigt sich über die Interna und die Programmierung der Platine ziemlich aus. Daher basiert diese Anleitung auf Reverse-Engineering, Literaturrecherche im Internet und Sichtung vieler Forenbeiträge.
 
-Viele nachfolgend und in den anderen Teilen beschriebene Details habe ich aus dem englischsprachigen Text von _Gosse Adema_ (https://www.instructables.com/Advanced-Makeblock-Sensors-DIY[https://www.instructables.com/Advanced-Makeblock-Sensors-DIY]) gefunden.
+Viele nachfolgend und in den anderen Teilen beschriebene Details habe ich dem englischsprachigen Text von _Gosse Adema_ (https://www.instructables.com/Advanced-Makeblock-Sensors-DIY[https://www.instructables.com/Advanced-Makeblock-Sensors-DIY]) entnommen.
 
 Hier sind noch einige Dokumente, die ich zusammengetragen habe:
 
@@ -110,7 +110,7 @@ include::makeblock-buzzer.adoc[leveloffset=+1]
 // chapter 7
 include::makeblock-motor.adoc[leveloffset=+1]
 
-// chapter 7
+// chapter 8
 include::makeblock-ranger-RJ25.adoc[leveloffset=+1]
 
 // conclusion
